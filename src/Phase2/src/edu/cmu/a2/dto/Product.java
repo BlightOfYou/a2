@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.cmu.a2.dto;
 
 /**
  *
- * @author Dantarp
  */
 public class Product {
-    public int Id;
+
+    public String Id; //varchar(10)
     public String Type;
+    public String Description; //varchar(80)
+    public float Price; //float(10,2)
+    public int Quantity; //int(11)
 }

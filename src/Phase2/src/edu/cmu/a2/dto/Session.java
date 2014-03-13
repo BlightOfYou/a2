@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.cmu.a2.dto;
 
 /**
  *
- * @author Dantarp
  */
 public class Session {
-    
+
+    public int Id;
+    public int Username;
+    public long LoginTime;
 }
