@@ -19,14 +19,15 @@ import java.util.logging.Logger;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-    //private static String DatabaseUrl = 'test';
-    private LoginService loginService = new LoginService("test");
-    
+    private static final String databaseUrl = "jdbc:mysql://localhost:3306/inventory";
+    public LoginService loginService = new LoginService(databaseUrl);
+//    private static class LoginService;
     
     /**
      * Creates new form LoginFrame
      */
     public LoginFrame() {
+//        LoginService loginService = new LoginService(databaseUrl);
         initComponents();
     }
 
@@ -113,6 +114,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         
+        //LoginService loginService = new LoginService(databaseUrl);
         
         try {
             Session session = loginService.Login(usernameText.getText(), passwordText.getText());
