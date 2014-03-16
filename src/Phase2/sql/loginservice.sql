@@ -10,14 +10,14 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `cultureboxes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
 
 INSERT INTO `users` VALUES (0,'christine', 'rbazkX6lKUBiFG+jyCQ9k8ttydN/tjcjbV1mOW4NEjo=' , '0F3il7taqYyRsHi4EDdxFgJP/2wwZxQstK+BBGuXLlM=');
 INSERT INTO `users` VALUES (0,'daniel', '2KK+4QG5DVzXNWTJBvEMNIASnUryaN8YacNgeLmU64I=' , 'efWDTCU6/lt/C/CFKQmzRP/4F10XiWXJl5bkmLfsI6Q=');
 INSERT INTO `users` VALUES (0,'keith', '4Ty4cskrndx4uL/6nZYyJLgzxltM/qT5OwOuuGmDN4o=' , 'dvCFujAUkMjT1zMlrNX4LaJLr1hezCVOOrmLQwkZOoo=');
 INSERT INTO `users` VALUES (0,'micah', 'dyD6Vs/OT87qGD87tHdosprzCtLCjzVlc/mPgsnaTAY=' , '7fBQkhsZ8akPRs2v/TMrFotZfqUCj7ztyfJsGdVWSXs=');
 
-/*!40000 ALTER TABLE `cultureboxes` ENABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `login_log`;
