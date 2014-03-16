@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class InventoryService {
 
-    InventoryService(URL DatabaseUrl) {
+    public InventoryService(String DatabaseUrl) {
 
     }
 
