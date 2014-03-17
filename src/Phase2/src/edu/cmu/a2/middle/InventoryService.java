@@ -7,7 +7,6 @@ package edu.cmu.a2.middle;
 
 import edu.cmu.a2.dto.Product;
 import java.lang.ProcessBuilder.Redirect.Type;
-import java.net.URL;
 import java.util.List;
 
 /**

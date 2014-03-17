@@ -6,7 +6,6 @@
 package edu.cmu.a2.middle;
 
 import edu.cmu.a2.dto.Order;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -14,7 +13,7 @@ import java.util.List;
  */
 public class OrderService {
 
-    public OrderService(URL DatabaseUrl) {
+    public OrderService(String DatabaseUrl) {
     }
 
     public void SubmitOrder(Order order) {

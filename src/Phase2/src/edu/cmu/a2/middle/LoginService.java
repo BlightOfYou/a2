@@ -8,7 +8,6 @@ package edu.cmu.a2.middle;
 import edu.cmu.a2.common.Base64;
 import edu.cmu.a2.dto.Session;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
