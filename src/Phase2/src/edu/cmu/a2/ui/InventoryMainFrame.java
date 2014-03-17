@@ -1,35 +1,24 @@
 package edu.cmu.a2.ui;
 
+import edu.cmu.a2.middle.*;
+import edu.cmu.a2.dto.*;
+import edu.cmu.a2.common.*;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 
-/******************************************************************************
- * File:NewJFrame.java
- * Course: 17655
- * Project: Assignment 2
- * Copyright: Copyright (c) 2009 Carnegie Mellon University
- * Versions:
- *	1.0 November 2009 - Initial rewrite of original assignment 2 (ajl).
- *
- * This class defines a GUI application that allows inventory to be added to the
- * inventory databases. There are tree tables in the inventory database: trees,
- * shrubs, and seeds.
- *
- ******************************************************************************/
-/*
- * AddInventoryMainFrame.java
- *
- * Created on Jan 29, 2010, 9:24:23 PM
- */
 
-/**
- *
- * @author lattanze
- */
+
 public class InventoryMainFrame extends javax.swing.JFrame {
 
+    private static final String inventoryDatabaseStr = "jdbc:mysql://localhost:3306/inventory";
+    //public InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
+    
+    private Boolean isEepProduct = false;
+    private Boolean isLeafTechProduct = false;
+    
        String versionID = "v0.1";
 
     /** Creates new form AddInventoryMainFrame */
@@ -70,6 +59,10 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         decrementButton = new javax.swing.JButton();
         deleteText = new javax.swing.JLabel();
         decrementText = new javax.swing.JLabel();
+        cultureBoxesRadioButton = new javax.swing.JRadioButton();
+        genomicsRadioButton = new javax.swing.JRadioButton();
+        processingRadioButton = new javax.swing.JRadioButton();
+        referenceMaterialsRadioButton = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,6 +151,34 @@ public class InventoryMainFrame extends javax.swing.JFrame {
 
         decrementText.setText("Decrements inventory count of item selected from the list");
 
+        cultureBoxesRadioButton.setText("Culture Boxes");
+        cultureBoxesRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cultureBoxesRadioButtonActionPerformed(evt);
+            }
+        });
+
+        genomicsRadioButton.setText("Genomics");
+        genomicsRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genomicsRadioButtonActionPerformed(evt);
+            }
+        });
+
+        processingRadioButton.setText("Processing");
+        processingRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                processingRadioButtonActionPerformed(evt);
+            }
+        });
+
+        referenceMaterialsRadioButton.setText("Reference Materials");
+        referenceMaterialsRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                referenceMaterialsRadioButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -175,32 +196,48 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                         .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(productDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(priceText)
                                     .addComponent(quantityText)
                                     .addComponent(productIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(26, 26, 26)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(treesRadioButton)
-                                    .addComponent(shrubsRadioButton)
-                                    .addComponent(seedsRadioButton))
-                                .addGap(51, 51, 51)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(addItemButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(listInventoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(treesRadioButton)
+                                        .addGap(9, 9, 9)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(51, 51, 51)
+                                                .addComponent(addItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(shrubsRadioButton)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(seedsRadioButton))))
+                                    .addComponent(listInventoryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(deleteItemButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                                    .addComponent(decrementButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(deleteText)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(decrementText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(productDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 10, Short.MAX_VALUE))))
+                                        .addComponent(decrementButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(decrementText, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(deleteItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(deleteText))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(cultureBoxesRadioButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(genomicsRadioButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(processingRadioButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(referenceMaterialsRadioButton)))
+                                        .addGap(0, 0, Short.MAX_VALUE))))))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(inventoryScrollPane)
                     .addGroup(layout.createSequentialGroup()
@@ -219,7 +256,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(frameTitleLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -229,37 +266,36 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(productDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(productDescriptionLabel)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(productIdText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(treesRadioButton)
-                            .addComponent(productIdLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(priceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(shrubsRadioButton)
-                            .addComponent(priceLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(quantityText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(seedsRadioButton)
-                            .addComponent(quantityLabel)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(addItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deleteItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deleteText))
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(decrementText)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(listInventoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(decrementButton)))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(productIdText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(treesRadioButton)
+                    .addComponent(productIdLabel)
+                    .addComponent(shrubsRadioButton)
+                    .addComponent(seedsRadioButton)
+                    .addComponent(cultureBoxesRadioButton)
+                    .addComponent(genomicsRadioButton)
+                    .addComponent(processingRadioButton)
+                    .addComponent(referenceMaterialsRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(priceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(priceLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quantityText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(quantityLabel)
+                    .addComponent(deleteItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteText)
+                    .addComponent(addItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(inventoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(decrementButton)
+                    .addComponent(decrementText)
+                    .addComponent(listInventoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(55, 55, 55)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(inventoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -267,26 +303,50 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void treesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treesRadioButtonActionPerformed
+  
+        eepRadioButtonSelected();
         treesRadioButton.setSelected(true);
-        shrubsRadioButton.setSelected(false);
-        seedsRadioButton.setSelected(false);
 
     }//GEN-LAST:event_treesRadioButtonActionPerformed
 
     private void shrubsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shrubsRadioButtonActionPerformed
-        // TODO add your handling code here:
-        treesRadioButton.setSelected(false);
-        shrubsRadioButton.setSelected(false);
-        seedsRadioButton.setSelected(true);
+ 
+        eepRadioButtonSelected();
+        shrubsRadioButton.setSelected(true);
     }//GEN-LAST:event_shrubsRadioButtonActionPerformed
 
     private void seedsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedsRadioButtonActionPerformed
-        // TODO add your handling code here:
-        treesRadioButton.setSelected(false);
-        shrubsRadioButton.setSelected(true);        
-        seedsRadioButton.setSelected(false);
+
+        eepRadioButtonSelected();
+        seedsRadioButton.setSelected(true);
     }//GEN-LAST:event_seedsRadioButtonActionPerformed
 
+    
+    
+    private void eepRadioButtonSelected() {
+        
+        productTypeRadioButtonSelected();
+        isEepProduct = true;
+        isLeafTechProduct = false;
+    }
+    
+    private void leafTechRadioButtonSelected() {
+        
+        productTypeRadioButtonSelected(); 
+        isEepProduct = false;
+        isLeafTechProduct = true;
+    }
+    
+    private void productTypeRadioButtonSelected() {
+        treesRadioButton.setSelected(false);
+        shrubsRadioButton.setSelected(false);        
+        seedsRadioButton.setSelected(false);
+        cultureBoxesRadioButton.setSelected(false);
+        genomicsRadioButton.setSelected(false);
+        referenceMaterialsRadioButton.setSelected(false);
+        processingRadioButton.setSelected(false);
+    }
+    
     private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
 
         // Adds inventory to database
@@ -353,30 +413,16 @@ public class InventoryMainFrame extends javax.swing.JFrame {
 
         //Now, if there was no error in the data fields, we try to
         //connect to the database.
-        
+  
+
         if ( !fieldError )
         {
+            
+
             try
             {
-                msgString = ">> Establishing Driver...";
-                inventoryTextArea.setText("\n"+msgString);
-
-                //load JDBC driver class for MySQL
-                Class.forName( "com.mysql.jdbc.Driver" );
-
-                msgString = ">> Setting up URL...";
-                inventoryTextArea.append("\n"+msgString);
-
-                //define the data source
-                String SQLServerIP = databaseServerIpText.getText();
-                String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/inventory";
-
-                msgString = ">> Establishing connection with: " + sourceURL + "...";
-                inventoryTextArea.append("\n"+msgString);
-
-                //create a connection to the db
-                DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
+                InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
+                inventoryTextArea.append("\nConnected to database");
             } catch (Exception e) {
 
                 errString =  "\nProblem connecting to database:: " + e;
@@ -478,14 +524,16 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         String tableSelected = null;    // String used to determine which data table to use
         java.sql.Statement s = null;    // SQL statement pointer
 
+        List<Product> productList = new ArrayList<Product>();
+        
         // Check to make sure a radio button is selected
-        if (treesRadioButton.isSelected() || shrubsRadioButton.isSelected() || seedsRadioButton.isSelected())
+        if (isEepProduct || isLeafTechProduct)
         {
             fieldError = false;
 
         } else {
 
-            msgString = "Must select Tree, Seeds, or Shrubs radio button.";
+            msgString = "Must select radio button.";
             inventoryTextArea.setText("\n"+msgString);
         }
 
@@ -502,25 +550,8 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             
             try
             {
-                msgString = ">> Establishing Driver...";
-                inventoryTextArea.setText("\n"+msgString);
-
-                //load JDBC driver class for MySQL
-                Class.forName( "com.mysql.jdbc.Driver" );
-
-                msgString = ">> Setting up URL...";
-                inventoryTextArea.append("\n"+msgString);
-
-                //define the data source
-                String SQLServerIP = databaseServerIpText.getText();
-                String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/inventory";
-
-                msgString = ">> Establishing connection with: " + sourceURL + "...";
-                inventoryTextArea.append("\n"+msgString);
-
-                //create a connection to the db
-                DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
+                InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
+                inventoryTextArea.append("\nConnected to database");
             } catch (Exception e) {
 
                 errString =  "\nProblem connecting to database:: " + e;
@@ -536,33 +567,50 @@ public class InventoryMainFrame extends javax.swing.JFrame {
 
         if (!connectError && !fieldError)
         {
-            try
-            {
-                // create an SQL statement variable and create the INSERT
-                // query to insert the new inventory into the database
+     try
+     {
+                        // if trees inventory selected
+                        if (treesRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("trees");
+                        }
 
-                s = DBConn.createStatement();
+                        // if strubs inventory selected
+                        if (shrubsRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("shrubs");
+                        }
 
-                // now we build a query to list the inventory table contents
-                // for the user
-                // ... here is the SQL for trees
-                if (treesRadioButton.isSelected())
-                {
-                    res = s.executeQuery( "Select * from trees" );
-                    tableSelected = "TREE";
-                }
-                // ... here is the SQL for shrubs
-                if (shrubsRadioButton.isSelected())
-                {
-                    res = s.executeQuery( "Select * from shrubs" );
-                    tableSelected = "SHRUB";
-                }
-                // ... here is the SQL for seeds
-                if (seedsRadioButton.isSelected())
-                {
-                    res = s.executeQuery( "Select * from seeds" );
-                    tableSelected = "SEED";
-                }
+                        // if seeds inventory selected
+                        if (seedsRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("seeds");
+                        }
+
+                        // if culture boxes inventory selected
+                        if (cultureBoxesRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("cultureboxes");
+                        }
+
+                        // if genomics inventory selected
+                        if (genomicsRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("genomics");
+                        }
+
+                        // if processing inventory selected
+                        if (processingRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("processing");
+                        }
+                        
+                        // if reference materials inventory selected
+                        if (referenceMaterialsRadioButton.isSelected())
+                        {
+                            productList = inventoryService.GetProducts("referencematerials");
+                        }
+                
 
                 // Now we list the inventory for the selected table
                 inventoryTextArea.setText("");
@@ -641,15 +689,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 // set up a connection to the LeafTech database
                 try
                 {                
-                    //load JDBC driver class for MySQL
-                    Class.forName( "com.mysql.jdbc.Driver" );
-
-                    //define the data source
-                    String SQLServerIP = databaseServerIpText.getText();
-                    String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/inventory";
-
-                    //create a connection to the db
-                    DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
+                    InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
 
                 } catch (Exception e) {
 
@@ -666,29 +706,49 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 {
                     try
                     {
-                        s = DBConn.createStatement();
-
                         // if trees inventory selected
                         if (treesRadioButton.isSelected())
                         {
-                            SQLstatement = ( "DELETE FROM trees WHERE product_code = '" + productID + "';");
+                            inventoryService.DeleteProduct("trees", Id);
                         }
 
-                        // if shrubs inventory selected
+                        // if strubs inventory selected
                         if (shrubsRadioButton.isSelected())
                         {
-                            SQLstatement = ( "DELETE FROM shrubs WHERE product_code = '" + productID + "';");
+                            inventoryService.DeleteProduct("shrubs", Id);
                         }
 
                         // if seeds inventory selected
                         if (seedsRadioButton.isSelected())
                         {
-                            SQLstatement = ( "DELETE FROM seeds WHERE product_code = '" + productID + "';");
+                            inventoryService.DeleteProduct("seeds", Id);
                         }
-   
-                        // execute the delete query
+
+                        // if culture boxes inventory selected
+                        if (cultureBoxesRadioButton.isSelected())
+                        {
+                            inventoryService.DeleteProduct("cultureboxes", Id);
+                        }
+
+                        // if genomics inventory selected
+                        if (genomicsRadioButton.isSelected())
+                        {
+                            inventoryService.DeleteProduct("genomics", Id);
+                        }
+
+                        // if processing inventory selected
+                        if (processingRadioButton.isSelected())
+                        {
+                            inventoryService.DeleteProduct("processing", Id);
+                        }
                         
-                        executeUpdateVal = s.executeUpdate(SQLstatement);
+                        // if reference materials inventory selected
+                        if (referenceMaterialsRadioButton.isSelected())
+                        {
+                            inventoryService.DeleteProduct("referencematerials", Id);
+                        }
+                        
+
 
                         // let the user know all went well
                         
@@ -739,6 +799,8 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         String inventorySelection = null;   // Inventory text string selected by user
         IndexNotFound = false;              // Flag indicating that a string index was not found
         
+        
+        
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
 
@@ -778,15 +840,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 // set up a connection to the LeafTech database
                 try
                 {                
-                    //load JDBC driver class for MySQL
-                    Class.forName( "com.mysql.jdbc.Driver" );
-
-                    //define the data source
-                    String SQLServerIP = databaseServerIpText.getText();
-                    String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/inventory";
-
-                    //create a connection to the db
-                    DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
+                    InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
 
                 } catch (Exception e) {
 
@@ -803,50 +857,51 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 {
                     try
                     {
-                        s = DBConn.createStatement();
 
                         // if trees inventory selected
                         if (treesRadioButton.isSelected())
                         {
-                            SQLstatement1 = ("UPDATE trees set quantity=(quantity-1) where product_code = '" + productID + "';");
-                            SQLstatement2 = ("SELECT * from trees where product_code = '" + productID + "';");
-                            tableSelected = "TREES";
+                            inventoryService.DecrementProduct("trees", Id);
                         }
 
                         // if strubs inventory selected
                         if (shrubsRadioButton.isSelected())
                         {
-                            SQLstatement1 = ("UPDATE shrubs set quantity=(quantity-1) where product_code = '" + productID + "';");
-                            SQLstatement2 = ("SELECT * from shrubs where product_code = '" + productID + "';");
-                            tableSelected = "SHRUBS";
+                            inventoryService.DecrementProduct("shrubs", Id);
                         }
 
                         // if seeds inventory selected
                         if (seedsRadioButton.isSelected())
                         {
-                            SQLstatement1 = ("UPDATE seeds set quantity=(quantity-1) where product_code = '" + productID + "';");
-                            SQLstatement2 = ("SELECT * from seeds where product_code = '" + productID + "';");
-                            tableSelected = "SEEDS";
+                            inventoryService.DecrementProduct("seeds", Id);
                         }
 
-                        // execute the update, then query the BD for the table entry for the item just changed
-                        // and display it for the user
-                        
-                        executeUpdateVal = s.executeUpdate(SQLstatement1);
-                        res = s.executeQuery(SQLstatement2);
-                       
-                        
-                        inventoryTextArea.append("\n\n" + productID + " inventory decremented...");
-                        
-                        while (res.next())
+                        // if culture boxes inventory selected
+                        if (cultureBoxesRadioButton.isSelected())
                         {
-                            msgString = tableSelected + ">> " + res.getString(1) + " :: " + res.getString(2) +
-                            " :: "+ res.getString(3) + " :: " + res.getString(4);
-                            inventoryTextArea.append("\n"+msgString);
+                            inventoryService.DecrementProduct("cultureboxes", Id);
+                        }
 
-                        } // while
+                        // if genomics inventory selected
+                        if (genomicsRadioButton.isSelected())
+                        {
+                            inventoryService.DecrementProduct("genomics", Id);
+                        }
+
+                        // if processing inventory selected
+                        if (processingRadioButton.isSelected())
+                        {
+                            inventoryService.DecrementProduct("processing", Id);
+                        }
                         
-                        inventoryTextArea.append("\n\n Number of items updated: " + executeUpdateVal );
+                        // if reference materials inventory selected
+                        if (referenceMaterialsRadioButton.isSelected())
+                        {
+                            inventoryService.DecrementProduct("referencematerials", Id);
+                        }
+                        
+                        // Inform user that type was updated
+                        inventoryTextArea.append("\n\n Number of items updated. "  );
 
                     } catch (Exception e) {
 
@@ -871,6 +926,11 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         } // Blank string check
     }//GEN-LAST:event_decrementButtonActionPerformed
 
+    
+
+    
+    
+    
     private void productDescriptionTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productDescriptionTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productDescriptionTextActionPerformed
@@ -878,6 +938,30 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     private void productIdTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productIdTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productIdTextActionPerformed
+
+    private void cultureBoxesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cultureBoxesRadioButtonActionPerformed
+        
+        leafTechRadioButtonSelected();
+        cultureBoxesRadioButton.setSelected(true);
+    }//GEN-LAST:event_cultureBoxesRadioButtonActionPerformed
+
+    private void genomicsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genomicsRadioButtonActionPerformed
+
+        leafTechRadioButtonSelected();
+        genomicsRadioButton.setSelected(true);
+    }//GEN-LAST:event_genomicsRadioButtonActionPerformed
+
+    private void processingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingRadioButtonActionPerformed
+
+        leafTechRadioButtonSelected();
+        processingRadioButton.setSelected(true);
+    }//GEN-LAST:event_processingRadioButtonActionPerformed
+
+    private void referenceMaterialsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenceMaterialsRadioButtonActionPerformed
+
+        leafTechRadioButtonSelected();
+        referenceMaterialsRadioButton.setSelected(true);
+    }//GEN-LAST:event_referenceMaterialsRadioButtonActionPerformed
 
     /**
     * @param args the command line arguments
@@ -892,6 +976,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItemButton;
+    private javax.swing.JRadioButton cultureBoxesRadioButton;
     private javax.swing.JLabel databaseServerIpLabel;
     private javax.swing.JTextField databaseServerIpText;
     private javax.swing.JButton decrementButton;
@@ -899,18 +984,21 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton deleteItemButton;
     private javax.swing.JLabel deleteText;
     private javax.swing.JLabel frameTitleLabel;
+    private javax.swing.JRadioButton genomicsRadioButton;
     private javax.swing.JScrollPane inventoryScrollPane;
     private javax.swing.JTextArea inventoryTextArea;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton listInventoryButton;
     private javax.swing.JLabel priceLabel;
     private javax.swing.JTextField priceText;
+    private javax.swing.JRadioButton processingRadioButton;
     private javax.swing.JLabel productDescriptionLabel;
     private javax.swing.JTextField productDescriptionText;
     private javax.swing.JLabel productIdLabel;
     private javax.swing.JTextField productIdText;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JTextField quantityText;
+    private javax.swing.JRadioButton referenceMaterialsRadioButton;
     private javax.swing.JRadioButton seedsRadioButton;
     private javax.swing.JRadioButton shrubsRadioButton;
     private javax.swing.JRadioButton treesRadioButton;

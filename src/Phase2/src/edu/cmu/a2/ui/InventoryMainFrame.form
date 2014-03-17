@@ -37,6 +37,10 @@
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
+                              <Component id="productDescriptionText" min="-2" pref="920" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="priceText" alignment="0" max="32767" attributes="1"/>
                                   <Component id="quantityText" alignment="0" max="32767" attributes="1"/>
@@ -44,32 +48,50 @@
                               </Group>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="treesRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="shrubsRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="seedsRadioButton" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="addItemButton" max="32767" attributes="1"/>
-                                  <Component id="listInventoryButton" pref="123" max="32767" attributes="1"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="treesRadioButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                                              <Component id="addItemButton" min="-2" pref="123" max="-2" attributes="1"/>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Component id="shrubsRadioButton" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="seedsRadioButton" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Component id="listInventoryButton" alignment="1" min="-2" pref="123" max="-2" attributes="1"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="deleteItemButton" pref="123" max="32767" attributes="0"/>
-                                  <Component id="decrementButton" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="deleteText" min="-2" max="-2" attributes="0"/>
+                                      <Component id="decrementButton" min="-2" pref="123" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="decrementText" pref="403" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="deleteItemButton" min="-2" pref="123" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="deleteText" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="cultureBoxesRadioButton" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="genomicsRadioButton" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="processingRadioButton" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="referenceMaterialsRadioButton" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="decrementText" max="32767" attributes="0"/>
                               </Group>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="productDescriptionText" min="-2" pref="920" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -96,7 +118,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="frameTitleLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="32" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -110,46 +132,40 @@
                       <Component id="productDescriptionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="productIdText" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="treesRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="productIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="priceText" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="shrubsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="quantityText" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="seedsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="addItemButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="deleteItemButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="deleteText" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="decrementText" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="listInventoryButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="decrementButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="productIdText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="treesRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="productIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="shrubsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="seedsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cultureBoxesRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="genomicsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="processingRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="referenceMaterialsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="priceText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="quantityText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="deleteItemButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                  <Component id="deleteText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addItemButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="inventoryScrollPane" min="-2" pref="240" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="decrementButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="decrementText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="listInventoryButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+              <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="inventoryScrollPane" min="-2" pref="289" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -291,6 +307,38 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Decrements inventory count of item selected from the list"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="cultureBoxesRadioButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Culture Boxes"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cultureBoxesRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="genomicsRadioButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Genomics"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="genomicsRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="processingRadioButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Processing"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="processingRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="referenceMaterialsRadioButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Reference Materials"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="referenceMaterialsRadioButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
