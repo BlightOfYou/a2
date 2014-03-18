@@ -22,4 +22,82 @@ public class Order {
     public boolean Shipped; //tinyint(1)
     public List<OrderItem> OrderItems; //varchar(40)
 
+    public Order(int OrderId, String OrderDate, String FirstName, String LastName, String Address, String Phone, float TotalCost, boolean Shipped, List<OrderItem> OrderItems) {
+        this.OrderId = OrderId;
+        this.OrderDate = OrderDate;
+        this.FirstName = FirstName;
+        this.LastName = LastName;
+        this.Address = Address;
+        this.Phone = Phone;
+        this.TotalCost = TotalCost;
+        this.Shipped = Shipped;
+        this.OrderItems = OrderItems;
+    }
+
+    public int getOrderId() {
+        return OrderId;
+    }
+
+    public void setOrderId(int OrderId) {
+        this.OrderId = OrderId;
+    }
+
+    public String getOrderDate() {
+        return OrderDate;
+    }
+
+    public void setOrderDate(String OrderDate) {
+        this.OrderDate = OrderDate;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String LastName) {
+        this.LastName = LastName;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String Address) {
+        this.Address = Address;
+    }
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String Phone) {
+        this.Phone = Phone;
+    }
+
+    public float getTotalCost() {
+        return TotalCost;
+    }
+
+    public void setTotalCost(float TotalCost) {
+        this.TotalCost = TotalCost;
+    }
+
+    public boolean isShipped() {
+        return Shipped;
+    }
+
+    public void setShipped(boolean Shipped) {
+        this.Shipped = Shipped;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return OrderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> OrderItems) {
+        this.OrderItems = OrderItems;
+    }
+
+    
+    
 }
