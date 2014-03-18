@@ -1,6 +1,9 @@
+package edu.cmu.a2.ui;
 
+import edu.cmu.a2.middle.*;
+import edu.cmu.a2.dto.*;
 import java.sql.*;
-
+import java.util.List;
  /******************************************************************************
  * File:NewJFrame.java
  * Course: 17655
@@ -18,12 +21,15 @@ import java.sql.*;
  *
  * @author lattanze
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class ShippingMainFrame extends javax.swing.JFrame {
     Integer updateOrderID;
     String versionID = "v2.10.10";
     
+    String databaseStr = "jdbc:mysql://localhost:3306/orderinfo";
+    OrderService orderService = new OrderService(databaseStr);
+    
     /** Creates new form NewJFrame */
-    public NewJFrame() {
+    public ShippingMainFrame() {
         initComponents();
         shippingApplicationLabel.setText("Shipping Application " + versionID);
     }
@@ -306,7 +312,9 @@ public class NewJFrame extends javax.swing.JFrame {
     private void showPendingOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPendingOrdersButtonActionPerformed
         // jButton2 is responsible for refreshing the list of pending
         // orders.
-        getPendingOrders();
+//        List<Order> orderList = new List;
+        
+        
     }//GEN-LAST:event_showPendingOrdersButtonActionPerformed
 
     private void selectOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectOrderButtonActionPerformed
@@ -339,6 +347,9 @@ public class NewJFrame extends javax.swing.JFrame {
         // make sure its not blank
         if (orderSelection.length() > 0 )
         {
+            
+//            CFP TO DO: Make sure product ID is correct
+
             // get the product ID
             beginIndex = 0;
             beginIndex = orderSelection.indexOf(" # ", beginIndex);
@@ -363,31 +374,11 @@ public class NewJFrame extends javax.swing.JFrame {
         {
             try
             {
-                msgString = ">> Establishing Driver...";
-                messagesTextArea.setText("\n"+msgString);
-
-                //Load J Connector for MySQL - explicit loads are not needed for 
-                //connectors that are version 4 and better
-                //Class.forName( "com.mysql.jdbc.Driver" );
-
-                msgString = ">> Setting up URL...";
-                messagesTextArea.append("\n"+msgString);
-
-                //define the data source
-                String SQLServerIP = serverIpAddressText.getText();
-                String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-                msgString = ">> Establishing connection with: " + sourceURL + "...";
-                messagesTextArea.append("\n"+msgString);
-
-                //create a connection to the db - note the default account is "remote"
-                //and the password is "remote_pass" - you will have to set this
-                //account up in your database
-                DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
+                Order order = orderService.GetOrder(orderId);
 
             } catch (Exception e) {
 
-                errString =  "\nProblem connecting to orderinfo database:: " + e;
+                errString =  "\nProblem retrieving order:: " + e;
                 messagesTextArea.append(errString);
                 connectError = true;
 
@@ -399,30 +390,19 @@ public class NewJFrame extends javax.swing.JFrame {
         {
             try
             {
-                s = DBConn.createStatement();
-                SQLStatement = "SELECT * FROM orders WHERE order_id = " + Integer.parseInt(orderID);
-                res = s.executeQuery( SQLStatement );
-                
+
                 // Get the information from the database. Display the
                 // first and last name, address, phone number, address, and
                 // order date. Same the ordertable name - this is the name of
                 // the table that is created when an order is submitted that
                 // contains the list of order items.
 
-                while (res.next()) {
                     
-                  orderTable = res.getString(9);         // name of table with list of items
-                  firstNameText.setText(res.getString(3)); // first name
-                  lastNameText.setText(res.getString(4)); // last name
-                  phoneText.setText(res.getString(6)); // phone
-                  orderDateText.setText(res.getString(2)); // order date
-                  mailingAddressTextArea.setText(res.getString(5));  // address
-
-                } // for each element in the return SQL query
-
-                // get the order items from the related order table
-                SQLStatement = "SELECT * FROM " + orderTable;
-                res = s.executeQuery( SQLStatement );
+                  firstNameText.setText(order.firstName); // first name
+                  lastNameText.setText(order.lastName); // last name
+                  phoneText.setText(order.phone); // phone
+                  orderDateText.setText(order.orderDate); // order date
+                  mailingAddressTextArea.setText(order.address);  // address
 
 
                 // list the items on the form that comprise the order
@@ -468,37 +448,8 @@ public class NewJFrame extends javax.swing.JFrame {
         Statement s = null;                 // SQL statement pointer
         String SQLStatement = null;         // SQL statement string
 
-        // Connect to the order database
-        try
-        {
-            msgString = ">> Establishing Driver...";
-            messagesTextArea.setText("\n"+msgString);
+        // Connect to the order database -- THIS CODE IS REMOVED
 
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            messagesTextArea.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = serverIpAddressText.getText();
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            messagesTextArea.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-        } catch (Exception e) {
-
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
-            messagesTextArea.append(errString);
-            connectError = true;
-
-        } // end try-catch
 
         // If we are connected, then we update the shipped status
 
@@ -506,12 +457,9 @@ public class NewJFrame extends javax.swing.JFrame {
         {
             try
             {
+                
                 // first we create the query
-                s = DBConn.createStatement();
-                SQLStatement = "UPDATE orders SET shipped=" + true + " WHERE order_id=" + updateOrderID;
-
-                // execute the statement
-                rows = s.executeUpdate( SQLStatement );
+                orderService.ShipOrder(orderId);
 
                 // if the query worked, then we display the data in TextArea 4 - BTW, its highly
                 // unlikely that the row won't exist and if it does the database tables are
@@ -575,12 +523,9 @@ public class NewJFrame extends javax.swing.JFrame {
         // jTextArea1.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
-        ResultSet res = null;               // SQL query result set pointer
-        Statement s = null;                 // SQL statement pointer
-        int shippedStatus;                  // if 0, order not shipped, if 1 order shipped
+
 
         // Clean up the form before we start
 
@@ -595,30 +540,11 @@ public class NewJFrame extends javax.swing.JFrame {
         // Connect to the order database
         try
         {
-            msgString = ">> Establishing Driver...";
-            messagesTextArea.setText("\n"+msgString);
-
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            messagesTextArea.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = serverIpAddressText.getText();
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            messagesTextArea.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
+            List<Order> pendingOrderList = orderService.GetPendingOrders();
 
         } catch (Exception e) {
 
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
+            errString =  "\nProblem retrieving pending orders:: " + e;
             messagesTextArea.append(errString);
             connectError = true;
 
@@ -630,43 +556,16 @@ public class NewJFrame extends javax.swing.JFrame {
         if ( !connectError )
         {
             try
-            {
-                // Create a query to get all the orders and execute the query
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from orders" );
+            {  
+                // TO DO: LIST OUT ORDERS IN ORDERTEXTAREA
+                displayOrders(pendingOrderList);
 
-                //Display the data in the textarea
-                orderTextArea.setText("");
-
-                // For each row returned, we check the shipped status. If it is
-                // equal to 0 it means it has not been shipped as of yet, so we
-                // display it in TextArea 1. Note that we use an integer because
-                // MySQL stores booleans and a TinyInt(1), which we interpret
-                // here on the application side as an integer. It works, it just
-                // isn't very elegant.
-                while (res.next())
-                {
-                    shippedStatus = Integer.parseInt(res.getString(8));
-
-                    if ( shippedStatus == 0 )
-                    {
-                        msgString = "ORDER # " + res.getString(1) + " : " + res.getString(2) +
-                              " : "+ res.getString(3) + " : " + res.getString(4);
-                        orderTextArea.append(msgString+"\n");
-
-                    } // shipped status check
-
-                } // while
-
-                // notify the user all went well and enable the select order
-                // button
                 selectOrderButton.setEnabled(true);
                 msgString =  "\nPENDING ORDERS RETRIEVED...";
                 messagesTextArea.setText(msgString);
-
             } catch (Exception e) {
 
-                errString =  "\nProblem getting tree inventory:: " + e;
+                errString =  "\nProblem listing pending orders:: " + e;
                 messagesTextArea.append(errString);
 
             } // end try-catch
@@ -682,15 +581,10 @@ public class NewJFrame extends javax.swing.JFrame {
         // orders is written to jTextArea1.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
-        ResultSet res = null;               // SQL query result set pointer
-        Statement s = null;                 // SQL statement pointer
-        int shippedStatus;                  // if 0, order not shipped, if 1 order shipped
 
         // Clean up the form before we start
-
         orderTextArea.setText("");
         mailingAddressTextArea.setText("");
         orderItemsTextArea.setText("");
@@ -702,30 +596,11 @@ public class NewJFrame extends javax.swing.JFrame {
         // Connect to the order database
         try
         {
-            msgString = ">> Establishing Driver...";
-            messagesTextArea.setText("\n"+msgString);
-
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            messagesTextArea.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = serverIpAddressText.getText();
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            messagesTextArea.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
+            List<Order> shippedOrderList = orderService.GetShippedOrders();
 
         } catch (Exception e) {
 
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
+            errString =  "\nProblem retrieving shipped orders:: " + e;
             messagesTextArea.append(errString);
             connectError = true;
 
@@ -740,32 +615,7 @@ public class NewJFrame extends javax.swing.JFrame {
             {
                 // Create a query to get all the rows from the orders database
                 // and execute the query.
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from orders" );
-
-                //Display the data in the textarea
-                orderTextArea.setText("");
-
-                // For each row returned, we check the shipped status. If it is
-                // equal to 0 it means it has not been shipped as of yet, so we
-                // display it in TextArea 1. Note that we use an integer because
-                // MySQL stores booleans and a TinyInt(1), which we interpret
-                // here on the application side as an integer. It works, it just
-                // isn't very elegant.
-
-                while (res.next())
-                {
-                    shippedStatus = Integer.parseInt(res.getString(8));
-
-                    if ( shippedStatus == 1 )
-                    {
-                        msgString = "SHIPPED ORDER # " + res.getString(1) + " : " + res.getString(2) +
-                              " : "+ res.getString(3) + " : " + res.getString(4);
-                        orderTextArea.append(msgString+"\n");
-
-                    } // shipped status check
-
-                } // while
+                displayOrders(shippedOrderList);
 
                 markAsShippedButton.setEnabled(false);
                 selectOrderButton.setEnabled(false);
@@ -775,7 +625,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
             } catch (Exception e) {
 
-                errString =  "\nProblem getting tree inventory:: " + e;
+                errString =  "\nProblem getting shipped orders:: " + e;
                 messagesTextArea.append(errString);
 
             } // end try-catch
@@ -785,13 +635,49 @@ public class NewJFrame extends javax.swing.JFrame {
     } // getPendingOrders
 
 
+
+    private void displayOrders(List<Order>) {
+        //                //-------- BEGIN OLD CODE ---------------------------------------//
+//                // Create a query to get all the orders and execute the query
+//                s = DBConn.createStatement();
+//                res = s.executeQuery( "Select * from orders" );
+//
+//                //Display the data in the textarea
+//                orderTextArea.setText("");
+//
+//                // For each row returned, we check the shipped status. If it is
+//                // equal to 0 it means it has not been shipped as of yet, so we
+//                // display it in TextArea 1. Note that we use an integer because
+//                // MySQL stores booleans and a TinyInt(1), which we interpret
+//                // here on the application side as an integer. It works, it just
+//                // isn't very elegant.
+//                while (res.next())
+//                {
+//                    shippedStatus = Integer.parseInt(res.getString(8));
+//
+//                    if ( shippedStatus == 0 )
+//                    {
+//                        msgString = "ORDER # " + res.getString(1) + " : " + res.getString(2) +
+//                              " : "+ res.getString(3) + " : " + res.getString(4);
+//                        orderTextArea.append(msgString+"\n");
+//
+//                    } // shipped status check
+//
+//                } // while
+//
+//                // notify the user all went well and enable the select order
+//                // button
+    }
+            
+            
+    
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new ShippingMainFrame().setVisible(true);
             }
         });
     }
