@@ -25,7 +25,7 @@ public class NewJFrame extends javax.swing.JFrame {
     /** Creates new form NewJFrame */
     public NewJFrame() {
         initComponents();
-        jLabel1.setText("Shipping Application " + versionID);
+        shippingApplicationLabel.setText("Shipping Application " + versionID);
     }
 
     /** This method is called from within the constructor to
@@ -37,139 +37,146 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        shippingApplicationLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        orderTextArea = new javax.swing.JTextArea();
+        serverIpAddressLabel = new javax.swing.JLabel();
+        serverIpAddressText = new javax.swing.JTextField();
+        firstNameText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        firstNameLabel = new javax.swing.JLabel();
+        lastNameLabel = new javax.swing.JLabel();
+        lastNameText = new javax.swing.JTextField();
+        phoneLabel = new javax.swing.JLabel();
+        phoneText = new javax.swing.JTextField();
+        mailingAddressLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
+        mailingAddressTextArea = new javax.swing.JTextArea();
+        markAsShippedButton = new javax.swing.JButton();
+        showPendingOrdersButton = new javax.swing.JButton();
+        selectOrderButton = new javax.swing.JButton();
+        orderLabel = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        orderItemsTextArea = new javax.swing.JTextArea();
+        orderItemsLabel = new javax.swing.JLabel();
+        messagesLabel = new javax.swing.JLabel();
+        showShippedOrdersButton = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        messagesTextArea = new javax.swing.JTextArea();
+        orderDateLabel = new javax.swing.JLabel();
+        orderDateText = new javax.swing.JTextField();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        orderTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Shipping Application");
+        shippingApplicationLabel.setText("Shipping Application");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setEditable(false);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        orderTextArea.setEditable(false);
+        orderTextArea.setColumns(20);
+        orderTextArea.setRows(5);
+        jScrollPane1.setViewportView(orderTextArea);
 
-        jLabel3.setText("Server IP Address:");
+        serverIpAddressLabel.setText("Server IP Address:");
 
-        jTextField1.setText("localhost");
+        serverIpAddressText.setText("localhost");
 
-        jTextField2.setEditable(false);
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        firstNameText.setEditable(false);
+        firstNameText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                firstNameTextActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Order Information:");
 
-        jLabel5.setText("Customer First Name:");
+        firstNameLabel.setText("Customer First Name:");
 
-        jLabel6.setText("Last Name:");
+        lastNameLabel.setText("Last Name:");
 
-        jTextField3.setEditable(false);
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        lastNameText.setEditable(false);
+        lastNameText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                lastNameTextActionPerformed(evt);
             }
         });
 
-        jLabel7.setText("Phone Number:");
+        phoneLabel.setText("Phone Number:");
 
-        jTextField4.setEditable(false);
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        phoneText.setEditable(false);
+        phoneText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                phoneTextActionPerformed(evt);
             }
         });
 
-        jLabel8.setText("Mailing Address");
+        mailingAddressLabel.setText("Mailing Address");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setEditable(false);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        mailingAddressTextArea.setEditable(false);
+        mailingAddressTextArea.setColumns(20);
+        mailingAddressTextArea.setRows(5);
+        jScrollPane2.setViewportView(mailingAddressTextArea);
 
-        jButton1.setText("Mark As Shipped");
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        markAsShippedButton.setText("Mark As Shipped");
+        markAsShippedButton.setEnabled(false);
+        markAsShippedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                markAsShippedButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Show  Pending Orders");
-        jButton2.setDefaultCapable(false);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        showPendingOrdersButton.setText("Show  Pending Orders");
+        showPendingOrdersButton.setDefaultCapable(false);
+        showPendingOrdersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                showPendingOrdersButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Select Order");
-        jButton3.setEnabled(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        selectOrderButton.setText("Select Order");
+        selectOrderButton.setEnabled(false);
+        selectOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                selectOrderButtonActionPerformed(evt);
             }
         });
 
-        jLabel10.setText("Order Number : Order Date & Time: Customer Name");
+        orderLabel.setText("Order Number : Order Date & Time: Customer Name");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setEditable(false);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
+        orderItemsTextArea.setEditable(false);
+        orderItemsTextArea.setColumns(20);
+        orderItemsTextArea.setRows(5);
+        jScrollPane3.setViewportView(orderItemsTextArea);
 
-        jLabel9.setText("Order Items ");
+        orderItemsLabel.setText("Order Items ");
 
-        jLabel11.setText("Messages");
+        messagesLabel.setText("Messages");
 
-        jButton4.setText("Show Shipped Orders");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        showShippedOrdersButton.setText("Show Shipped Orders");
+        showShippedOrdersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                showShippedOrdersButtonActionPerformed(evt);
             }
         });
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setEditable(false);
-        jTextArea4.setRows(5);
-        jScrollPane4.setViewportView(jTextArea4);
+        messagesTextArea.setEditable(false);
+        messagesTextArea.setColumns(20);
+        messagesTextArea.setRows(5);
+        jScrollPane4.setViewportView(messagesTextArea);
 
-        jLabel2.setText("Order Date:");
+        orderDateLabel.setText("Order Date:");
 
-        jTextField5.setEditable(false);
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        orderDateText.setEditable(false);
+        orderDateText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                orderDateTextActionPerformed(evt);
             }
         });
+
+        orderTextArea1.setEditable(false);
+        orderTextArea1.setColumns(20);
+        orderTextArea1.setRows(5);
+        jScrollPane5.setViewportView(orderTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -180,103 +187,106 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 894, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 894, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(shippingApplicationLabel)
                                 .addGap(228, 228, 228))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel8)
+                                .addComponent(mailingAddressLabel)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(markAsShippedButton, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 716, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 716, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(selectOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(showShippedOrdersButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(showPendingOrdersButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(187, 187, 187)
-                                .addComponent(jLabel3)
+                                .addComponent(serverIpAddressLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
+                                .addComponent(serverIpAddressText))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5))
+                                    .addComponent(firstNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(firstNameLabel))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lastNameLabel)
+                                    .addComponent(lastNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(phoneLabel)
+                                    .addComponent(phoneText, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE))
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))))
+                                        .addComponent(orderDateLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(orderDateText))))
                         .addGap(45, 45, 45))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel9)
+                            .addComponent(messagesLabel)
+                            .addComponent(orderItemsLabel)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel10))
+                            .addComponent(orderLabel))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(shippingApplicationLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(serverIpAddressLabel)
+                    .addComponent(serverIpAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showPendingOrdersButton))
                 .addGap(8, 8, 8)
-                .addComponent(jButton4)
+                .addComponent(showShippedOrdersButton)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel10)
+                .addComponent(orderLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel2))
+                    .addComponent(firstNameLabel)
+                    .addComponent(lastNameLabel)
+                    .addComponent(phoneLabel)
+                    .addComponent(orderDateLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(firstNameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderDateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lastNameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(phoneText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addComponent(mailingAddressLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9)
+                .addComponent(orderItemsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14)
-                        .addComponent(jLabel11))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(messagesLabel))
+                    .addComponent(markAsShippedButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
@@ -285,21 +295,21 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void lastNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_lastNameTextActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void phoneTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_phoneTextActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void showPendingOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPendingOrdersButtonActionPerformed
         // jButton2 is responsible for refreshing the list of pending
         // orders.
         getPendingOrders();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_showPendingOrdersButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void selectOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectOrderButtonActionPerformed
         // This button gets the selected line of text from the
         // order list window jTextArea1. The line of text is parsed for the
         // order number. Once the order number is parsed, then the order is
@@ -324,7 +334,7 @@ public class NewJFrame extends javax.swing.JFrame {
         String SQLStatement;                // SQL query
 
         // this is the selected line of text
-        orderSelection =  jTextArea1.getSelectedText();
+        orderSelection =  orderTextArea.getSelectedText();
 
         // make sure its not blank
         if (orderSelection.length() > 0 )
@@ -339,7 +349,7 @@ public class NewJFrame extends javax.swing.JFrame {
         } else {
 
             msgString = ">> Order string is blank...";
-            jTextArea4.setText("\n"+msgString);
+            messagesTextArea.setText("\n"+msgString);
             orderBlank = true;
 
         } // Blank string check
@@ -354,21 +364,21 @@ public class NewJFrame extends javax.swing.JFrame {
             try
             {
                 msgString = ">> Establishing Driver...";
-                jTextArea4.setText("\n"+msgString);
+                messagesTextArea.setText("\n"+msgString);
 
                 //Load J Connector for MySQL - explicit loads are not needed for 
                 //connectors that are version 4 and better
                 //Class.forName( "com.mysql.jdbc.Driver" );
 
                 msgString = ">> Setting up URL...";
-                jTextArea4.append("\n"+msgString);
+                messagesTextArea.append("\n"+msgString);
 
                 //define the data source
-                String SQLServerIP = jTextField1.getText();
+                String SQLServerIP = serverIpAddressText.getText();
                 String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
 
                 msgString = ">> Establishing connection with: " + sourceURL + "...";
-                jTextArea4.append("\n"+msgString);
+                messagesTextArea.append("\n"+msgString);
 
                 //create a connection to the db - note the default account is "remote"
                 //and the password is "remote_pass" - you will have to set this
@@ -378,7 +388,7 @@ public class NewJFrame extends javax.swing.JFrame {
             } catch (Exception e) {
 
                 errString =  "\nProblem connecting to orderinfo database:: " + e;
-                jTextArea4.append(errString);
+                messagesTextArea.append(errString);
                 connectError = true;
 
             } // end try-catch
@@ -402,11 +412,11 @@ public class NewJFrame extends javax.swing.JFrame {
                 while (res.next()) {
                     
                   orderTable = res.getString(9);         // name of table with list of items
-                  jTextField2.setText(res.getString(3)); // first name
-                  jTextField3.setText(res.getString(4)); // last name
-                  jTextField4.setText(res.getString(6)); // phone
-                  jTextField5.setText(res.getString(2)); // order date
-                  jTextArea2.setText(res.getString(5));  // address
+                  firstNameText.setText(res.getString(3)); // first name
+                  lastNameText.setText(res.getString(4)); // last name
+                  phoneText.setText(res.getString(6)); // phone
+                  orderDateText.setText(res.getString(2)); // order date
+                  mailingAddressTextArea.setText(res.getString(5));  // address
 
                 } // for each element in the return SQL query
 
@@ -416,13 +426,13 @@ public class NewJFrame extends javax.swing.JFrame {
 
 
                 // list the items on the form that comprise the order
-                jTextArea3.setText("");
+                orderItemsTextArea.setText("");
 
                 while (res.next())
                 {
                     msgString = res.getString(1) + ":  PRODUCT ID: " + res.getString(2) +
                          "  DESCRIPTION: "+ res.getString(3) + "  PRICE $" + res.getString(4);
-                    jTextArea3.append(msgString + "\n");
+                    orderItemsTextArea.append(msgString + "\n");
 
                 } // while
 
@@ -430,22 +440,22 @@ public class NewJFrame extends javax.swing.JFrame {
                 updateOrderID = Integer.parseInt(orderID);
 
                 // Update the form
-                jButton1.setEnabled(true);
+                markAsShippedButton.setEnabled(true);
                 msgString = "RECORD RETRIEVED...";
-                jTextArea4.setText(msgString);
+                messagesTextArea.setText(msgString);
                 
             } catch (Exception e) {
 
                 errString =  "\nProblem getting order items:: " + e;
-                jTextArea1.append(errString);
+                orderTextArea.append(errString);
 
             } // end try-catch
 
         } // connect and blank order check
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_selectOrderButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void markAsShippedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markAsShippedButtonActionPerformed
         // This method is responsible changing the status of the order
         // to shipped.
 
@@ -462,20 +472,20 @@ public class NewJFrame extends javax.swing.JFrame {
         try
         {
             msgString = ">> Establishing Driver...";
-            jTextArea4.setText("\n"+msgString);
+            messagesTextArea.setText("\n"+msgString);
 
             //load JDBC driver class for MySQL
             Class.forName( "com.mysql.jdbc.Driver" );
 
             msgString = ">> Setting up URL...";
-            jTextArea4.append("\n"+msgString);
+            messagesTextArea.append("\n"+msgString);
 
             //define the data source
-            String SQLServerIP = jTextField1.getText();
+            String SQLServerIP = serverIpAddressText.getText();
             String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
 
             msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea4.append("\n"+msgString);
+            messagesTextArea.append("\n"+msgString);
 
             //create a connection to the db - note the default account is "remote"
             //and the password is "remote_pass" - you will have to set this
@@ -485,7 +495,7 @@ public class NewJFrame extends javax.swing.JFrame {
         } catch (Exception e) {
 
             errString =  "\nProblem connecting to orderinfo database:: " + e;
-            jTextArea4.append(errString);
+            messagesTextArea.append(errString);
             connectError = true;
 
         } // end try-catch
@@ -510,52 +520,52 @@ public class NewJFrame extends javax.swing.JFrame {
 
                 if (rows > 0)
                 {
-                   jTextArea4.setText("\nOrder #" + updateOrderID + " status has been changed to shipped.");
+                   messagesTextArea.setText("\nOrder #" + updateOrderID + " status has been changed to shipped.");
 
                 } else {
 
-                   jTextArea4.setText("\nOrder #" + updateOrderID + " record not found.");
+                   messagesTextArea.setText("\nOrder #" + updateOrderID + " record not found.");
 
                 } // execute check
 
                 // Clean up the form
-                jButton1.setEnabled(false);
-                jButton3.setEnabled(false);
-                jTextArea1.setText("");
-                jTextArea2.setText("");
-                jTextArea3.setText("");
-                jTextField2.setText("");
-                jTextField3.setText("");
-                jTextField4.setText("");
-                jTextField5.setText("");
+                markAsShippedButton.setEnabled(false);
+                selectOrderButton.setEnabled(false);
+                orderTextArea.setText("");
+                mailingAddressTextArea.setText("");
+                orderItemsTextArea.setText("");
+                firstNameText.setText("");
+                lastNameText.setText("");
+                phoneText.setText("");
+                orderDateText.setText("");
 
             } catch (Exception e) {
 
                 errString =  "\nProblem updating status:: " + e;
-                jTextArea4.append(errString);
-                jTextArea1.setText("");
+                messagesTextArea.append(errString);
+                orderTextArea.setText("");
 
             } // end try-catch
 
         } // if connect check
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_markAsShippedButtonActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void showShippedOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showShippedOrdersButtonActionPerformed
         // This button will display the list of orders that have already
         // have been shipped.
 
         getShippedOrders();
 
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_showShippedOrdersButtonActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void firstNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_firstNameTextActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void orderDateTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderDateTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_orderDateTextActionPerformed
 
     private void getPendingOrders() {
 
@@ -574,32 +584,32 @@ public class NewJFrame extends javax.swing.JFrame {
 
         // Clean up the form before we start
 
-        jTextArea1.setText("");
-        jTextArea2.setText("");
-        jTextArea3.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
+        orderTextArea.setText("");
+        mailingAddressTextArea.setText("");
+        orderItemsTextArea.setText("");
+        firstNameText.setText("");
+        lastNameText.setText("");
+        phoneText.setText("");
+        orderDateText.setText("");
 
         // Connect to the order database
         try
         {
             msgString = ">> Establishing Driver...";
-            jTextArea4.setText("\n"+msgString);
+            messagesTextArea.setText("\n"+msgString);
 
             //load JDBC driver class for MySQL
             Class.forName( "com.mysql.jdbc.Driver" );
 
             msgString = ">> Setting up URL...";
-            jTextArea4.append("\n"+msgString);
+            messagesTextArea.append("\n"+msgString);
 
             //define the data source
-            String SQLServerIP = jTextField1.getText();
+            String SQLServerIP = serverIpAddressText.getText();
             String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
 
             msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea4.append("\n"+msgString);
+            messagesTextArea.append("\n"+msgString);
 
             //create a connection to the db - note the default account is "remote"
             //and the password is "remote_pass" - you will have to set this
@@ -609,7 +619,7 @@ public class NewJFrame extends javax.swing.JFrame {
         } catch (Exception e) {
 
             errString =  "\nProblem connecting to orderinfo database:: " + e;
-            jTextArea4.append(errString);
+            messagesTextArea.append(errString);
             connectError = true;
 
         } // end try-catch
@@ -626,7 +636,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 res = s.executeQuery( "Select * from orders" );
 
                 //Display the data in the textarea
-                jTextArea1.setText("");
+                orderTextArea.setText("");
 
                 // For each row returned, we check the shipped status. If it is
                 // equal to 0 it means it has not been shipped as of yet, so we
@@ -642,7 +652,7 @@ public class NewJFrame extends javax.swing.JFrame {
                     {
                         msgString = "ORDER # " + res.getString(1) + " : " + res.getString(2) +
                               " : "+ res.getString(3) + " : " + res.getString(4);
-                        jTextArea1.append(msgString+"\n");
+                        orderTextArea.append(msgString+"\n");
 
                     } // shipped status check
 
@@ -650,14 +660,14 @@ public class NewJFrame extends javax.swing.JFrame {
 
                 // notify the user all went well and enable the select order
                 // button
-                jButton3.setEnabled(true);
+                selectOrderButton.setEnabled(true);
                 msgString =  "\nPENDING ORDERS RETRIEVED...";
-                jTextArea4.setText(msgString);
+                messagesTextArea.setText(msgString);
 
             } catch (Exception e) {
 
                 errString =  "\nProblem getting tree inventory:: " + e;
-                jTextArea4.append(errString);
+                messagesTextArea.append(errString);
 
             } // end try-catch
             
@@ -681,32 +691,32 @@ public class NewJFrame extends javax.swing.JFrame {
 
         // Clean up the form before we start
 
-        jTextArea1.setText("");
-        jTextArea2.setText("");
-        jTextArea3.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
+        orderTextArea.setText("");
+        mailingAddressTextArea.setText("");
+        orderItemsTextArea.setText("");
+        firstNameText.setText("");
+        lastNameText.setText("");
+        phoneText.setText("");
+        orderDateText.setText("");
 
         // Connect to the order database
         try
         {
             msgString = ">> Establishing Driver...";
-            jTextArea4.setText("\n"+msgString);
+            messagesTextArea.setText("\n"+msgString);
 
             //load JDBC driver class for MySQL
             Class.forName( "com.mysql.jdbc.Driver" );
 
             msgString = ">> Setting up URL...";
-            jTextArea4.append("\n"+msgString);
+            messagesTextArea.append("\n"+msgString);
 
             //define the data source
-            String SQLServerIP = jTextField1.getText();
+            String SQLServerIP = serverIpAddressText.getText();
             String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
 
             msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea4.append("\n"+msgString);
+            messagesTextArea.append("\n"+msgString);
 
             //create a connection to the db - note the default account is "remote"
             //and the password is "remote_pass" - you will have to set this
@@ -716,7 +726,7 @@ public class NewJFrame extends javax.swing.JFrame {
         } catch (Exception e) {
 
             errString =  "\nProblem connecting to orderinfo database:: " + e;
-            jTextArea4.append(errString);
+            messagesTextArea.append(errString);
             connectError = true;
 
         } // end try-catch
@@ -734,7 +744,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 res = s.executeQuery( "Select * from orders" );
 
                 //Display the data in the textarea
-                jTextArea1.setText("");
+                orderTextArea.setText("");
 
                 // For each row returned, we check the shipped status. If it is
                 // equal to 0 it means it has not been shipped as of yet, so we
@@ -751,22 +761,22 @@ public class NewJFrame extends javax.swing.JFrame {
                     {
                         msgString = "SHIPPED ORDER # " + res.getString(1) + " : " + res.getString(2) +
                               " : "+ res.getString(3) + " : " + res.getString(4);
-                        jTextArea1.append(msgString+"\n");
+                        orderTextArea.append(msgString+"\n");
 
                     } // shipped status check
 
                 } // while
 
-                jButton1.setEnabled(false);
-                jButton3.setEnabled(false);
+                markAsShippedButton.setEnabled(false);
+                selectOrderButton.setEnabled(false);
 
                 msgString =  "\nSHIPPED ORDERS RETRIEVED...";
-                jTextArea4.setText(msgString);
+                messagesTextArea.setText(msgString);
 
             } catch (Exception e) {
 
                 errString =  "\nProblem getting tree inventory:: " + e;
-                jTextArea4.append(errString);
+                messagesTextArea.append(errString);
 
             } // end try-catch
 
@@ -787,34 +797,36 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel firstNameLabel;
+    private javax.swing.JTextField firstNameText;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JLabel lastNameLabel;
+    private javax.swing.JTextField lastNameText;
+    private javax.swing.JLabel mailingAddressLabel;
+    private javax.swing.JTextArea mailingAddressTextArea;
+    private javax.swing.JButton markAsShippedButton;
+    private javax.swing.JLabel messagesLabel;
+    private javax.swing.JTextArea messagesTextArea;
+    private javax.swing.JLabel orderDateLabel;
+    private javax.swing.JTextField orderDateText;
+    private javax.swing.JLabel orderItemsLabel;
+    private javax.swing.JTextArea orderItemsTextArea;
+    private javax.swing.JLabel orderLabel;
+    private javax.swing.JTextArea orderTextArea;
+    private javax.swing.JTextArea orderTextArea1;
+    private javax.swing.JLabel phoneLabel;
+    private javax.swing.JTextField phoneText;
+    private javax.swing.JButton selectOrderButton;
+    private javax.swing.JLabel serverIpAddressLabel;
+    private javax.swing.JTextField serverIpAddressText;
+    private javax.swing.JLabel shippingApplicationLabel;
+    private javax.swing.JButton showPendingOrdersButton;
+    private javax.swing.JButton showShippedOrdersButton;
     // End of variables declaration//GEN-END:variables
 
 }
