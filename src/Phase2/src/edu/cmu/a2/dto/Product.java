@@ -5,6 +5,8 @@
  */
 package edu.cmu.a2.dto;
 
+import java.util.Objects;
+
 /**
  *
  */
@@ -62,6 +64,44 @@ public class Product {
 
     public void setQuantity(int Quantity) {
         this.Quantity = Quantity;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.Id);
+        hash = 37 * hash + Objects.hashCode(this.Type);
+        hash = 37 * hash + Objects.hashCode(this.Description);
+        hash = 37 * hash + Float.floatToIntBits(this.Price);
+        hash = 37 * hash + this.Quantity;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Product other = (Product) obj;
+        if (!Objects.equals(this.Id, other.Id)) {
+            return false;
+        }
+        if (!Objects.equals(this.Type, other.Type)) {
+            return false;
+        }
+        if (!Objects.equals(this.Description, other.Description)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.Price) != Float.floatToIntBits(other.Price)) {
+            return false;
+        }
+        if (this.Quantity != other.Quantity) {
+            return false;
+        }
+        return true;
     }
     
     

@@ -7,6 +7,7 @@
 package edu.cmu.a2.middle;
 
 import edu.cmu.a2.dto.Product;
+import java.sql.SQLException;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,6 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -44,26 +46,29 @@ public class InventoryServiceTest {
      * Test of GetProduct method, of class InventoryService.
      */
     @Test
-    public void testGetProduct() {
+    public void testGetProduct() throws SQLException {
         System.out.println("GetProduct");
-        String Type = "";
-        int Id = 0;
-        InventoryService instance = null;
-        Product expResult = null;
+        String Type = "cultureboxes";
+        String Id = "PB005";
+        InventoryService instance = new InventoryService("localhost",3306);
+        Product expResult = new Product(Id,Type,"B-Cap",(float)250.00,45);
         Product result = instance.GetProduct(Type, Id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(result);
+        assertTrue(expResult.equals(result));
+        assertEquals(expResult,(result));
+        
+        
     }
 
     /**
      * Test of AddProduct method, of class InventoryService.
      */
     @Test
+    @Ignore
     public void testAddProduct() {
         System.out.println("AddProduct");
         Product product = null;
-        InventoryService instance = null;
+        InventoryService instance = new InventoryService("localhost",3306);
         instance.AddProduct(product);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -73,11 +78,12 @@ public class InventoryServiceTest {
      * Test of DecrementProduct method, of class InventoryService.
      */
     @Test
+    @Ignore
     public void testDecrementProduct() {
         System.out.println("DecrementProduct");
         String Type = "";
         int Id = 0;
-        InventoryService instance = null;
+        InventoryService instance = new InventoryService("localhost",3306);
         instance.DecrementProduct(Type, Id);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -87,11 +93,12 @@ public class InventoryServiceTest {
      * Test of GetProductTypes method, of class InventoryService.
      */
     @Test
+    @Ignore
     public void testGetProductTypes() {
         System.out.println("GetProductTypes");
-        InventoryService instance = null;
-        List<ProcessBuilder.Redirect.Type> expResult = null;
-        List<ProcessBuilder.Redirect.Type> result = instance.GetProductTypes();
+        InventoryService instance = new InventoryService("localhost",3306);
+        List<String> expResult = null;
+        List<String> result = instance.GetProductTypes();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -101,15 +108,12 @@ public class InventoryServiceTest {
      * Test of GetProducts method, of class InventoryService.
      */
     @Test
-    public void testGetProducts() {
+    public void testGetProducts() throws SQLException {
         System.out.println("GetProducts");
-        String Type = "";
-        InventoryService instance = null;
-        List<Product> expResult = null;
+        String Type = "cultureboxes";
+        InventoryService instance = new InventoryService("localhost",3306);
         List<Product> result = instance.GetProducts(Type);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(7, result.size());
     }
     
 }

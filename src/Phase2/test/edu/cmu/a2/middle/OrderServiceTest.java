@@ -7,6 +7,7 @@
 package edu.cmu.a2.middle;
 
 import edu.cmu.a2.dto.Order;
+import java.sql.SQLException;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,7 +45,7 @@ public class OrderServiceTest {
      * Test of SubmitOrder method, of class OrderService.
      */
     @Test
-    public void testSubmitOrder() {
+    public void testSubmitOrder() throws SQLException {
         System.out.println("SubmitOrder");
         Order order = null;
         OrderService instance = null;
@@ -57,7 +58,7 @@ public class OrderServiceTest {
      * Test of GetOrder method, of class OrderService.
      */
     @Test
-    public void testGetOrder() {
+    public void testGetOrder() throws SQLException {
         System.out.println("GetOrder");
         int OrderId = 0;
         OrderService instance = null;
