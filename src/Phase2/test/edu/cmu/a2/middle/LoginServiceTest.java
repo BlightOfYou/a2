@@ -24,7 +24,7 @@ public class LoginServiceTest {
     public void testLogin() throws MalformedURLException, LoginService.AuditLogException {
         String Username = "micah";
         String Password = "password";
-        LoginService instance = new LoginService("jdbc:mysql://localhost:3306/security");
+        LoginService instance = new LoginService("localhost", 3306);
         Session result = null;
         try {
             result = instance.Login(Username, Password);
@@ -40,7 +40,7 @@ public class LoginServiceTest {
     public void testInvalidLogin() throws MalformedURLException, LoginService.AuditLogException {
         String Username = "micah";
         String Password = "bleh";
-        LoginService instance = new LoginService("jdbc:mysql://localhost:3306/security");
+        LoginService instance = new LoginService("localhost", 3306);
         Session result = null;
         
         boolean invalidExceptionCaught = false;
@@ -62,7 +62,7 @@ public class LoginServiceTest {
     public void testLogout() throws LoginService.AuditLogException {
         String Username = "micah";
         String Password = "password";
-        LoginService instance = new LoginService("jdbc:mysql://localhost:3306/security");
+        LoginService instance = new LoginService("localhost", 3306);
         Session result = null;
         try {
             result = instance.Login(Username, Password);
