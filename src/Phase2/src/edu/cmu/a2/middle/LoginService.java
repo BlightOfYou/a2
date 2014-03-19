@@ -36,8 +36,8 @@ public class LoginService {
 
     private String databaseUrl;
 
-    public LoginService(String DatabaseUrl) {
-        databaseUrl = DatabaseUrl;
+    public LoginService(String host, int port) {
+        databaseUrl =  String.format("jdbc:mysql://%s:%d/loginservice", host, port);
     }
 
     public Session Login(String Username, String Password)
@@ -245,7 +245,7 @@ public class LoginService {
      */
     public static void main(String[] args)
             throws Exception {
-        LoginService login = new LoginService(null);
+        LoginService login = new LoginService("localhost", 3306);
 
         String salt = login.GenerateSalt();
         System.out.println("Salt: " + salt);

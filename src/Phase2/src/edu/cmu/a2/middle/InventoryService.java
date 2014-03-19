@@ -17,11 +17,9 @@ import java.util.List;
  *
  */
 public class InventoryService {
-    
-    private String databaseUrl;
-    
-    public InventoryService(String DatabaseUrl) {
-        databaseUrl = DatabaseUrl;
+
+    public InventoryService(String host, int port) {
+             
     }
 
     public Product GetProduct(String Type, int Id) {

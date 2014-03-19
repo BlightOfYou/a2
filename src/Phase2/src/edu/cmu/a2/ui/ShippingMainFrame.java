@@ -25,8 +25,9 @@ public class ShippingMainFrame extends javax.swing.JFrame {
     Integer updateOrderID;
     String versionID = "v2.10.10";
     
-    String databaseStr = "jdbc:mysql://localhost:3306/orderinfo";
-    OrderService orderService = new OrderService(databaseStr);
+    String serviceHost = "localhost";
+    int servicePort = 3306;
+    OrderService orderService = new OrderService(serviceHost, servicePort);
     
     /** Creates new form NewJFrame */
     public ShippingMainFrame() {

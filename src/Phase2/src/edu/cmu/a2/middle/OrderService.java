@@ -22,8 +22,8 @@ public class OrderService {
     private String firstName;
     private String lastName;
     
-    public OrderService(String DatabaseUrl) {
-        databaseUrl = DatabaseUrl;
+    public OrderService(String host, int port) {
+        //databaseUrl = DatabaseUrl;
     }
 
     public void SubmitOrder(Order order) {
