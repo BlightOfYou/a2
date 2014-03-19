@@ -21,8 +21,7 @@ import java.util.logging.Logger;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-    private static final String databaseUrl = "jdbc:mysql://localhost:3306/loginservice";
-    public LoginService loginService = new LoginService(databaseUrl);
+    public LoginService loginService = new LoginService("localhost", 3306);
 //    private static class LoginService;
     
     /**

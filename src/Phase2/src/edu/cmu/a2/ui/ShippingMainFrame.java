@@ -27,7 +27,14 @@ public class ShippingMainFrame extends javax.swing.JFrame {
     Integer updateOrderID;
     String versionID = "v2.10.10";
     
+<<<<<<< HEAD
     Integer port = 3306;
+=======
+    String serviceHost = "localhost";
+    int servicePort = 3306;
+    OrderService orderService = new OrderService(serviceHost, servicePort);
+    
+>>>>>>> 4aa68ac1b44574eda22e2b381705b8a6a0bba624
     /** Creates new form NewJFrame */
     public ShippingMainFrame() {
         initComponents();
