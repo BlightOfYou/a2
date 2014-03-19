@@ -12,21 +12,38 @@ import java.sql.ResultSet;
 
 
 public class InventoryMainFrame extends javax.swing.JFrame {
-
-    private static final String inventoryDatabaseStr = "jdbc:mysql://localhost:3306/inventory";
+    
+//    private static final String inventoryDatabaseStr = "jdbc:mysql://localhost:3306/inventory";
     //public InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
     
     private Boolean isEepProduct = false;
     private Boolean isLeafTechProduct = false;
     
-       String versionID = "v0.1";
-
+    String productType = null;
+    
+    Integer port = 3306;
+    Boolean connectError = false;
+    String errString = null;
+    String versionID = "v0.1";
+    
     /** Creates new form AddInventoryMainFrame */
     public InventoryMainFrame() {
         initComponents();
         frameTitleLabel.setText("Inventory Management Application " + versionID);
+        
+        try
+        {
+            InventoryService inventoryService = new InventoryService(serverIpAddressText, port);
+        } catch (Exception e) {
+            
+            errString =  "\nProblem connecting to database:: " + e;
+            inventoryTextArea.append(errString);
+            connectError = true;
+            
+        } // end try-catch
+        
     }
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -301,26 +318,29 @@ public class InventoryMainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void treesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treesRadioButtonActionPerformed
-  
+        
         eepRadioButtonSelected();
         treesRadioButton.setSelected(true);
-
+        productType = "trees";
+        
     }//GEN-LAST:event_treesRadioButtonActionPerformed
-
+    
     private void shrubsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shrubsRadioButtonActionPerformed
- 
+        
         eepRadioButtonSelected();
         shrubsRadioButton.setSelected(true);
+        productType = "shrubs";
     }//GEN-LAST:event_shrubsRadioButtonActionPerformed
-
+    
     private void seedsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedsRadioButtonActionPerformed
-
+        
         eepRadioButtonSelected();
         seedsRadioButton.setSelected(true);
+        productType = "seeds";
     }//GEN-LAST:event_seedsRadioButtonActionPerformed
-
+    
     
     
     private void eepRadioButtonSelected() {
@@ -332,14 +352,14 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     
     private void leafTechRadioButtonSelected() {
         
-        productTypeRadioButtonSelected(); 
+        productTypeRadioButtonSelected();
         isEepProduct = false;
         isLeafTechProduct = true;
     }
     
     private void productTypeRadioButtonSelected() {
         treesRadioButton.setSelected(false);
-        shrubsRadioButton.setSelected(false);        
+        shrubsRadioButton.setSelected(false);
         seedsRadioButton.setSelected(false);
         cultureBoxesRadioButton.setSelected(false);
         genomicsRadioButton.setSelected(false);
@@ -348,9 +368,9 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     }
     
     private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
-
+        
         // Adds inventory to database
-
+        
         Boolean connectError = false;   // Error flag
         Connection DBConn = null;       // MySQL connection handle
         String description;             // Tree, seed, or shrub description
@@ -368,16 +388,16 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         String SQLstatement = null;     // String for building SQL queries
         
         // Check to make sure a radio button is selected
-       
+        
         inventoryTextArea.setText("");
         
-        if (!treesRadioButton.isSelected() && !shrubsRadioButton.isSelected() && !seedsRadioButton.isSelected())
+        if (!treesRadioButton.isSelected() && !shrubsRadioButton.isSelected() && !seedsRadioButton.isSelected() && !cultureBoxesRadioButton.isSelected() && !genomicsRadioButton.isSelected() && !processingRadioButton.isSelected() && !referenceMaterialsRadioButton.isSelected())
         {
             fieldError = true;
-            inventoryTextArea.append("\nMust select Tree, Seeds, or Shrubs radio button.");
-
+            inventoryTextArea.append("\nMust select product type.");
+            
         } else {
-       
+            
             //Make sure there is a product description
             if ( productDescriptionText.getText().length() == 0 )
             {
@@ -385,21 +405,21 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 inventoryTextArea.append("\nMust enter a product description.");
                 
             } else {
-     
+                
                 //Make sure there is a product ID
                 if ( productIdText.getText().length() == 0 )
                 {
                     fieldError = true;
                     inventoryTextArea.append("\nMust enter a product ID.");
                 } else {
-            
+                    
                     //Make sure there is a price
                     if ( priceText.getText().length() == 0 )
                     {
                         fieldError = true;
                         inventoryTextArea.append("\nMust enter a product price.");
                     } else {
-                    
+                        
                         //Make sure quantity is specified
                         if ( quantityText.getText().length() == 0 )
                         {
@@ -410,31 +430,11 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 } // product ID
             } //product description
         } //category selected
-
-        //Now, if there was no error in the data fields, we try to
-        //connect to the database.
-  
-
-        if ( !fieldError )
-        {
-            
-
-            try
-            {
-                InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
-                inventoryTextArea.append("\nConnected to database");
-            } catch (Exception e) {
-
-                errString =  "\nProblem connecting to database:: " + e;
-                inventoryTextArea.append(errString);
-                connectError = true;
-
-            } // end try-catch
-        } // fieldError check
-
+        
+        
         //If there is not connection error, then we form the SQL statement
         //and then execute it.
-
+        
         if (!connectError && !fieldError )
         {
             try
@@ -444,76 +444,36 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 productID = productIdText.getText();
                 quantity = Integer.parseInt(quantityText.getText());
                 perUnitCost = Float.parseFloat(priceText.getText());
-
+                
                 // create an SQL statement variable and create the INSERT
                 // query to insert the new inventory into the database
-
-                s = DBConn.createStatement();
-
-                // if trees are selected then insert inventory into trees
-                // table
-                if (treesRadioButton.isSelected())
-                {
-                    SQLstatement = ( "INSERT INTO trees (product_code, " +
-                            "description, quantity, price) VALUES ( '" +
-                            productID + "', " + "'" + description + "', " +
-                            quantity + ", " + perUnitCost + ");");
-                    
-                    tableSelected = "TREES";
-
-                }
-
-                // if shrubs are selected then insert inventory into strubs
-                // table
-                if (shrubsRadioButton.isSelected())
-                {
-                    SQLstatement = ( "INSERT INTO shrubs (product_code, " +
-                            "description, quantity, price) VALUES ( '" +
-                            productID + "', " + "'" + description + "', " +
-                            quantity + ", " + perUnitCost + ");");
-                    
-                    tableSelected = "SHRUBS";
-                }
-
-                // if seeds are selected then insert inventory into seeds
-                // table
-                if (seedsRadioButton.isSelected())
-                {
-                    SQLstatement = ( "INSERT INTO seeds (product_code, " +
-                            "description, quantity, price) VALUES ( '" +
-                            productID + "', " + "'" + description + "', " +
-                            quantity + ", " + perUnitCost + ");");
-                    
-                    tableSelected = "SEEDS";
-                }
-
-                // execute the update
-                executeUpdateVal = s.executeUpdate(SQLstatement);
-
+                
+                Product product = new Product(productId, productType, description, float Price, int Quantity)
+                
                 // let the user know all went well
-
+                
                 inventoryTextArea.append("\nINVENTORY UPDATED... The following was added to the " + tableSelected + " inventory...\n");
                 inventoryTextArea.append("\nProduct Code:: " + productID);
                 inventoryTextArea.append("\nDescription::  " + description);
                 inventoryTextArea.append("\nQuantity::     " + quantity);
                 inventoryTextArea.append("\nUnit Cost::    " + perUnitCost);
-
+                
             } catch (Exception e) {
-
+                
                 errString =  "\nProblem adding inventory:: " + e;
                 inventoryTextArea.append(errString);
                 executeError = true;
-
+                
             } // try
-
+            
         } //execute SQL check
-
+        
     }//GEN-LAST:event_addItemButtonActionPerformed
-
+    
     private void listInventoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listInventoryButtonActionPerformed
         // This button will list the inventory for the product selected by the
         // radio button
-
+        
         Boolean connectError = false;   // Error flag
         Connection DBConn = null;       // MySQL connection handle
         Boolean executeError = false;   // Error flag
@@ -523,115 +483,95 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         ResultSet res = null;           // SQL query result set pointer
         String tableSelected = null;    // String used to determine which data table to use
         java.sql.Statement s = null;    // SQL statement pointer
-
-        List<Product> productList = new ArrayList<Product>();
+        
         
         // Check to make sure a radio button is selected
         if (isEepProduct || isLeafTechProduct)
         {
             fieldError = false;
-
+            
         } else {
-
+            
             msgString = "Must select radio button.";
             inventoryTextArea.setText("\n"+msgString);
         }
-
-
-        //Now, we try to connect to the inventory database.
-        if (!fieldError)
-        {
-            //Clear the fields - they are not needed and may cause confusion
-            productIdText.setText("");
-            priceText.setText("");
-            quantityText.setText("");
-            productDescriptionText.setText("");
-            inventoryTextArea.setText("");
-            
-            try
-            {
-                InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
-                inventoryTextArea.append("\nConnected to database");
-            } catch (Exception e) {
-
-                errString =  "\nProblem connecting to database:: " + e;
-                inventoryTextArea.append(errString);
-                connectError = true;
-
-            } // end try-catch
-
-        } // fielderror check - make sure a product is selected
-    
+        
+        
         //If there is not connection error, then we form the SQL statement
         //and then execute it.
-
+        
         if (!connectError && !fieldError)
         {
-     try
-     {
-                        // if trees inventory selected
-                        if (treesRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("trees");
-                        }
-
-                        // if strubs inventory selected
-                        if (shrubsRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("shrubs");
-                        }
-
-                        // if seeds inventory selected
-                        if (seedsRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("seeds");
-                        }
-
-                        // if culture boxes inventory selected
-                        if (cultureBoxesRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("cultureboxes");
-                        }
-
-                        // if genomics inventory selected
-                        if (genomicsRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("genomics");
-                        }
-
-                        // if processing inventory selected
-                        if (processingRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("processing");
-                        }
-                        
-                        // if reference materials inventory selected
-                        if (referenceMaterialsRadioButton.isSelected())
-                        {
-                            productList = inventoryService.GetProducts("referencematerials");
-                        }
+            try
+            {
+//                        // if trees inventory selected
+//                        if (treesRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("trees");
+//                        }
+//
+//                        // if strubs inventory selected
+//                        if (shrubsRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("shrubs");
+//                        }
+//
+//                        // if seeds inventory selected
+//                        if (seedsRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("seeds");
+//                        }
+//
+//                        // if culture boxes inventory selected
+//                        if (cultureBoxesRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("cultureboxes");
+//                        }
+//
+//                        // if genomics inventory selected
+//                        if (genomicsRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("genomics");
+//                        }
+//
+//                        // if processing inventory selected
+//                        if (processingRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("processing");
+//                        }
+//
+//                        // if reference materials inventory selected
+//                        if (referenceMaterialsRadioButton.isSelected())
+//                        {
+//                            productList = inventoryService.GetProducts("referencematerials");
+//                        }
                 
-
+                productList = inventoryService.GetProducts(productType);
+                
+                
                 // Now we list the inventory for the selected table
                 inventoryTextArea.setText("");
-                while (res.next())
-                {
-                    msgString = tableSelected+">>" + res.getString(1) + "::" + res.getString(2) +
-                            " :: "+ res.getString(3) + "::" + res.getString(4);
-                    inventoryTextArea.append("\n"+msgString);
-
-                } // while
-
+                
+//                TO DO: List out products
+                
+//                while (res.next())
+//                {
+//                    msgString = tableSelected+">>" + res.getString(1) + "::" + res.getString(2) +
+//                            " :: "+ res.getString(3) + "::" + res.getString(4);
+//                    inventoryTextArea.append("\n"+msgString);
+//
+//                } // while
+                
             } catch(Exception e) {
-
+                
                 errString =  "\nProblem with " + tableSelected +" query:: " + e;
                 inventoryTextArea.append(errString);
                 executeError = true;
-
+                
             } // try
         }
     }//GEN-LAST:event_listInventoryButtonActionPerformed
-
+    
     private void deleteItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteItemButtonActionPerformed
         // Deletes an item from the database
         
@@ -652,32 +592,32 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
-
+        
         // make sure the selection is not blank
         if ( inventorySelection != null )
         {
             // get the product ID - here we get the leading index
             beginIndex = 0;
             endIndex = inventorySelection.indexOf(">>",beginIndex);
-
+            
             if (endIndex < 0 ) {
                 IndexNotFound = true;
             } else {
-                beginIndex = endIndex+2; //skip past ">>"                                
+                beginIndex = endIndex+2; //skip past ">>"
             }
             
             if ( !IndexNotFound )
             {
                 // Here we get the trailing index and parse out the productID
                 endIndex = inventorySelection.indexOf(":",beginIndex);
-
+                
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
                 } else {
                     productID = inventorySelection.substring(beginIndex,endIndex);
-                }              
+                }
             }
-           
+            
             // Now we delete the inventory item indicated by the productID we
             // parsed out above from the indicated table.
             
@@ -685,101 +625,91 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             {
                 inventoryTextArea.setText("");
                 inventoryTextArea.append( "Deleting ProductID: " + productID );
-
-                // set up a connection to the LeafTech database
-                try
-                {                
-                    InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
-
-                } catch (Exception e) {
-
-                    errString =  "\nProblem connecting to database:: " + e;
-                    inventoryTextArea.append(errString);
-                    connectError = true;
-
-                } // end try-catch
+                
                 
                 //If there is no connection error, then we form the SQL statement
                 //to delete the inventory item and then execute it.
-
+                
                 if (!connectError )
                 {
                     try
                     {
-                        // if trees inventory selected
-                        if (treesRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("trees", Id);
-                        }
-
-                        // if strubs inventory selected
-                        if (shrubsRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("shrubs", Id);
-                        }
-
-                        // if seeds inventory selected
-                        if (seedsRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("seeds", Id);
-                        }
-
-                        // if culture boxes inventory selected
-                        if (cultureBoxesRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("cultureboxes", Id);
-                        }
-
-                        // if genomics inventory selected
-                        if (genomicsRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("genomics", Id);
-                        }
-
-                        // if processing inventory selected
-                        if (processingRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("processing", Id);
-                        }
+//                        // if trees inventory selected
+//                        if (treesRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("trees", Id);
+//                        }
+//
+//                        // if strubs inventory selected
+//                        if (shrubsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("shrubs", Id);
+//                        }
+//
+//                        // if seeds inventory selected
+//                        if (seedsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("seeds", Id);
+//                        }
+//
+//                        // if culture boxes inventory selected
+//                        if (cultureBoxesRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("cultureboxes", Id);
+//                        }
+//
+//                        // if genomics inventory selected
+//                        if (genomicsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("genomics", Id);
+//                        }
+//
+//                        // if processing inventory selected
+//                        if (processingRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("processing", Id);
+//                        }
+//
+//                        // if reference materials inventory selected
+//                        if (referenceMaterialsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DeleteProduct("referencematerials", Id);
+//                        }
                         
-                        // if reference materials inventory selected
-                        if (referenceMaterialsRadioButton.isSelected())
-                        {
-                            inventoryService.DeleteProduct("referencematerials", Id);
-                        }
+//                        TO DO: Convert productId string to int
+                        int productIdInt = Integer.parseInt(productId);
+                        inventoryService.DeleteProduct(productType, productIdInt);
                         
-
-
                         // let the user know all went well
                         
                         inventoryTextArea.append("\n\n" + productID + " deleted...");
                         inventoryTextArea.append("\n Number of items deleted: " + executeUpdateVal );
-
-
+                        
+                        
                     } catch (Exception e) {
-
+                        
                         errString =  "\nProblem with delete:: " + e;
                         inventoryTextArea.append(errString);
-
+                        
                     } // try
-               
-                } // connection check    
-                                       
+                    
+                } // connection check
+                
             } else {
-
+                
                 inventoryTextArea.setText("");
-                inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");      
-
+                inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
+                
             }
         } else {
-
+            
             inventoryTextArea.setText("");
-            inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)"); 
-
-        } // Blank string check        
+            inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
+            
+        } // Blank string check
         
     }//GEN-LAST:event_deleteItemButtonActionPerformed
-
+    
     private void decrementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decrementButtonActionPerformed
         // Decrements the inventory count for a selected item
         int beginIndex;                     // Parsing index
@@ -803,32 +733,32 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
-
+        
         // make sure the selection is not blank
         if ( inventorySelection != null )
         {
             // get the product ID - here we get the leading index
             beginIndex = 0;
             endIndex = inventorySelection.indexOf(">>",beginIndex);
-
+            
             if (endIndex < 0 ) {
                 IndexNotFound = true;
             } else {
-                beginIndex = endIndex+2; //skip past ">>"                                
+                beginIndex = endIndex+2; //skip past ">>"
             }
             
             if ( !IndexNotFound )
             {
                 // Here we get the trailing index and parse out the productID
                 endIndex = inventorySelection.indexOf(":",beginIndex);
-
+                
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
                 } else {
                     productID = inventorySelection.substring(beginIndex,endIndex);
-                }              
+                }
             }
-           
+            
             // Now we decrement the inventory count of the item indicated by the productID we
             // parsed out above from the indicated table.
             
@@ -837,135 +767,128 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 inventoryTextArea.setText("");
                 inventoryTextArea.append( "Deleting ProductID: " + productID );
 
-                // set up a connection to the LeafTech database
-                try
-                {                
-                    InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
-
-                } catch (Exception e) {
-
-                    errString =  "\nProblem connecting to database:: " + e;
-                    inventoryTextArea.append(errString);
-                    connectError = true;
-
-                } // end try-catch
                 
                 //If there is no connection error, then we form the SQL statement
                 //to decrement the inventory item count and then execute it.
-
+                
                 if (!connectError )
                 {
                     try
                     {
-
-                        // if trees inventory selected
-                        if (treesRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("trees", Id);
-                        }
-
-                        // if strubs inventory selected
-                        if (shrubsRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("shrubs", Id);
-                        }
-
-                        // if seeds inventory selected
-                        if (seedsRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("seeds", Id);
-                        }
-
-                        // if culture boxes inventory selected
-                        if (cultureBoxesRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("cultureboxes", Id);
-                        }
-
-                        // if genomics inventory selected
-                        if (genomicsRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("genomics", Id);
-                        }
-
-                        // if processing inventory selected
-                        if (processingRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("processing", Id);
-                        }
                         
-                        // if reference materials inventory selected
-                        if (referenceMaterialsRadioButton.isSelected())
-                        {
-                            inventoryService.DecrementProduct("referencematerials", Id);
-                        }
+//                        // if trees inventory selected
+//                        if (treesRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("trees", Id);
+//                        }
+//                        
+//                        // if strubs inventory selected
+//                        if (shrubsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("shrubs", Id);
+//                        }
+//                        
+//                        // if seeds inventory selected
+//                        if (seedsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("seeds", Id);
+//                        }
+//                        
+//                        // if culture boxes inventory selected
+//                        if (cultureBoxesRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("cultureboxes", Id);
+//                        }
+//                        
+//                        // if genomics inventory selected
+//                        if (genomicsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("genomics", Id);
+//                        }
+//                        
+//                        // if processing inventory selected
+//                        if (processingRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("processing", Id);
+//                        }
+//                        
+//                        // if reference materials inventory selected
+//                        if (referenceMaterialsRadioButton.isSelected())
+//                        {
+//                            inventoryService.DecrementProduct("referencematerials", Id);
+//                        }
+                        int productIdInt = Integer.parseInt(productId);
+                        inventoryService.DecrementProduct(productType, productIdInt);
                         
                         // Inform user that type was updated
                         inventoryTextArea.append("\n\n Number of items updated. "  );
-
+                        
                     } catch (Exception e) {
-
+                        
                         errString =  "\nProblem with delete:: " + e;
                         inventoryTextArea.append(errString);
-
+                        
                     } // try
-               
-                } // connection check    
-                                       
+                    
+                } // connection check
+                
             } else {
-
+                
                 inventoryTextArea.setText("");
-                inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");      
-
+                inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
+                
             }
         } else {
-
+            
             inventoryTextArea.setText("");
-            inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)"); 
-
+            inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
+            
         } // Blank string check
     }//GEN-LAST:event_decrementButtonActionPerformed
-
     
-
+    
+    
     
     
     
     private void productDescriptionTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productDescriptionTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productDescriptionTextActionPerformed
-
+    
     private void productIdTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productIdTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productIdTextActionPerformed
-
+    
     private void cultureBoxesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cultureBoxesRadioButtonActionPerformed
         
         leafTechRadioButtonSelected();
         cultureBoxesRadioButton.setSelected(true);
+        productType = "cultureboxes";
     }//GEN-LAST:event_cultureBoxesRadioButtonActionPerformed
-
+    
     private void genomicsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genomicsRadioButtonActionPerformed
-
+        
         leafTechRadioButtonSelected();
         genomicsRadioButton.setSelected(true);
     }//GEN-LAST:event_genomicsRadioButtonActionPerformed
-
+    
     private void processingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingRadioButtonActionPerformed
-
+        
         leafTechRadioButtonSelected();
         processingRadioButton.setSelected(true);
+        productType = "processing";
     }//GEN-LAST:event_processingRadioButtonActionPerformed
-
+    
     private void referenceMaterialsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenceMaterialsRadioButtonActionPerformed
-
+        
         leafTechRadioButtonSelected();
         referenceMaterialsRadioButton.setSelected(true);
+        productType = "referencematerials";
     }//GEN-LAST:event_referenceMaterialsRadioButtonActionPerformed
-
+    
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -973,7 +896,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItemButton;
     private javax.swing.JRadioButton cultureBoxesRadioButton;
@@ -1003,5 +926,5 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton shrubsRadioButton;
     private javax.swing.JRadioButton treesRadioButton;
     // End of variables declaration//GEN-END:variables
-
+    
 }

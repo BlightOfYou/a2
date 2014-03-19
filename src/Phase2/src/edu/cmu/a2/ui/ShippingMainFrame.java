@@ -2,6 +2,8 @@ package edu.cmu.a2.ui;
 
 import edu.cmu.a2.middle.*;
 import edu.cmu.a2.dto.*;
+import edu.cmu.a2.common.*;
+
 import java.sql.*;
 import java.util.List;
  /******************************************************************************
@@ -25,12 +27,11 @@ public class ShippingMainFrame extends javax.swing.JFrame {
     Integer updateOrderID;
     String versionID = "v2.10.10";
     
-    String databaseStr = "jdbc:mysql://localhost:3306/orderinfo";
-    OrderService orderService = new OrderService(databaseStr);
-    
+    Integer port = 3306;
     /** Creates new form NewJFrame */
     public ShippingMainFrame() {
         initComponents();
+        OrderService orderService = new OrderService(serverIpAddressText, port);
         shippingApplicationLabel.setText("Shipping Application " + versionID);
     }
 
@@ -327,19 +328,15 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         // in jTextArea3.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle    
         String errString = null;            // String for displaying errors
         int beginIndex;                     // Parsing index
         int endIndex;                       // Parsing index
         String msgString = null;            // String for displaying non-error messages
         String orderSelection = null;       // Order selected from TextArea1
-        String orderTable = null;           // The name of the table containing the order items
         String orderID = null;              // Product ID pnemonic
-        String productDescription = null;   // Product description
         ResultSet res = null;               // SQL query result set pointer
-        Statement s = null;                 // SQL statement pointer
         Boolean orderBlank = false;         // False: order string is not blank
-        String SQLStatement;                // SQL query
+
 
         // this is the selected line of text
         orderSelection =  orderTextArea.getSelectedText();
@@ -440,13 +437,8 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         // to shipped.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
-        ResultSet res = null;               // SQL query result set pointer
-        int rows;                           // Rows updated
-        Statement s = null;                 // SQL statement pointer
-        String SQLStatement = null;         // SQL statement string
+
 
         // Connect to the order database -- THIS CODE IS REMOVED
 
@@ -479,13 +471,7 @@ public class ShippingMainFrame extends javax.swing.JFrame {
                 // Clean up the form
                 markAsShippedButton.setEnabled(false);
                 selectOrderButton.setEnabled(false);
-                orderTextArea.setText("");
-                mailingAddressTextArea.setText("");
-                orderItemsTextArea.setText("");
-                firstNameText.setText("");
-                lastNameText.setText("");
-                phoneText.setText("");
-                orderDateText.setText("");
+                clearTextArea();
 
             } catch (Exception e) {
 
@@ -528,14 +514,7 @@ public class ShippingMainFrame extends javax.swing.JFrame {
 
 
         // Clean up the form before we start
-
-        orderTextArea.setText("");
-        mailingAddressTextArea.setText("");
-        orderItemsTextArea.setText("");
-        firstNameText.setText("");
-        lastNameText.setText("");
-        phoneText.setText("");
-        orderDateText.setText("");
+        clearTextArea();
 
         // Connect to the order database
         try
@@ -585,13 +564,7 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         String msgString = null;            // String for displaying non-error messages
 
         // Clean up the form before we start
-        orderTextArea.setText("");
-        mailingAddressTextArea.setText("");
-        orderItemsTextArea.setText("");
-        firstNameText.setText("");
-        lastNameText.setText("");
-        phoneText.setText("");
-        orderDateText.setText("");
+        clearTextArea();
 
         // Connect to the order database
         try
@@ -670,6 +643,15 @@ public class ShippingMainFrame extends javax.swing.JFrame {
     }
             
             
+    private void clearTextArea() {
+        orderTextArea.setText("");
+        mailingAddressTextArea.setText("");
+        orderItemsTextArea.setText("");
+        firstNameText.setText("");
+        lastNameText.setText("");
+        phoneText.setText("");
+        orderDateText.setText("");
+    }
     
     /**
     * @param args the command line arguments

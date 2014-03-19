@@ -55,7 +55,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
+                                      <Component id="serverIpAddressLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane2" alignment="0" max="32767" attributes="1"/>
                                   <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
@@ -95,7 +95,7 @@
                                   <Component id="costLabel" alignment="0" max="32767" attributes="1"/>
                                   <Component id="costText" alignment="0" max="32767" attributes="1"/>
                               </Group>
-                              <Component id="databaseIpText" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="serverIpAddressText" min="-2" pref="110" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -116,8 +116,8 @@
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="databaseIpText" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="serverIpAddressText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="serverIpAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -234,21 +234,33 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Culture Boxes"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cultureBoxesButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="genomicsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Genomics"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="genomicsButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="processesButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Processes"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="processesButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="referenceMaterialsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Reference Materials"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="referenceMaterialsButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -361,12 +373,12 @@
         <Property name="text" type="java.lang.String" value="Customer Information"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel11">
+    <Component class="javax.swing.JLabel" name="serverIpAddressLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Database IP:"/>
+        <Property name="text" type="java.lang.String" value="Server IP Address:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="databaseIpText">
+    <Component class="javax.swing.JTextField" name="serverIpAddressText">
       <Properties>
         <Property name="text" type="java.lang.String" value="localhost"/>
       </Properties>
