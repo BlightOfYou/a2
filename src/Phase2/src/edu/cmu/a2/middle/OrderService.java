@@ -227,7 +227,47 @@ public class OrderService {
         } // end if
     }
 
-    public void DeleteOrder(int OrderId) {
+    public void DeleteOrder(int OrderId) throws SQLException{
+        //Database parameters
+        Connection DBConn = null;           //MySQL connection handle
+        String errString = null;            //String for displaying errors
+        ResultSet res = null;               //SQL query result set pointer
+        int del = -1;                       //SQL query 
+        Statement s = null;                 //SQL statement pointer
+        
+        //Connect to orders database
+        try {
+            DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
+        } catch (SQLException e){
+            errString = "\nProblem connecting to database(" + databaseUrl + "):: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
+        
+        
+        // If we are connected, then we query to see if OrderID exists in
+        // order database for deletion
+        try{
+            s = DBConn.createStatement();
+            res = s.executeQuery("SELECT * FROM orders WHERE order_id = " 
+                                     + Integer.toString(OrderId) + ";");
+        
+        } catch (SQLException e){
+            errString = "\nThat Order ID does not exist:: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
+        
+        
+        // Now try to delete order with order id 
+        try{
+            if (!res.first()) {
+                del = s.executeUpdate("DELETE * FROM orders WHERE order_id = "
+                                      + Integer.toString(OrderId) + ";");
+            } // end if
+                
+        } catch (SQLException e){
+            errString = "\nProblem deleting order from order database:: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
     }
 
     public void ShipOrder(int OrderId) {
