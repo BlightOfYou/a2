@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
+
 
 /**
  *
@@ -64,44 +64,45 @@ public class InventoryServiceTest {
      * Test of AddProduct method, of class InventoryService.
      */
     @Test
-    @Ignore
-    public void testAddProduct() {
+    public void testAddProduct() throws SQLException {
         System.out.println("AddProduct");
-        Product product = null;
+        Product product = new Product(("P"+Math.random()).substring(0, 10),"cultureboxes","Desc",10f,10);
         InventoryService instance = new InventoryService("localhost",3306);
         instance.AddProduct(product);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Product actual = instance.GetProduct(product.getType(),product.getId());
+        instance.DeleteProduct(product);
+        assertEquals(product,actual);
+        
     }
 
     /**
      * Test of DecrementProduct method, of class InventoryService.
      */
     @Test
-    @Ignore
-    public void testDecrementProduct() {
+    public void testDecrementProduct() throws SQLException {
         System.out.println("DecrementProduct");
-        String Type = "";
-        int Id = 0;
+        Product product = new Product(("P"+Math.random()).substring(0, 10),"cultureboxes","Desc",10f,10);
         InventoryService instance = new InventoryService("localhost",3306);
-        instance.DecrementProduct(Type, Id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.AddProduct(product);
+        instance.DecrementProduct(product.getType(), product.getId());
+        Product actual = instance.GetProduct(product.getType(), product.getId());
+        assertEquals(product.getQuantity()-1,actual.getQuantity());
+        instance.DeleteProduct(product);
+
     }
 
     /**
      * Test of GetProductTypes method, of class InventoryService.
      */
     @Test
-    @Ignore
-    public void testGetProductTypes() {
+    public void testGetProductTypes() throws SQLException {
         System.out.println("GetProductTypes");
         InventoryService instance = new InventoryService("localhost",3306);
-        List<String> expResult = null;
+        //List<String> expResult = null;
         List<String> result = instance.GetProductTypes();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(result);
+        //Might not be 7 if new tables have been added
+        assertEquals(7, result.size());
     }
 
     /**
@@ -113,7 +114,9 @@ public class InventoryServiceTest {
         String Type = "cultureboxes";
         InventoryService instance = new InventoryService("localhost",3306);
         List<Product> result = instance.GetProducts(Type);
-        assertEquals(7, result.size());
+        //Might not be 7 if new tables have been added
+        //assertEquals(7, result.size());
+        assertFalse(result.isEmpty());
     }
     
 }

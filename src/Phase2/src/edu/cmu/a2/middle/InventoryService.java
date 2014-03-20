@@ -6,13 +6,13 @@
 package edu.cmu.a2.middle;
 
 import edu.cmu.a2.dto.Product;
-import java.lang.ProcessBuilder.Redirect.Type;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -104,16 +104,244 @@ public class InventoryService {
 
     }
 
-    public void AddProduct(Product product) {
-
-    }
-
-    public void DecrementProduct(String Type, int Id) {
-
-    }
-
-    public List<String> GetProductTypes() {
+    private String getCorrectUrlForType(String type) throws SQLException {
+        List<String> result = GetProductTypes(this.databaseUrlEep);
+        HashSet<String> types = new HashSet<String>(result);
+        if (types.contains(type)) {
+            return this.databaseUrlEep;
+        }
+        result = GetProductTypes(this.databaseUrlLeaf);
+        types = new HashSet<String>(result);
+        if (types.contains(type)) {
+            return this.databaseUrlLeaf;
+        }
         return null;
+
+    }
+
+    public void DeleteProduct(Product product) throws SQLException, IllegalArgumentException {
+        if (product == null) {
+            throw new IllegalArgumentException("Product is null");
+        }
+        String sourceUrl = getCorrectUrlForType(product.getType());
+        if (sourceUrl == null) {
+            throw new IllegalArgumentException("Type " + product.getType() + " not found in database");
+        }
+        DeleteProduct(product, sourceUrl);
+
+    }
+
+    private void DeleteProduct(Product product, String sourceURL) throws SQLException {
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        Connection DBConn = null;           // MySQL connection handle
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        int res = -1;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        String type = product.getType();
+        String id = product.getId();
+
+        try {
+            DBConn = DriverManager.getConnection(sourceURL, "remote", "remote_pass");
+
+        } catch (Exception e) {
+            errString = "\nProblem connecting to database(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
+
+        // If we are connected, then we get the product from the
+        // inventory database
+        try {
+            s = DBConn.createStatement();
+            res = s.executeUpdate(
+                    "DELETE FROM " + type
+                    + " WHERE productid = "
+                    + "'" + product.getId() + "'"
+                    + ";"
+            );
+
+        } catch (SQLException e) {
+            errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+
+        } // end try-catch
+
+    }
+    
+    public void AddProduct(Product product) throws SQLException, IllegalArgumentException {
+        if (product == null) {
+            throw new IllegalArgumentException("Product is null");
+        }
+        String sourceUrl = getCorrectUrlForType(product.getType());
+        if (sourceUrl == null) {
+            throw new IllegalArgumentException("Type " + product.getType() + " not found in database");
+        }
+        AddProduct(product, sourceUrl);
+
+    }
+
+    private void AddProduct(Product product, String sourceURL) throws SQLException {
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        Connection DBConn = null;           // MySQL connection handle
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        int res = -1;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        String type = product.getType();
+        String id = product.getId();
+
+        try {
+            DBConn = DriverManager.getConnection(sourceURL, "remote", "remote_pass");
+
+        } catch (Exception e) {
+            errString = "\nProblem connecting to database(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
+
+        // If we are connected, then we get the product from the
+        // inventory database
+        try {
+            s = DBConn.createStatement();
+            res = s.executeUpdate(
+                    "INSERT INTO " + type
+                    + " (productid,productdescription,productquantity,productprice) "
+                    + "VALUES ("
+                    + "'" + product.getId() + "',"
+                    + "'" + product.getDescription() + "',"
+                    + product.getQuantity() + ","
+                    + product.getPrice()
+                    + ");"
+            );
+
+        } catch (SQLException e) {
+            errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+
+        } // end try-catch
+
+    }
+
+    public void DecrementProduct(String Type, String Id) throws SQLException {
+        SQLException exception = null;
+        //lazy way of determining if it exists
+        Product result = this.GetProduct(Type, Id);
+        try {
+            DecrementProduct(result, this.databaseUrlEep);
+            return;
+        } catch (SQLException e) {
+            exception = e;
+        }
+        try {
+            DecrementProduct(result, this.databaseUrlLeaf);
+            return;
+        } catch (SQLException e) {
+            exception = e;
+        }
+        if (exception != null) {
+            throw exception;
+        }
+    }
+
+    private void DecrementProduct(Product product, String sourceURL) throws SQLException {
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        Connection DBConn = null;           // MySQL connection handle
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        int res = -1;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        String type = product.getType();
+        String id = product.getId();
+
+        try {
+            DBConn = DriverManager.getConnection(sourceURL, "remote", "remote_pass");
+
+        } catch (Exception e) {
+            errString = "\nProblem connecting to database(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
+
+        // If we are connected, then we get the product from the
+        // inventory database
+        try {
+            s = DBConn.createStatement();
+            res = s.executeUpdate("UPDATE " + type + " SET productquantity=productquantity-1 WHERE productid='" + id + "';"); /*Was hoping this selected a product with id*/
+
+        } catch (SQLException e) {
+            errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+
+        } // end try-catch
+
+    }
+
+    public List<String> GetProductTypes() throws SQLException {
+        List<String> ret = new ArrayList<String>();
+        List<String> result;
+        result = GetProductTypes(this.databaseUrlEep);
+        if (result != null) {
+            ret.addAll(result);
+        }
+        result = GetProductTypes(this.databaseUrlLeaf);
+        if (result != null) {
+            ret.addAll(result);
+        }
+        return ret;
+
+    }
+
+    private List<String> GetProductTypes(String sourceURL) throws SQLException {
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        Connection DBConn = null;           // MySQL connection handle
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+
+        try {
+            DBConn = DriverManager.getConnection(sourceURL, "remote", "remote_pass");
+
+        } catch (Exception e) {
+            errString = "\nProblem connecting to database(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+        } // end try-catch
+
+        // If we are connected, then we get the product from the
+        // inventory database
+        try {
+            s = DBConn.createStatement();
+            res = s.executeQuery("SHOW TABLES ;");
+
+            // Make sure we got back at least one row
+            if (!res.first()) {
+                return null;
+            }
+            List<String> return_products = new ArrayList<String>();
+            do {
+                String type = res.getString(1);
+                if (type != null && !type.equals("")) {
+                    return_products.add(type);
+                }
+            } while (res.next());
+            return return_products;
+            /*Now I am thinking of just getting the product*/
+            /*
+             res.getString(1) /*Copied the below from Orders NewJFrame, don't know what this means...*/
+            /*
+             while (res.next()) {
+
+             msgString = res.getString(1) + " : " + res.getString(2)
+             + " : $" + res.getString(4) + " : " + res.getString(3)
+             + " units in stock";
+             */
+        } catch (SQLException e) {
+            errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
+            throw new SQLException(errString);
+
+        } // end try-catch
 
     }
 
