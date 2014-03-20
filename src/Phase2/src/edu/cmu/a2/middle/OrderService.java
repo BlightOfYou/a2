@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class OrderService {
 
     public OrderService(String host, int port) {
         databaseUrl = String.format("jdbc:mysql://%s:%d/orders", host, port);
-        ;
     }
 
     public void SubmitOrder(Order order) throws SQLException/*Some kind of exception*/ {
@@ -203,8 +203,55 @@ public class OrderService {
     public void ShipOrder(int OrderId) {
     }
 
-    public List<Order> GetAllOrders() {
-        return null;
+    public List<Order> GetAllOrders() throws SQLException{
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        Connection DBConn = null;           // MySQL connection handle
+        String errString = null;            // String for displaying errors
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer  
+        
+        try {
+            DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
+
+        } catch (Exception e) {
+            errString = "\nProblem connecting to database(" + databaseUrl + "):: " + e;
+            connectError = true;
+            throw new SQLException(errString);
+        } // end try-catch
+        
+        
+        // If we are connected, then we get the orders from the
+        // order database
+        if ( !connectError )
+        {
+            try {
+                s = DBConn.createStatement();
+                res = s.executeQuery("SELECT * FROM orders;");
+
+                // Make sure we got back at least one row
+                if (!res.first()) {
+                    return null;
+                }
+                List<Order> return_allorders = new ArrayList<Order>();
+                do {
+                    return_allorders.add(new Order(res.getInt("order_id"), 
+                                                   res.getString("order_date"),
+                                                   res.getString("first_name"),
+                                                   res.getString("last_name"),
+                                                   res.getString("address"),
+                                                   res.getString("phone"),
+                                                   res.getFloat("total_cost"),
+                                                   res.getBoolean("shipped"),
+                                                   res.getObject("ordertable"))); /*Don't know what the error is*/
+                } while (res.next());
+                return return_allorders;
+            } catch (SQLException e) {
+                errString = "\nProblem getting product from inventory(" + databaseUrl + "):: " + e;
+                throw new SQLException(errString);
+
+            } // end try-catch
+        }return null;
     }
 
     public List<Order> GetShippedOrders() {
