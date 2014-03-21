@@ -24,7 +24,7 @@ public class OrderService {
     private String databaseUrl;
 
     public OrderService(String host, int port) {
-        databaseUrl = String.format("jdbc:mysql://%s:%d/orders", host, port);
+        databaseUrl = String.format("jdbc:mysql://%s:%d/orderinfo", host, port);
     }
 
     public void SubmitOrder(Order order) throws SQLException/*Some kind of exception*/ {
@@ -183,7 +183,7 @@ public class OrderService {
         String errString = null;            // String for displaying errors
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer 
-        
+
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
         } catch (SQLException e) {
@@ -191,80 +191,91 @@ public class OrderService {
             connectError = true;
             throw new SQLException(errString);
         } // end try-catch
-        
-        if( !connectError )
-        {
-            try{
-               /*SQL command to select a single order from the SQL database*/
+
+        if (!connectError) {
+            try {
+                /*SQL command to select a single order from the SQL database*/
                 s = DBConn.createStatement();
-                res = s.executeQuery("SELECT * FROM orders WHERE order_id = " 
-                                     + Integer.toString(OrderId) + ";");
-                
-                if (!res.first()){
+                res = s.executeQuery("SELECT * FROM orders WHERE order_id = "
+                        + Integer.toString(OrderId) + ";");
+
+                if (!res.first()) {
                     return null;
                 }
-                
+                    String ordertable = (res.getString("ordertable"));
+                    s = DBConn.createStatement();
+                    ResultSet res2 = s.executeQuery("SELECT * FROM " + ordertable + " ;");
+                    List<OrderItem> orders = new ArrayList<OrderItem>();
+                    // Make sure we got back at least one row
+                    if (res2.first()) {
+                        do {
+                            int ItemId = res2.getInt(1);
+                            int ProductId = res2.getInt(2);
+                            int Description = res2.getInt(3);
+                            float ItemPrice = res2.getFloat(4);
+
+                            orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
+                        } while (res2.next());
+                    }
                 /*create return object*/
-                Order return_order = new Order(res.getInt("order_id"), 
-                                               res.getString("order_date"),
-                                               res.getString("first_name"),
-                                               res.getString("last_name"),
-                                               res.getString("address"),
-                                               res.getString("phone"),
-                                               res.getFloat("total_cost"),
-                                               res.getBoolean("shipped"),
-                                               res.getObject("ordertable")); /*Don't know what the error is*/
+                Order return_order = new Order(res.getInt("order_id"),
+                        res.getString("order_date"),
+                        res.getString("first_name"),
+                        res.getString("last_name"),
+                        res.getString("address"),
+                        res.getString("phone"),
+                        res.getFloat("total_cost"),
+                        res.getBoolean("shipped"),
+                        orders); /*Don't know what the error is*/
+
                 return return_order;
-                
+
             } catch (SQLException e) {
                 errString = "\nProblem getting order from orders database\n" + e;
                 throw new SQLException(errString);
             } //end try-catch
-            
-        }
-        else{
+
+        } else {
             return null;
         } // end if
     }
 
-    public void DeleteOrder(int OrderId) throws SQLException{
+    public void DeleteOrder(int OrderId) throws SQLException {
         //Database parameters
         Connection DBConn = null;           //MySQL connection handle
         String errString = null;            //String for displaying errors
         ResultSet res = null;               //SQL query result set pointer
         int del = -1;                       //SQL query 
         Statement s = null;                 //SQL statement pointer
-        
+
         //Connect to orders database
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
-        } catch (SQLException e){
+        } catch (SQLException e) {
             errString = "\nProblem connecting to database(" + databaseUrl + "):: " + e;
             throw new SQLException(errString);
         } // end try-catch
-        
-        
+
         // If we are connected, then we query to see if OrderID exists in
         // order database for deletion
-        try{
+        try {
             s = DBConn.createStatement();
-            res = s.executeQuery("SELECT * FROM orders WHERE order_id = " 
-                                     + Integer.toString(OrderId) + ";");
-        
-        } catch (SQLException e){
+            res = s.executeQuery("SELECT * FROM orders WHERE order_id = "
+                    + Integer.toString(OrderId) + ";");
+
+        } catch (SQLException e) {
             errString = "\nThat Order ID does not exist:: " + e;
             throw new SQLException(errString);
         } // end try-catch
-        
-        
+
         // Now try to delete order with order id 
-        try{
+        try {
             if (!res.first()) {
-                del = s.executeUpdate("DELETE * FROM orders WHERE order_id = "
-                                      + Integer.toString(OrderId) + ";");
+                del = s.executeUpdate("DELETE FROM orders WHERE order_id = "
+                        + Integer.toString(OrderId) + ";");
             } // end if
-                
-        } catch (SQLException e){
+
+        } catch (SQLException e) {
             errString = "\nProblem deleting order from order database:: " + e;
             throw new SQLException(errString);
         } // end try-catch
@@ -273,14 +284,14 @@ public class OrderService {
     public void ShipOrder(int OrderId) {
     }
 
-    public List<Order> GetAllOrders() throws SQLException{
+    public List<Order> GetAllOrders() throws SQLException {
         // Database parameters
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer  
-        
+
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
 
@@ -289,12 +300,10 @@ public class OrderService {
             connectError = true;
             throw new SQLException(errString);
         } // end try-catch
-        
-        
+
         // If we are connected, then we get the orders from the
         // order database
-        if ( !connectError )
-        {
+        if (!connectError) {
             try {
                 s = DBConn.createStatement();
                 res = s.executeQuery("SELECT * FROM orders;");
@@ -305,15 +314,32 @@ public class OrderService {
                 }
                 List<Order> return_allorders = new ArrayList<Order>();
                 do {
-                    return_allorders.add(new Order(res.getInt("order_id"), 
-                                                   res.getString("order_date"),
-                                                   res.getString("first_name"),
-                                                   res.getString("last_name"),
-                                                   res.getString("address"),
-                                                   res.getString("phone"),
-                                                   res.getFloat("total_cost"),
-                                                   res.getBoolean("shipped"),
-                                                   res.getObject("ordertable"))); /*Don't know what the error is*/
+                    String ordertable = (res.getString("ordertable"));
+                    s = DBConn.createStatement();
+                    ResultSet res2 = s.executeQuery("SELECT * FROM " + ordertable + " ;");
+                    List<OrderItem> orders = new ArrayList<OrderItem>();
+                    // Make sure we got back at least one row
+                    if (res2.first()) {
+                        do {
+                            int ItemId = res2.getInt(1);
+                            int ProductId = res2.getInt(2);
+                            int Description = res2.getInt(3);
+                            float ItemPrice = res2.getFloat(4);
+
+                            orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
+                        } while (res2.next());
+                    }
+
+                    return_allorders.add(new Order(res.getInt("order_id"),
+                            res.getString("order_date"),
+                            res.getString("first_name"),
+                            res.getString("last_name"),
+                            res.getString("address"),
+                            res.getString("phone"),
+                            res.getFloat("total_cost"),
+                            res.getBoolean("shipped"),
+                            orders)); /*Don't know what the error is*/
+
                 } while (res.next());
                 return return_allorders;
             } catch (SQLException e) {
@@ -321,7 +347,8 @@ public class OrderService {
                 throw new SQLException(errString);
 
             } // end try-catch
-        }return null;
+        }
+        return null;
     }
 
     public List<Order> GetShippedOrders() {
