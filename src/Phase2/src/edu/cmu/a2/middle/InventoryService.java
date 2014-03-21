@@ -28,6 +28,38 @@ public class InventoryService {
         databaseUrlLeaf = String.format("jdbc:mysql://%s:%d/leaftech", host, port);
     }
 
+    private String getIdentifier(String sourceURL) {
+        if (sourceURL.equals(this.databaseUrlEep)) {
+            return "product_code";
+        } else {
+            return "productid";
+        }
+    }
+
+    private String getDescription(String sourceURL) {
+        if (sourceURL.equals(this.databaseUrlEep)) {
+            return "description";
+        } else {
+            return "productdescription";
+        }
+    }
+
+    private String getQuantity(String sourceURL) {
+        if (sourceURL.equals(this.databaseUrlEep)) {
+            return "quantity";
+        } else {
+            return "productquantity";
+        }
+    }
+
+    private String getPrice(String sourceURL) {
+        if (sourceURL.equals(this.databaseUrlEep)) {
+            return "price";
+        } else {
+            return "productprice";
+        }
+    }
+
     private Product GetProduct(String Type, String Id, String sourceURL) throws SQLException {
         // Database parameters
         Boolean connectError = false;       // Error flag
@@ -51,14 +83,14 @@ public class InventoryService {
         // inventory database
         try {
             s = DBConn.createStatement();
-            res = s.executeQuery("SELECT * FROM " + type + " WHERE productid = '" + id + "';"); /*Was hoping this selected a product with id*/
+            res = s.executeQuery("SELECT * FROM " + type + " WHERE " + getIdentifier(sourceURL) + " = '" + id + "';"); /*Was hoping this selected a product with id*/
 
             // Make sure we got back at least one row
             if (!res.first()) {
                 return null;
             }
-            return new Product(Id, Type, res.getString("productdescription"),
-                    res.getFloat("productprice"), res.getInt("productquantity"));
+            return new Product(Id, Type, res.getString(getDescription(sourceURL)),
+                    res.getFloat(getPrice(sourceURL)), res.getInt(getQuantity(sourceURL)));
 
             /*Now I am thinking of just getting the product*/
             /*
@@ -120,9 +152,9 @@ public class InventoryService {
     }
 
     public void DeleteProduct(String Type, String Id) throws SQLException, IllegalArgumentException {
-        DeleteProduct(new Product(Id,Type,null,0,0));
+        DeleteProduct(new Product(Id, Type, null, 0, 0));
     }
-    
+
     private void DeleteProduct(Product product) throws SQLException, IllegalArgumentException {
         if (product == null) {
             throw new IllegalArgumentException("Product is null");
@@ -160,7 +192,7 @@ public class InventoryService {
             s = DBConn.createStatement();
             res = s.executeUpdate(
                     "DELETE FROM " + type
-                    + " WHERE productid = "
+                    + " WHERE " + getIdentifier(sourceURL) + " = "
                     + "'" + product.getId() + "'"
                     + ";"
             );
@@ -172,7 +204,7 @@ public class InventoryService {
         } // end try-catch
 
     }
-    
+
     public void AddProduct(Product product) throws SQLException, IllegalArgumentException {
         if (product == null) {
             throw new IllegalArgumentException("Product is null");
@@ -210,7 +242,10 @@ public class InventoryService {
             s = DBConn.createStatement();
             res = s.executeUpdate(
                     "INSERT INTO " + type
-                    + " (productid,productdescription,productquantity,productprice) "
+                    + " (" + getIdentifier(sourceURL) +
+                            ","+getDescription(sourceURL)+
+                            ","+getQuantity(sourceURL)+
+                            ","+getPrice(sourceURL)+") "
                     + "VALUES ("
                     + "'" + product.getId() + "',"
                     + "'" + product.getDescription() + "',"
@@ -271,7 +306,9 @@ public class InventoryService {
         // inventory database
         try {
             s = DBConn.createStatement();
-            res = s.executeUpdate("UPDATE " + type + " SET productquantity=productquantity-1 WHERE productid='" + id + "';"); /*Was hoping this selected a product with id*/
+            res = s.executeUpdate("UPDATE " + type + 
+                    " SET "+getQuantity(sourceURL)+"="+getQuantity(sourceURL)+
+                    "-1 WHERE " + getIdentifier(sourceURL) + "='" + id + "';"); /*Was hoping this selected a product with id*/
 
         } catch (SQLException e) {
             errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
@@ -407,8 +444,8 @@ public class InventoryService {
             }
             List<Product> return_products = new ArrayList<Product>();
             do {
-                return_products.add(new Product(res.getString("productid"), Type, res.getString("productdescription"),
-                        res.getFloat("productprice"), res.getInt("productquantity")));
+                return_products.add(new Product(res.getString(getIdentifier(sourceURL)), Type, res.getString(getDescription(sourceURL)),
+                        res.getFloat(getPrice(sourceURL)), res.getInt(getQuantity(sourceURL))));
             } while (res.next());
             return return_products;
             /*Now I am thinking of just getting the product*/
