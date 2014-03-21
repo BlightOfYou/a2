@@ -8,7 +8,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 
 public class InventoryMainFrame extends javax.swing.JFrame {
@@ -26,21 +28,23 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     String errString = null;
     String versionID = "v0.1";
     
+//    InventoryService inventoryService;
+//InventoryService inventoryService = new InventoryService(databaseServerIpText.getText(), port);
     /** Creates new form AddInventoryMainFrame */
     public InventoryMainFrame() {
         initComponents();
         frameTitleLabel.setText("Inventory Management Application " + versionID);
         
-        try
-        {
-            InventoryService inventoryService = new InventoryService(serverIpAddressText, port);
-        } catch (Exception e) {
-            
-            errString =  "\nProblem connecting to database:: " + e;
-            inventoryTextArea.append(errString);
-            connectError = true;
-            
-        } // end try-catch
+//        try
+//        {
+//            InventoryService inventoryService = new InventoryService(databaseServerIpText.getText(), port);
+//        } catch (Exception e) {
+//
+//            errString =  "\nProblem connecting to database:: " + e;
+//            inventoryTextArea.append(errString);
+//            connectError = true;
+//
+//        } // end try-catch
         
     }
     
@@ -319,6 +323,29 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    private InventoryService connectToInventoryService() throws Exception {
+        Exception exception = null;
+        InventoryService inventoryService;
+        
+        try
+        {
+            inventoryService = new InventoryService(databaseServerIpText.getText(), port);
+            return inventoryService;
+            
+        } catch (Exception e) {
+            
+            errString =  "\nProblem connecting to database:: " + e;
+            inventoryTextArea.append(errString);
+            connectError = true;
+            exception = e;
+        } // end try-catch
+        if (exception != null) {
+            throw exception;
+        }
+        throw new Exception("Unable to connect to database");
+        
+    }
+    
     private void treesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treesRadioButtonActionPerformed
         
         eepRadioButtonSelected();
@@ -371,7 +398,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         
         // Adds inventory to database
         
-        Boolean connectError = false;   // Error flag
+//        Boolean connectError = false;   // Error flag
         Connection DBConn = null;       // MySQL connection handle
         String description;             // Tree, seed, or shrub description
         Boolean executeError = false;   // Error flag
@@ -448,8 +475,8 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 // create an SQL statement variable and create the INSERT
                 // query to insert the new inventory into the database
                 
-                Product product = new Product(productId, productType, description, float Price, int Quantity)
-                
+                Product product = new Product(productID, productType, description, perUnitCost, quantity);
+//                inventoryService.AddProduct(product);
                 // let the user know all went well
                 
                 inventoryTextArea.append("\nINVENTORY UPDATED... The following was added to the " + tableSelected + " inventory...\n");
@@ -474,15 +501,25 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         // This button will list the inventory for the product selected by the
         // radio button
         
-        Boolean connectError = false;   // Error flag
-        Connection DBConn = null;       // MySQL connection handle
+//        Boolean connectError = false;   // Error flag
+//        Connection DBConn = null;       // MySQL connection handle
         Boolean executeError = false;   // Error flag
         String errString = null;        // String for displaying errors
         Boolean fieldError = true;      // Error flag
         String msgString = null;        // String for displaying non-error messages
-        ResultSet res = null;           // SQL query result set pointer
+//        ResultSet res = null;           // SQL query result set pointer
         String tableSelected = null;    // String used to determine which data table to use
         java.sql.Statement s = null;    // SQL statement pointer
+        
+        List<Product> products = new ArrayList<>();
+        
+        InventoryService inventoryService = null;
+        
+        try {
+            inventoryService = connectToInventoryService();
+        } catch (Exception e) {
+            connectError = true;
+        }
         
         
         // Check to make sure a radio button is selected
@@ -497,6 +534,8 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         }
         
         
+        
+        
         //If there is not connection error, then we form the SQL statement
         //and then execute it.
         
@@ -504,49 +543,8 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         {
             try
             {
-//                        // if trees inventory selected
-//                        if (treesRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("trees");
-//                        }
-//
-//                        // if strubs inventory selected
-//                        if (shrubsRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("shrubs");
-//                        }
-//
-//                        // if seeds inventory selected
-//                        if (seedsRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("seeds");
-//                        }
-//
-//                        // if culture boxes inventory selected
-//                        if (cultureBoxesRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("cultureboxes");
-//                        }
-//
-//                        // if genomics inventory selected
-//                        if (genomicsRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("genomics");
-//                        }
-//
-//                        // if processing inventory selected
-//                        if (processingRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("processing");
-//                        }
-//
-//                        // if reference materials inventory selected
-//                        if (referenceMaterialsRadioButton.isSelected())
-//                        {
-//                            productList = inventoryService.GetProducts("referencematerials");
-//                        }
                 
-                productList = inventoryService.GetProducts(productType);
+                products = inventoryService.GetProducts(productType);
                 
                 
                 // Now we list the inventory for the selected table
@@ -579,16 +577,20 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         int endIndex;                       // Parsing index
         String productID = null;            // Product ID pnemonic
         Boolean IndexNotFound;              // Flag indicating a string index was not found.
-        Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        int executeUpdateVal;               // Return value from execute indicating effected rows
-        String msgString = null;            // String for displaying non-error messages
-        String tableSelected = null;        // String used to determine which data table to use
         java.sql.Statement s = null;        // SQL statement pointer
-        String SQLstatement = null;         // String for building SQL queries
         String inventorySelection = null;   // Inventory text string selected by user
         IndexNotFound = false;              // Flag indicating that a string index was not found
+//        Boolean connectError = false;
+        
+        InventoryService inventoryService = null;
+        
+        try {
+            inventoryService = connectToInventoryService();
+        } catch (Exception e) {
+            connectError = true;
+        }
         
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
@@ -634,59 +636,18 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                 {
                     try
                     {
-//                        // if trees inventory selected
-//                        if (treesRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("trees", Id);
-//                        }
-//
-//                        // if strubs inventory selected
-//                        if (shrubsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("shrubs", Id);
-//                        }
-//
-//                        // if seeds inventory selected
-//                        if (seedsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("seeds", Id);
-//                        }
-//
-//                        // if culture boxes inventory selected
-//                        if (cultureBoxesRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("cultureboxes", Id);
-//                        }
-//
-//                        // if genomics inventory selected
-//                        if (genomicsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("genomics", Id);
-//                        }
-//
-//                        // if processing inventory selected
-//                        if (processingRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("processing", Id);
-//                        }
-//
-//                        // if reference materials inventory selected
-//                        if (referenceMaterialsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DeleteProduct("referencematerials", Id);
-//                        }
+                        
                         
 //                        TO DO: Convert productId string to int
-                        int productIdInt = Integer.parseInt(productId);
-                        inventoryService.DeleteProduct(productType, productIdInt);
+                        int productIdInt = Integer.parseInt(productID);
+//                        inventoryService.DeleteProduct(productType, productIdInt);
                         
                         // let the user know all went well
                         
                         inventoryTextArea.append("\n\n" + productID + " deleted...");
-                        inventoryTextArea.append("\n Number of items deleted: " + executeUpdateVal );
                         
                         
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         
                         errString =  "\nProblem with delete:: " + e;
                         inventoryTextArea.append(errString);
@@ -716,19 +677,20 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         int endIndex;                       // Parsing index
         String productID = null;            // Product ID pnemonic
         Boolean IndexNotFound;              // Flag indicating a string index was not found.
-        Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
+        
         String errString = null;            // String for displaying errors
-        int executeUpdateVal;               // Return value from execute indicating effected rows
-        String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
-        String tableSelected = null;        // String used to determine which data table to use
-        java.sql.Statement s = null;        // SQL statement pointer
-        String SQLstatement1 = null;        // String for building SQL queries
-        String SQLstatement2 = null;        // String for building SQL queries
         String inventorySelection = null;   // Inventory text string selected by user
         IndexNotFound = false;              // Flag indicating that a string index was not found
+//        Boolean connectError = false;
         
+        InventoryService inventoryService = null;
+        
+        try {
+            inventoryService = connectToInventoryService();
+        } catch (Exception e) {
+            connectError = true;            
+        }
         
         
         // this is the selected line of text
@@ -766,7 +728,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             {
                 inventoryTextArea.setText("");
                 inventoryTextArea.append( "Deleting ProductID: " + productID );
-
+                
                 
                 //If there is no connection error, then we form the SQL statement
                 //to decrement the inventory item count and then execute it.
@@ -776,49 +738,8 @@ public class InventoryMainFrame extends javax.swing.JFrame {
                     try
                     {
                         
-//                        // if trees inventory selected
-//                        if (treesRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("trees", Id);
-//                        }
-//                        
-//                        // if strubs inventory selected
-//                        if (shrubsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("shrubs", Id);
-//                        }
-//                        
-//                        // if seeds inventory selected
-//                        if (seedsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("seeds", Id);
-//                        }
-//                        
-//                        // if culture boxes inventory selected
-//                        if (cultureBoxesRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("cultureboxes", Id);
-//                        }
-//                        
-//                        // if genomics inventory selected
-//                        if (genomicsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("genomics", Id);
-//                        }
-//                        
-//                        // if processing inventory selected
-//                        if (processingRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("processing", Id);
-//                        }
-//                        
-//                        // if reference materials inventory selected
-//                        if (referenceMaterialsRadioButton.isSelected())
-//                        {
-//                            inventoryService.DecrementProduct("referencematerials", Id);
-//                        }
-                        int productIdInt = Integer.parseInt(productId);
-                        inventoryService.DecrementProduct(productType, productIdInt);
+//                        int productIdInt = Integer.parseInt(productId);
+//                        inventoryService.DecrementProduct(productType, productID);
                         
                         // Inform user that type was updated
                         inventoryTextArea.append("\n\n Number of items updated. "  );
