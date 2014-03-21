@@ -88,4 +88,13 @@ public class OrderItem {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return ">>" + ItemId + "::" + 
+                ProductId + "::" + 
+                Description + "::" + 
+                ItemPrice;
+                //"OrderItem{" + "ItemId=" + ItemId + ", ProductId=" + ProductId + ", Description=" + Description + ", ItemPrice=" + ItemPrice + '}';
+    }
+
 }
