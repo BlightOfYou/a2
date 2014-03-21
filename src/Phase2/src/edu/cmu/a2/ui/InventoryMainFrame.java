@@ -1,5 +1,6 @@
 package edu.cmu.a2.ui;
 
+import edu.cmu.a2.ui.*;
 import edu.cmu.a2.middle.*;
 import edu.cmu.a2.dto.*;
 import edu.cmu.a2.common.*;
@@ -13,20 +14,13 @@ import java.util.List;
 import java.util.Arrays;
 
 
-public class InventoryMainFrame extends javax.swing.JFrame {
+public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame {
     
-//    private static final String inventoryDatabaseStr = "jdbc:mysql://localhost:3306/inventory";
-    //public InventoryService inventoryService = new InventoryService(inventoryDatabaseStr);
     
     private Boolean isEepProduct = false;
     private Boolean isLeafTechProduct = false;
-    
     String productType = null;
     
-    Integer port = 3306;
-    Boolean connectError = false;
-    String errString = null;
-    String versionID = "v0.1";
     
 //    InventoryService inventoryService;
 //InventoryService inventoryService = new InventoryService(databaseServerIpText.getText(), port);
@@ -34,18 +28,6 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     public InventoryMainFrame() {
         initComponents();
         frameTitleLabel.setText("Inventory Management Application " + versionID);
-        
-//        try
-//        {
-//            InventoryService inventoryService = new InventoryService(databaseServerIpText.getText(), port);
-//        } catch (Exception e) {
-//
-//            errString =  "\nProblem connecting to database:: " + e;
-//            inventoryTextArea.append(errString);
-//            connectError = true;
-//
-//        } // end try-catch
-        
     }
     
     /** This method is called from within the constructor to
@@ -323,28 +305,28 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private InventoryService connectToInventoryService() throws Exception {
-        Exception exception = null;
-        InventoryService inventoryService;
-        
-        try
-        {
-            inventoryService = new InventoryService(databaseServerIpText.getText(), port);
-            return inventoryService;
-            
-        } catch (Exception e) {
-            
-            errString =  "\nProblem connecting to database:: " + e;
-            inventoryTextArea.append(errString);
-            connectError = true;
-            exception = e;
-        } // end try-catch
-        if (exception != null) {
-            throw exception;
-        }
-        throw new Exception("Unable to connect to database");
-        
-    }
+//    private InventoryService connectToInventoryService() throws Exception {
+//        Exception exception = null;
+//        InventoryService inventoryService;
+//        
+//        try
+//        {
+//            inventoryService = new InventoryService(databaseServerIpText.getText(), port);
+//            return inventoryService;
+//            
+//        } catch (Exception e) {
+//            
+//            errString =  "\nProblem connecting to database:: " + e;
+//            inventoryTextArea.append(errString);
+//            connectError = true;
+//            exception = e;
+//        } // end try-catch
+//        if (exception != null) {
+//            throw exception;
+//        }
+//        throw new Exception("Unable to connect to database");
+//        
+//    }
     
     private void treesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treesRadioButtonActionPerformed
         
@@ -516,7 +498,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         InventoryService inventoryService = null;
         
         try {
-            inventoryService = connectToInventoryService();
+            inventoryService = connectToInventoryService(databaseServerIpText.getText());
         } catch (Exception e) {
             connectError = true;
         }
@@ -587,7 +569,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         InventoryService inventoryService = null;
         
         try {
-            inventoryService = connectToInventoryService();
+            inventoryService = connectToInventoryService(databaseServerIpText.getText());
         } catch (Exception e) {
             connectError = true;
         }
@@ -687,7 +669,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         InventoryService inventoryService = null;
         
         try {
-            inventoryService = connectToInventoryService();
+            inventoryService = connectToInventoryService(databaseServerIpText.getText());
         } catch (Exception e) {
             connectError = true;            
         }
