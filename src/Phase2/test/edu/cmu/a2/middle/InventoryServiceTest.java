@@ -70,7 +70,7 @@ public class InventoryServiceTest {
         InventoryService instance = new InventoryService("localhost",3306);
         instance.AddProduct(product);
         Product actual = instance.GetProduct(product.getType(),product.getId());
-        instance.DeleteProduct(product);
+        instance.DeleteProduct(product.getType(),product.getId());
         assertEquals(product,actual);
         
     }
@@ -87,7 +87,7 @@ public class InventoryServiceTest {
         instance.DecrementProduct(product.getType(), product.getId());
         Product actual = instance.GetProduct(product.getType(), product.getId());
         assertEquals(product.getQuantity()-1,actual.getQuantity());
-        instance.DeleteProduct(product);
+        instance.DeleteProduct(product.getType(),product.getId());
 
     }
 

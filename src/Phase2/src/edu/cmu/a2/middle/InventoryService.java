@@ -119,7 +119,11 @@ public class InventoryService {
 
     }
 
-    public void DeleteProduct(Product product) throws SQLException, IllegalArgumentException {
+    public void DeleteProduct(String Type, String Id) throws SQLException, IllegalArgumentException {
+        DeleteProduct(new Product(Id,Type,null,0,0));
+    }
+    
+    private void DeleteProduct(Product product) throws SQLException, IllegalArgumentException {
         if (product == null) {
             throw new IllegalArgumentException("Product is null");
         }
