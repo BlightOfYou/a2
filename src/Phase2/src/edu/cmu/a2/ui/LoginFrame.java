@@ -19,9 +19,10 @@ import java.util.logging.Logger;
  *
  * @author binky
  */
-public class LoginFrame extends javax.swing.JFrame {
-
-    public LoginService loginService = new LoginService("localhost", 3306);
+public class LoginFrame extends javax.swing.JDialog {
+   
+    private Session session = null;
+    
 //    private static class LoginService;
     
     /**
@@ -32,6 +33,10 @@ public class LoginFrame extends javax.swing.JFrame {
         initComponents();
     }
 
+    public Session getSession() {
+        return session;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,12 +48,14 @@ public class LoginFrame extends javax.swing.JFrame {
 
         frameTitle = new javax.swing.JLabel();
         usernameText = new javax.swing.JTextField();
-        passwordText = new javax.swing.JTextField();
+        passwordText = new javax.swing.JPasswordField();
         usernameLabel = new javax.swing.JLabel();
         passwordLabel = new javax.swing.JLabel();
         loginButton = new javax.swing.JButton();
+        passwordLabel1 = new javax.swing.JLabel();
+        serverName = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         frameTitle.setText("EEP Log In");
 
@@ -69,6 +76,14 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
 
+        passwordLabel1.setText("Server:");
+
+        serverName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverNameActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,6 +91,10 @@ public class LoginFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(passwordLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(serverName, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(passwordLabel)
@@ -92,15 +111,19 @@ public class LoginFrame extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(84, 84, 84)
                                 .addComponent(loginButton)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)))
                 .addGap(61, 61, 61))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(59, Short.MAX_VALUE)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(frameTitle)
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passwordLabel1)
+                    .addComponent(serverName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameLabel))
@@ -118,29 +141,31 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         
-        //LoginService loginService = new LoginService(databaseUrl);
+        LoginService loginService = new LoginService(serverName.getText(), 3306);
         
         try {
-            Session session = loginService.Login(usernameText.getText(), passwordText.getText());
-            JOptionPane.showMessageDialog(this, "Login successful! This needs functionality!");
+            session = loginService.Login(usernameText.getText(), new String(passwordText.getPassword()));
+            this.dispose();
             
         } catch (LoginService.InvalidLoginException ex) {
+            session = null;
             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Invalid Login!");
             
         } catch (LoginService.AuditLogException ex) {
+            session = null;
             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "AuditLogException!");
         }
-        
-        
-
-// TODO add your handling code here:
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void usernameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_usernameTextActionPerformed
+
+    private void serverNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_serverNameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,7 +206,9 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JLabel frameTitle;
     private javax.swing.JButton loginButton;
     private javax.swing.JLabel passwordLabel;
-    private javax.swing.JTextField passwordText;
+    private javax.swing.JLabel passwordLabel1;
+    private javax.swing.JPasswordField passwordText;
+    private javax.swing.JTextField serverName;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameText;
     // End of variables declaration//GEN-END:variables

@@ -22,12 +22,13 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
     String productType = null;
     
     
-//    InventoryService inventoryService;
-//InventoryService inventoryService = new InventoryService(databaseServerIpText.getText(), port);
     /** Creates new form AddInventoryMainFrame */
-    public InventoryMainFrame() {
+    public InventoryMainFrame(Session session) {
+        super(session);
+                
         initComponents();
         frameTitleLabel.setText("Inventory Management Application " + versionID);
+        databaseServerIpText.setText(session.getServerHost());
     }
     
     /** This method is called from within the constructor to
@@ -99,6 +100,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
 
         quantityLabel.setText("Quantity");
 
+        databaseServerIpText.setEditable(false);
         databaseServerIpText.setText("localhost");
 
         productIdText.addActionListener(new java.awt.event.ActionListener() {
@@ -498,7 +500,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         InventoryService inventoryService = null;
         
         try {
-            inventoryService = connectToInventoryService(databaseServerIpText.getText());
+            inventoryService = connectToInventoryService();
         } catch (Exception e) {
             connectError = true;
         }
@@ -569,7 +571,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         InventoryService inventoryService = null;
         
         try {
-            inventoryService = connectToInventoryService(databaseServerIpText.getText());
+            inventoryService = connectToInventoryService();
         } catch (Exception e) {
             connectError = true;
         }
@@ -669,7 +671,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         InventoryService inventoryService = null;
         
         try {
-            inventoryService = connectToInventoryService(databaseServerIpText.getText());
+            inventoryService = connectToInventoryService();
         } catch (Exception e) {
             connectError = true;            
         }
@@ -795,7 +797,19 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InventoryMainFrame().setVisible(true);
+                
+                LoginFrame login = new LoginFrame();
+                login.setModal(true);
+                login.setVisible(true);
+                
+                Session session = login.getSession();
+                
+                if(session != null) {
+                    new InventoryMainFrame(session).setVisible(true);    
+                }
+                
+                
+                
             }
         });
     }

@@ -6,6 +6,7 @@
 
 package edu.cmu.a2.ui;
 
+import edu.cmu.a2.dto.Session;
 import edu.cmu.a2.middle.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,21 +21,27 @@ public abstract class MainFrame extends javax.swing.JFrame {
     Boolean connectError = false;
     String errString = null;
     String versionID = "v0.1";
+    
+    Session session;    
     /**
      * Creates new form Frame
      */
-    public MainFrame() {
+    public MainFrame(Session session) {
         initComponents();
+        this.session = session;
     }
     
+    public Session getSession() {
+        return session;
+    }
     
-    public InventoryService connectToInventoryService(String databaseServerIp) throws Exception {
+    public InventoryService connectToInventoryService() throws Exception {
         Exception exception = null;
         InventoryService inventoryService;
         
         try
         {
-            inventoryService = new InventoryService(databaseServerIp, port);
+            inventoryService = new InventoryService(session.getServerHost(), port);
             return inventoryService;
             
         } catch (Exception e) {
@@ -54,13 +61,13 @@ public abstract class MainFrame extends javax.swing.JFrame {
         
     }
     
-        public OrderService connectToOrderService(String databaseServerIp) throws Exception {
+        public OrderService connectToOrderService() throws Exception {
         Exception exception = null;
         OrderService orderService;
         
         try
         {
-            orderService = new OrderService(databaseServerIp, port);
+            orderService = new OrderService(session.getServerHost(), port);
             return orderService;
             
         } catch (Exception e) {
