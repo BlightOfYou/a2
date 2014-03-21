@@ -54,4 +54,38 @@ public class OrderItem {
         this.ItemPrice = ItemPrice;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + this.ItemId;
+        hash = 37 * hash + this.ProductId;
+        hash = 37 * hash + this.Description;
+        hash = 37 * hash + Float.floatToIntBits(this.ItemPrice);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OrderItem other = (OrderItem) obj;
+        if (this.ItemId != other.ItemId) {
+            return false;
+        }
+        if (this.ProductId != other.ProductId) {
+            return false;
+        }
+        if (this.Description != other.Description) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.ItemPrice) != Float.floatToIntBits(other.ItemPrice)) {
+            return false;
+        }
+        return true;
+    }
+
 }

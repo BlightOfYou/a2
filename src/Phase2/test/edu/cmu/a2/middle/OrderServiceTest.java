@@ -10,6 +10,8 @@ import edu.cmu.a2.dto.OrderItem;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -35,9 +37,30 @@ public class OrderServiceTest {
     public static void tearDownClass() {
     }
 
+    public int getLastOrder(OrderService instance) throws SQLException {
+        int id = 1;
+        for (Order o : instance.GetAllOrders()) {
+            if (o.getOrderId() >= id) {
+                id = o.getOrderId();
+            }
+        }
+        return id;
+    }
+
     @Before
     public void setUp() {
-        int OrderId = 100;
+        OrderService instance = new OrderService("localhost", 3306);
+        int OrderId = 1;
+        try {
+            for (Order o : instance.GetAllOrders()) {
+                if (o.getOrderId() >= OrderId) {
+                    OrderId = o.getOrderId() + 1;
+                }
+            }
+        } catch (Exception ex) {
+            //Logger.getLogger(OrderServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         String OrderDate = "now"; //varchar(30)
         String FirstName = "A"; //varchar(20)
         String LastName = "b"; //varchar(20)
@@ -64,9 +87,10 @@ public class OrderServiceTest {
         System.out.println("SubmitOrder");
         OrderService instance = new OrderService("localhost", 3306);
         instance.SubmitOrder(order);
-        Order result = instance.GetOrder(order.getOrderId());
+        Order result = instance.GetOrder((getLastOrder(instance)));
+        order.setOrderId((getLastOrder(instance)));
         assertEquals(order, result);
-        instance.DeleteOrder(order.getOrderId());
+        instance.DeleteOrder(getLastOrder(instance));
 
     }
 
@@ -76,15 +100,16 @@ public class OrderServiceTest {
     @Test
     public void testGetOrder() throws SQLException {
         System.out.println("GetOrder");
-        int OrderId = order.getOrderId();
-        OrderService instance = new OrderService("localhost",3306);
+        OrderService instance = new OrderService("localhost", 3306);
         Order expResult = order;
 
         instance.SubmitOrder(order);
-        Order result = instance.GetOrder(OrderId);
+        order.setOrderId(getLastOrder(instance));
+        Order result = instance.GetOrder((getLastOrder(instance)));
+        assertNotNull(result);
         assertEquals(expResult, result);
 
-        instance.DeleteOrder(OrderId);
+        instance.DeleteOrder(getLastOrder(instance));
     }
 
     /**
@@ -94,9 +119,19 @@ public class OrderServiceTest {
     public void testDeleteOrder() throws SQLException {
         System.out.println("DeleteOrder");
         int OrderId = order.getOrderId();
-        OrderService instance = new OrderService("localhost",3306);
+        OrderService instance = new OrderService("localhost", 3306);
         instance.SubmitOrder(order);
-        instance.DeleteOrder(OrderId);
+        int expected = instance.GetAllOrders().size() - 1;
+        instance.DeleteOrder(getLastOrder(instance));
+        
+        int actual = 0;
+        try {
+            instance.GetAllOrders().size();
+        } catch(Exception e) {
+            //no orders left
+        }
+        
+        assertEquals(expected, actual);
     }
 
     /**
@@ -129,8 +164,7 @@ public class OrderServiceTest {
         // TODO review the generated test code and remove the default call to fail.
         assertNotNull(result);
         assertFalse(result.isEmpty());
-
-        instance.DeleteOrder(order.getOrderId());
+        instance.DeleteOrder(getLastOrder(instance));
     }
 
     /**

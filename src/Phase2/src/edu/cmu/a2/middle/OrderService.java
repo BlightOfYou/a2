@@ -270,11 +270,8 @@ public class OrderService {
 
         // Now try to delete order with order id 
         try {
-            if (!res.first()) {
                 del = s.executeUpdate("DELETE FROM orders WHERE order_id = "
                         + Integer.toString(OrderId) + ";");
-            } // end if
-
         } catch (SQLException e) {
             errString = "\nProblem deleting order from order database:: " + e;
             throw new SQLException(errString);

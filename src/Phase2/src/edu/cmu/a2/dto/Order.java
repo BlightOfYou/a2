@@ -6,6 +6,7 @@
 package edu.cmu.a2.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -96,6 +97,64 @@ public class Order {
 
     public void setOrderItems(List<OrderItem> OrderItems) {
         this.OrderItems = OrderItems;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + this.OrderId;
+        hash = 53 * hash + Objects.hashCode(this.OrderDate);
+        hash = 53 * hash + Objects.hashCode(this.FirstName);
+        hash = 53 * hash + Objects.hashCode(this.LastName);
+        hash = 53 * hash + Objects.hashCode(this.Address);
+        hash = 53 * hash + Objects.hashCode(this.Phone);
+        hash = 53 * hash + Float.floatToIntBits(this.TotalCost);
+        hash = 53 * hash + (this.Shipped ? 1 : 0);
+        hash = 53 * hash + Objects.hashCode(this.OrderItems);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (this.OrderId != other.OrderId) {
+            return false;
+        }
+        /*
+        if (!Objects.equals(this.OrderDate, other.OrderDate)) {
+            return false;
+        }
+                */
+        if (!Objects.equals(this.FirstName, other.FirstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.LastName, other.LastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.Address, other.Address)) {
+            return false;
+        }
+        if (!Objects.equals(this.Phone, other.Phone)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.TotalCost) != Float.floatToIntBits(other.TotalCost)) {
+            return false;
+        }
+        if (this.Shipped != other.Shipped) {
+            return false;
+        }
+        /*
+        if (!Objects.equals(this.OrderItems, other.OrderItems)) {
+            return false;
+        }
+        */
+        return true;
     }
 
     
