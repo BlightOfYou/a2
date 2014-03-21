@@ -6,7 +6,9 @@ import edu.cmu.a2.common.*;
 
 import javax.swing.JOptionPane;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /******************************************************************************
  * File:NewJFrame.java
@@ -25,31 +27,31 @@ import java.util.Calendar;
  *
  * @author lattanze
  */
-public class OrderMainFrame extends javax.swing.JFrame {
+public class OrderMainFrame extends MainFrame {
     
-    String versionID = "v2.10.10";
-    Integer port = 3306;
-    Boolean connectError = false;
-    String errString = null;
+    
+    InventoryService inventoryService = null;
+    OrderService orderService = null;
+
     
 //    OrderService orderService = new OrderService(databaseStr);
     /** Creates new form NewJFrame */
     public OrderMainFrame() {
         initComponents();
-        jLabel1.setText("Order Management Application " + versionID);
+        jLabel1.setText("Order Management Application " + versionID);   
         
-        try
-        {
-            OrderService orderService = new OrderService(serverIpAddressText, port);
-            InventoryService inventoryService = new InventoryService(serverIpAddressText, port);
+        
+        try {
+            inventoryService = connectToInventoryService(databaseServerIpText.getText());
         } catch (Exception e) {
-            
-            errString =  "\nProblem connecting to database:: " + e;
-            inventoryTextArea.append(errString);
             connectError = true;
-            
-        } // end try-catch
+        }
         
+        try {
+            orderService = connectToOrderService(databaseServerIpText.getText());
+        } catch (Exception e) {
+            connectError = true;
+        }
     }
     
     /** This method is called from within the constructor to
@@ -90,8 +92,8 @@ public class OrderMainFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         messagesTextArea = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        serverIpAddressLabel = new javax.swing.JLabel();
-        serverIpAddressText = new javax.swing.JTextField();
+        databaseServerIpLabel = new javax.swing.JLabel();
+        databaseServerIpText = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         addressTextArea = new javax.swing.JTextArea();
@@ -214,9 +216,9 @@ public class OrderMainFrame extends javax.swing.JFrame {
 
         jLabel3.setText("Customer Information");
 
-        serverIpAddressLabel.setText("Server IP Address:");
+        databaseServerIpLabel.setText("Server IP Address:");
 
-        serverIpAddressText.setText("localhost");
+        databaseServerIpText.setText("localhost");
 
         jLabel12.setText("Address");
 
@@ -259,7 +261,7 @@ public class OrderMainFrame extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(serverIpAddressLabel))
+                                        .addComponent(databaseServerIpLabel))
                                     .addComponent(jScrollPane2)
                                     .addComponent(jScrollPane3)
                                     .addGroup(layout.createSequentialGroup()
@@ -290,7 +292,7 @@ public class OrderMainFrame extends javax.swing.JFrame {
                                     .addComponent(addToOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(costLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(costText))
-                                .addComponent(serverIpAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(databaseServerIpText, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(74, 74, 74))
             .addGroup(layout.createSequentialGroup()
                 .addGap(300, 300, 300)
@@ -304,8 +306,8 @@ public class OrderMainFrame extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(serverIpAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(serverIpAddressLabel))
+                    .addComponent(databaseServerIpText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(databaseServerIpLabel))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
@@ -365,8 +367,8 @@ public class OrderMainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void treesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treesButtonActionPerformed
-        
-        displayTypeList("trees");
+        productType = "trees";
+        displayTypeList();
     }//GEN-LAST:event_treesButtonActionPerformed
     
     private void addToOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToOrderButtonActionPerformed
@@ -390,6 +392,7 @@ public class OrderMainFrame extends javax.swing.JFrame {
         sCost = null;
         sTotalCost = null;
         
+
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
         
@@ -434,7 +437,7 @@ public class OrderMainFrame extends javax.swing.JFrame {
             if ( !IndexNotFound )
             {
 //                TO DO: fill in order item constructor
-                OrderItem orderItem = new OrderItem(...)
+//                OrderItem orderItem = new OrderItem(int ItemId, int ProductId, int Description, float ItemPrice)
                 itemsSelectedTextArea.append( productID + " : " + productDescription + " : $"
                         + sCost + "\n");
                 
@@ -448,6 +451,10 @@ public class OrderMainFrame extends javax.swing.JFrame {
                 sTotalCost = sTotalCost.substring(beginIndex, sTotalCost.length());
                 fCost = Float.parseFloat(sTotalCost) + Float.parseFloat(sCost);
                 costText.setText( "$" + fCost.toString());
+                
+                Order.getOrderItems().add(new OrderItem(...)).
+
+                
                 
             } else {
                 messagesTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
@@ -490,7 +497,7 @@ public class OrderMainFrame extends javax.swing.JFrame {
         String productID = null;        // Product id of tree, seed, or shrub
         Statement s = null;             // SQL statement pointer
         String SQLstatement = null;     // String for building SQL queries
-        
+        Boolean shipped = false;
         // Check to make sure there is a first name, last name, address and phone
         if ((firstNameText.getText().length()>0) && (lastNameText.getText().length()>0)
                 && (phoneTextArea.getText().length()>0)
@@ -536,10 +543,14 @@ public class OrderMainFrame extends javax.swing.JFrame {
             sTotalCost = sTotalCost.substring(beginIndex, sTotalCost.length());
             fCost = Float.parseFloat(sTotalCost);
             
+            
+//            Order(int OrderId, String OrderDate, firstName, lastName, customerAddress, phoneNumber, float TotalCost, shipped, List<OrderItem> OrderItems)
+//Order order = new Order()
+//            
             try
             {
 //                Need to create order object to pass in to SubmitOrder
-                orderService.SubmitOrder(...);
+//                this.orderService.SubmitOrder(...);
                 msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
                 messagesTextArea.setText(msgString);
                 clearTextArea();
@@ -629,14 +640,17 @@ public class OrderMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_lastNameTextActionPerformed
     
     private void seedsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedsButtonActionPerformed
-        displayTypeList("seeds");
+        productType = "seeds";
+        displayTypeList();
     }//GEN-LAST:event_seedsButtonActionPerformed
     
     private void shrubsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shrubsButtonActionPerformed
-        displayTypeList("shrubs");
+        
+        productType = "shrubs";
+        displayTypeList();
     }//GEN-LAST:event_shrubsButtonActionPerformed
     
-    private void displayTypeList(String productType) {
+    private void displayTypeList() {
         
         // jButton1 is responsible for querying the inventory database and
         // getting the tree inventory. Once retieved, the tree inventory is
@@ -651,6 +665,8 @@ public class OrderMainFrame extends javax.swing.JFrame {
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         
+        List<Product> productList = new ArrayList<Product>();
+        
         // If we are connected, then we get the list of trees from the
         // inventory database
         
@@ -661,7 +677,7 @@ public class OrderMainFrame extends javax.swing.JFrame {
                 //Display the data in the textarea
                 
                 inventoryTextArea.setText("");
-                List<Product> = inventoryService.GetProducts(productType);
+                 productList = this.inventoryService.GetProducts(productType);
                 
                 
 //                while (res.next())
@@ -688,19 +704,23 @@ public class OrderMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_phoneTextAreaActionPerformed
     
     private void cultureBoxesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cultureBoxesButtonActionPerformed
-        displayTypeList("cultureboxes");
+        productType = "cultureboxes";
+        displayTypeList();
     }//GEN-LAST:event_cultureBoxesButtonActionPerformed
     
     private void genomicsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genomicsButtonActionPerformed
-        displayTypeList("genomics");
+        productType = "genomics";
+        displayTypeList();
     }//GEN-LAST:event_genomicsButtonActionPerformed
     
     private void processesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processesButtonActionPerformed
-        displayTypeList("processes");
+        productType = "processes";
+        displayTypeList();
     }//GEN-LAST:event_processesButtonActionPerformed
     
     private void referenceMaterialsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenceMaterialsButtonActionPerformed
-        displayTypeList("referencematerials");
+        productType = "referencematerials";
+        displayTypeList();
     }//GEN-LAST:event_referenceMaterialsButtonActionPerformed
     
     private void clearTextArea() {
@@ -730,6 +750,8 @@ public class OrderMainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel costLabel;
     private javax.swing.JTextField costText;
     private javax.swing.JButton cultureBoxesButton;
+    private javax.swing.JLabel databaseServerIpLabel;
+    private javax.swing.JTextField databaseServerIpText;
     private javax.swing.JTextField firstNameText;
     private javax.swing.JButton genomicsButton;
     private javax.swing.JTextArea inventoryTextArea;
@@ -755,8 +777,6 @@ public class OrderMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton processesButton;
     private javax.swing.JButton referenceMaterialsButton;
     private javax.swing.JButton seedsButton;
-    private javax.swing.JLabel serverIpAddressLabel;
-    private javax.swing.JTextField serverIpAddressText;
     private javax.swing.JButton shrubsButton;
     private javax.swing.JButton submitOrderButton;
     private javax.swing.JButton treesButton;

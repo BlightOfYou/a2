@@ -16,6 +16,7 @@ import javax.swing.JLabel;
  */
 public abstract class MainFrame extends javax.swing.JFrame {
     
+    String productType = null;
     Integer port = 3306;
     Boolean connectError = false;
     String errString = null;

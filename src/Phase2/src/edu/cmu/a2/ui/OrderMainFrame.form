@@ -55,7 +55,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="serverIpAddressLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="databaseServerIpLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane2" alignment="0" max="32767" attributes="1"/>
                                   <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
@@ -95,7 +95,7 @@
                                   <Component id="costLabel" alignment="0" max="32767" attributes="1"/>
                                   <Component id="costText" alignment="0" max="32767" attributes="1"/>
                               </Group>
-                              <Component id="serverIpAddressText" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="databaseServerIpText" min="-2" pref="110" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -116,8 +116,8 @@
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="serverIpAddressText" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="serverIpAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="databaseServerIpText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="databaseServerIpLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -373,12 +373,12 @@
         <Property name="text" type="java.lang.String" value="Customer Information"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="serverIpAddressLabel">
+    <Component class="javax.swing.JLabel" name="databaseServerIpLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Server IP Address:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="serverIpAddressText">
+    <Component class="javax.swing.JTextField" name="databaseServerIpText">
       <Properties>
         <Property name="text" type="java.lang.String" value="localhost"/>
       </Properties>
