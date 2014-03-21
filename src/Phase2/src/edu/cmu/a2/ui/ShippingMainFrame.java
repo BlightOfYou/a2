@@ -6,7 +6,7 @@ import edu.cmu.a2.common.*;
 
 import java.sql.*;
 import java.util.List;
- /******************************************************************************
+/******************************************************************************
  * File:NewJFrame.java
  * Course: 17655
  * Project: Assignment 2
@@ -19,29 +19,28 @@ import java.util.List;
  *
  ******************************************************************************/
 /*
- * Created on Feb 4, 2010, 7:40:03 PM
- *
- * @author lattanze
- */
-public class ShippingMainFrame extends javax.swing.JFrame {
+* Created on Feb 4, 2010, 7:40:03 PM
+*
+* @author lattanze
+*/
+public class ShippingMainFrame extends MainFrame {
     Integer updateOrderID;
-    String versionID = "v2.10.10";
+    OrderService orderService = null;
+    int orderId = 0;
     
-<<<<<<< HEAD
-    Integer port = 3306;
-=======
-    String serviceHost = "localhost";
-    int servicePort = 3306;
-    OrderService orderService = new OrderService(serviceHost, servicePort);
-    
->>>>>>> 4aa68ac1b44574eda22e2b381705b8a6a0bba624
     /** Creates new form NewJFrame */
     public ShippingMainFrame() {
         initComponents();
-        OrderService orderService = new OrderService(serverIpAddressText, port);
         shippingApplicationLabel.setText("Shipping Application " + versionID);
+        
+        try {
+            orderService = connectToOrderService(databaseServerIpText.getText());
+        } catch (Exception e) {
+            connectError = true;
+        }
+        
     }
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -54,8 +53,8 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         shippingApplicationLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         orderTextArea = new javax.swing.JTextArea();
-        serverIpAddressLabel = new javax.swing.JLabel();
-        serverIpAddressText = new javax.swing.JTextField();
+        databaseServerIpLabel = new javax.swing.JLabel();
+        databaseServerIpText = new javax.swing.JTextField();
         firstNameText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         firstNameLabel = new javax.swing.JLabel();
@@ -91,9 +90,9 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         orderTextArea.setRows(5);
         jScrollPane1.setViewportView(orderTextArea);
 
-        serverIpAddressLabel.setText("Server IP Address:");
+        databaseServerIpLabel.setText("Server IP Address:");
 
-        serverIpAddressText.setText("localhost");
+        databaseServerIpText.setText("localhost");
 
         firstNameText.setEditable(false);
         firstNameText.addActionListener(new java.awt.event.ActionListener() {
@@ -204,7 +203,6 @@ public class ShippingMainFrame extends javax.swing.JFrame {
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(shippingApplicationLabel)
                                 .addGap(228, 228, 228))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -225,9 +223,9 @@ public class ShippingMainFrame extends javax.swing.JFrame {
                                     .addComponent(showShippedOrdersButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(showPendingOrdersButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(187, 187, 187)
-                                .addComponent(serverIpAddressLabel)
+                                .addComponent(databaseServerIpLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(serverIpAddressText))
+                                .addComponent(databaseServerIpText))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(firstNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -242,9 +240,7 @@ public class ShippingMainFrame extends javax.swing.JFrame {
                                     .addComponent(phoneText, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(orderDateLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(orderDateLabel)
                                     .addComponent(orderDateText))))
                         .addGap(45, 45, 45))
                     .addGroup(layout.createSequentialGroup()
@@ -262,8 +258,8 @@ public class ShippingMainFrame extends javax.swing.JFrame {
                 .addComponent(shippingApplicationLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(serverIpAddressLabel)
-                    .addComponent(serverIpAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(databaseServerIpLabel)
+                    .addComponent(databaseServerIpText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showPendingOrdersButton))
                 .addGap(8, 8, 8)
                 .addComponent(showShippedOrdersButton)
@@ -308,15 +304,15 @@ public class ShippingMainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void lastNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_lastNameTextActionPerformed
-
+    
     private void phoneTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_phoneTextActionPerformed
-
+    
     private void showPendingOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPendingOrdersButtonActionPerformed
         // jButton2 is responsible for refreshing the list of pending
         // orders.
@@ -324,7 +320,7 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_showPendingOrdersButtonActionPerformed
-
+    
     private void selectOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectOrderButtonActionPerformed
         // This button gets the selected line of text from the
         // order list window jTextArea1. The line of text is parsed for the
@@ -333,262 +329,249 @@ public class ShippingMainFrame extends javax.swing.JFrame {
         // record contains the name of the table that has the items that make
         // up the order. This table is opened and all the items are listed
         // in jTextArea3.
-
-        Boolean connectError = false;       // Error flag
+        
         String errString = null;            // String for displaying errors
         int beginIndex;                     // Parsing index
         int endIndex;                       // Parsing index
         String msgString = null;            // String for displaying non-error messages
         String orderSelection = null;       // Order selected from TextArea1
-        String orderID = null;              // Product ID pnemonic
+        String orderIdSelection = null;              // Product ID pnemonic
         ResultSet res = null;               // SQL query result set pointer
-        Boolean orderBlank = false;         // False: order string is not blank
+        Boolean orderBlank;         // False: order string is not blank
+        
+        
+        Order order = null;
 
-
-        // this is the selected line of text
+// this is the selected line of text
         orderSelection =  orderTextArea.getSelectedText();
-
+        
         // make sure its not blank
         if (orderSelection.length() > 0 )
         {
             
 //            CFP TO DO: Make sure product ID is correct
-
+            
             // get the product ID
             beginIndex = 0;
             beginIndex = orderSelection.indexOf(" # ", beginIndex);
             beginIndex = beginIndex + 3; //skip past _#_
             endIndex = orderSelection.indexOf(" :", beginIndex);
-            orderID = orderSelection.substring(beginIndex,endIndex);
-
+            orderIdSelection = orderSelection.substring(beginIndex,endIndex);
+            orderId = Integer.parseInt(orderIdSelection);
+            orderBlank = false;
         } else {
-
+            
             msgString = ">> Order string is blank...";
             messagesTextArea.setText("\n"+msgString);
             orderBlank = true;
-
+            
         } // Blank string check
-
+        
         // If an order was selected, then connect to the orderinfo database. In
         // all normal situations this would be impossible to do since the select
         // button is disabled until an order is selected... just in case the
         // check is here.
-
-        if ( !orderBlank )
-        {
-            try
-            {
-                Order order = orderService.GetOrder(orderId);
-
-            } catch (Exception e) {
-
-                errString =  "\nProblem retrieving order:: " + e;
-                messagesTextArea.append(errString);
-                connectError = true;
-
-            } // end try-catch
-
-        } // blank order check 
-
+        
+       
+        
         if ( !connectError && !orderBlank )
         {
             try
             {
-
+                order = this.orderService.GetOrder(orderId); 
+            } catch (Exception e) {
+                
+                errString =  "\nProblem retrieving order:: " + e;
+                messagesTextArea.append(errString);
+                connectError = true;
+                
+            } // end try-catch
+            
+            try
+            {
+                
                 // Get the information from the database. Display the
                 // first and last name, address, phone number, address, and
                 // order date. Same the ordertable name - this is the name of
                 // the table that is created when an order is submitted that
                 // contains the list of order items.
-
-                    
-                  firstNameText.setText(order.firstName); // first name
-                  lastNameText.setText(order.lastName); // last name
-                  phoneText.setText(order.phone); // phone
-                  orderDateText.setText(order.orderDate); // order date
-                  mailingAddressTextArea.setText(order.address);  // address
-
-
+                
+                
+                firstNameText.setText(order.FirstName); // first name
+                lastNameText.setText(order.LastName); // last name
+                phoneText.setText(order.Phone); // phone
+                orderDateText.setText(order.OrderDate); // order date
+                mailingAddressTextArea.setText(order.Address);  // address
+                
+                
                 // list the items on the form that comprise the order
                 orderItemsTextArea.setText("");
-
+                
                 while (res.next())
                 {
                     msgString = res.getString(1) + ":  PRODUCT ID: " + res.getString(2) +
-                         "  DESCRIPTION: "+ res.getString(3) + "  PRICE $" + res.getString(4);
+                            "  DESCRIPTION: "+ res.getString(3) + "  PRICE $" + res.getString(4);
                     orderItemsTextArea.append(msgString + "\n");
-
+                    
                 } // while
-
+                
                 // This global variable is used to update the record as shipped
-                updateOrderID = Integer.parseInt(orderID);
-
+                updateOrderID = Integer.parseInt(orderIdSelection);
+                
                 // Update the form
                 markAsShippedButton.setEnabled(true);
                 msgString = "RECORD RETRIEVED...";
                 messagesTextArea.setText(msgString);
                 
             } catch (Exception e) {
-
+                
                 errString =  "\nProblem getting order items:: " + e;
                 orderTextArea.append(errString);
-
+                
             } // end try-catch
-
+            
         } // connect and blank order check
         
     }//GEN-LAST:event_selectOrderButtonActionPerformed
-
+    
     private void markAsShippedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markAsShippedButtonActionPerformed
         // This method is responsible changing the status of the order
         // to shipped.
 
-        Boolean connectError = false;       // Error flag
         String errString = null;            // String for displaying errors
-
-
+        OrderService orderService;
+        
         // Connect to the order database -- THIS CODE IS REMOVED
-
-
+        
+        
         // If we are connected, then we update the shipped status
-
+        
         if ( !connectError )
         {
             try
             {
                 
                 // first we create the query
-                orderService.ShipOrder(orderId);
-
+                this.orderService.ShipOrder(orderId);
+                messagesTextArea.setText("\nOrder #" + updateOrderID + " status has been changed to shipped.");
                 // if the query worked, then we display the data in TextArea 4 - BTW, its highly
                 // unlikely that the row won't exist and if it does the database tables are
                 // really screwed up... this should not fail if you get here, but the check (in the
                 // form of the else clause) is in place anyway
-
-                if (rows > 0)
-                {
-                   messagesTextArea.setText("\nOrder #" + updateOrderID + " status has been changed to shipped.");
-
-                } else {
-
-                   messagesTextArea.setText("\nOrder #" + updateOrderID + " record not found.");
-
-                } // execute check
-
+                
                 // Clean up the form
                 markAsShippedButton.setEnabled(false);
                 selectOrderButton.setEnabled(false);
                 clearTextArea();
-
+                
             } catch (Exception e) {
-
+                
                 errString =  "\nProblem updating status:: " + e;
                 messagesTextArea.append(errString);
                 orderTextArea.setText("");
-
+                
             } // end try-catch
-
+            
         } // if connect check
-
+        
     }//GEN-LAST:event_markAsShippedButtonActionPerformed
-
+    
     private void showShippedOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showShippedOrdersButtonActionPerformed
         // This button will display the list of orders that have already
         // have been shipped.
-
+        
         getShippedOrders();
-
+        
     }//GEN-LAST:event_showShippedOrdersButtonActionPerformed
-
+    
     private void firstNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_firstNameTextActionPerformed
-
+    
     private void orderDateTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderDateTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_orderDateTextActionPerformed
-
+    
     private void getPendingOrders() {
-
+        
         // This method is responsible for querying the orders database and
         // getting the list of pending orders. This are orders that have not
         // been shipped as of yet. The list of pending orders is written to
         // jTextArea1.
-
-        Boolean connectError = false;       // Error flag
+        
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
-
-
+        
+        
         // Clean up the form before we start
         clearTextArea();
-
+        
         // Connect to the order database
         try
         {
             List<Order> pendingOrderList = orderService.GetPendingOrders();
-
+            
         } catch (Exception e) {
-
+            
             errString =  "\nProblem retrieving pending orders:: " + e;
             messagesTextArea.append(errString);
             connectError = true;
-
+            
         } // end try-catch
-
+        
         // If we are connected, then we get the list of trees from the
         // inventory database
-
+        
         if ( !connectError )
         {
             try
-            {  
+            {
                 // TO DO: LIST OUT ORDERS IN ORDERTEXTAREA
                 displayOrders(pendingOrderList);
-
+                
                 selectOrderButton.setEnabled(true);
                 msgString =  "\nPENDING ORDERS RETRIEVED...";
                 messagesTextArea.setText(msgString);
             } catch (Exception e) {
-
+                
                 errString =  "\nProblem listing pending orders:: " + e;
                 messagesTextArea.append(errString);
-
+                
             } // end try-catch
             
         } // if connect check
-
+        
     } // getPendingOrders
-
+    
     private void getShippedOrders() {
-
+        
         // This method is responsible for querying the orders database and
         // getting the list of orders that have been shipped. The list of shipped
         // orders is written to jTextArea1.
-
+        
         Boolean connectError = false;       // Error flag
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
-
+        
         // Clean up the form before we start
         clearTextArea();
-
+        
         // Connect to the order database
         try
         {
             List<Order> shippedOrderList = orderService.GetShippedOrders();
-
+            
         } catch (Exception e) {
-
+            
             errString =  "\nProblem retrieving shipped orders:: " + e;
             messagesTextArea.append(errString);
             connectError = true;
-
+            
         } // end try-catch
-
+        
         // If we are connected, then we get the list of trees from the
         // inventory database
-
+        
         if ( !connectError )
         {
             try
@@ -596,26 +579,26 @@ public class ShippingMainFrame extends javax.swing.JFrame {
                 // Create a query to get all the rows from the orders database
                 // and execute the query.
                 displayOrders(shippedOrderList);
-
+                
                 markAsShippedButton.setEnabled(false);
                 selectOrderButton.setEnabled(false);
-
+                
                 msgString =  "\nSHIPPED ORDERS RETRIEVED...";
                 messagesTextArea.setText(msgString);
-
+                
             } catch (Exception e) {
-
+                
                 errString =  "\nProblem getting shipped orders:: " + e;
                 messagesTextArea.append(errString);
-
+                
             } // end try-catch
-
+            
         } // connect check
-
+        
     } // getPendingOrders
-
-
-
+    
+    
+    
     private void displayOrders(List<Order>) {
         //                //-------- BEGIN OLD CODE ---------------------------------------//
 //                // Create a query to get all the orders and execute the query
@@ -648,8 +631,8 @@ public class ShippingMainFrame extends javax.swing.JFrame {
 //                // notify the user all went well and enable the select order
 //                // button
     }
-            
-            
+    
+    
     private void clearTextArea() {
         orderTextArea.setText("");
         mailingAddressTextArea.setText("");
@@ -661,8 +644,8 @@ public class ShippingMainFrame extends javax.swing.JFrame {
     }
     
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -670,8 +653,10 @@ public class ShippingMainFrame extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel databaseServerIpLabel;
+    private javax.swing.JTextField databaseServerIpText;
     private javax.swing.JLabel firstNameLabel;
     private javax.swing.JTextField firstNameText;
     private javax.swing.JLabel jLabel4;
@@ -697,11 +682,9 @@ public class ShippingMainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel phoneLabel;
     private javax.swing.JTextField phoneText;
     private javax.swing.JButton selectOrderButton;
-    private javax.swing.JLabel serverIpAddressLabel;
-    private javax.swing.JTextField serverIpAddressText;
     private javax.swing.JLabel shippingApplicationLabel;
     private javax.swing.JButton showPendingOrdersButton;
     private javax.swing.JButton showShippedOrdersButton;
     // End of variables declaration//GEN-END:variables
-
+    
 }

@@ -103,6 +103,16 @@ public class Product {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return ">>" +  Id + "::" + 
+                Type + "::" + 
+                Description + "::" + 
+                Price + "::" + 
+                Quantity;
+                //"Product{" + "Id=" + Id + ", Type=" + Type + ", Description=" + Description + ", Price=" + Price + ", Quantity=" + Quantity + '}';
+    }
     
     
 }

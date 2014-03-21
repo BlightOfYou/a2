@@ -5,6 +5,7 @@
  */
 package edu.cmu.a2.dto;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -127,10 +128,10 @@ public class Order {
             return false;
         }
         /*
-        if (!Objects.equals(this.OrderDate, other.OrderDate)) {
-            return false;
-        }
-                */
+         if (!Objects.equals(this.OrderDate, other.OrderDate)) {
+         return false;
+         }
+         */
         if (!Objects.equals(this.FirstName, other.FirstName)) {
             return false;
         }
@@ -150,13 +151,25 @@ public class Order {
             return false;
         }
         /*
-        if (!Objects.equals(this.OrderItems, other.OrderItems)) {
-            return false;
-        }
-        */
+         if (!Objects.equals(this.OrderItems, other.OrderItems)) {
+         return false;
+         }
+         */
         return true;
     }
 
-    
-    
+    @Override
+    public String toString() {
+        return ">>" + OrderId + "::" +
+                OrderDate + "::" + 
+                FirstName + "::" + 
+                LastName + "::" + 
+                Address + "::" + 
+                Phone + "::" + 
+                TotalCost + "::" + 
+                Shipped + "::" + 
+                Arrays.toString(OrderItems.toArray());
+        //"Order{" + "OrderId=" + OrderId + ", OrderDate=" + OrderDate + ", FirstName=" + FirstName + ", LastName=" + LastName + ", Address=" + Address + ", Phone=" + Phone + ", TotalCost=" + TotalCost + ", Shipped=" + Shipped + ", OrderItems=" + OrderItems + '}';
+    }
+
 }
