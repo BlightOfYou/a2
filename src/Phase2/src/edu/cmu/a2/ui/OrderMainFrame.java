@@ -32,13 +32,13 @@ public class OrderMainFrame extends MainFrame {
     
     InventoryService inventoryService = null;
     OrderService orderService = null;
-
+    
     
 //    OrderService orderService = new OrderService(databaseStr);
     /** Creates new form NewJFrame */
     public OrderMainFrame() {
         initComponents();
-        jLabel1.setText("Order Management Application " + versionID);   
+        jLabel1.setText("Order Management Application " + versionID);
         
         
         try {
@@ -392,7 +392,7 @@ public class OrderMainFrame extends MainFrame {
         sCost = null;
         sTotalCost = null;
         
-
+        
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
         
@@ -453,7 +453,7 @@ public class OrderMainFrame extends MainFrame {
                 costText.setText( "$" + fCost.toString());
                 
                 Order.getOrderItems().add(new OrderItem(...)).
-
+                
                 
                 
             } else {
@@ -476,7 +476,7 @@ public class OrderMainFrame extends MainFrame {
         // database as well.
         
         int beginIndex;                 // String parsing index
-        Boolean connectError = false;   // Error flag
+        
         String customerAddress;         // Buyers mailing address
         int endIndex;                   // String paring index
         String firstName = null;        // Customer's first name
@@ -543,28 +543,6 @@ public class OrderMainFrame extends MainFrame {
             sTotalCost = sTotalCost.substring(beginIndex, sTotalCost.length());
             fCost = Float.parseFloat(sTotalCost);
             
-            
-//            Order(int OrderId, String OrderDate, firstName, lastName, customerAddress, phoneNumber, float TotalCost, shipped, List<OrderItem> OrderItems)
-//Order order = new Order()
-//            
-            try
-            {
-//                Need to create order object to pass in to SubmitOrder
-//                this.orderService.SubmitOrder(...);
-                msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
-                messagesTextArea.setText(msgString);
-                clearTextArea();
-                
-            } catch (Exception e) {
-                
-                errString =  "\nProblem submitting order:: " + e;
-                messagesTextArea.append(errString);
-                executeError = true;
-                
-            } // try
-            
-            
-            
         }
         
 //        // Now, if there is no connect or SQL execution errors at this point,
@@ -572,66 +550,65 @@ public class OrderMainFrame extends MainFrame {
 //        // new ordersXXXX table created. Here we insert the list of items in
 //        // jTextArea2 into the ordersXXXX table.
 //
-//        if ( !connectError && !executeError )
-//        {
-//            // Now we create a table that contains the itemized list
-//            // of stuff that is associated with the order
+        if ( !connectError && !executeError )
+        {
+            // Now we create a table that contains the itemized list
+            // of stuff that is associated with the order
+            
+            String[] items = itemsSelectedTextArea.getText().split("\\n");
+            
+            for (int i = 0; i < items.length; i++ )
+            {
+                orderItem = items[i];
+                messagesTextArea.append("\nitem #:" + i + ": " + items[i]);
+                
+                // Check just to make sure that a blank line was not stuck in
+                // there... just in case.
+                
+                if (orderItem.length() > 0 )
+                {
+                    // Parse out the product id
+                    beginIndex = 0;
+                    endIndex = orderItem.indexOf(" : ",beginIndex);
+                    productID = orderItem.substring(beginIndex,endIndex);
+                    
+                    // Parse out the description text
+                    beginIndex = endIndex + 3; //skip over " : "
+                    endIndex = orderItem.indexOf(" : ",beginIndex);
+                    description = orderItem.substring(beginIndex,endIndex);
+                    
+                    // Parse out the item cost
+                    beginIndex = endIndex + 4; //skip over " : $"
+                    //endIndex = orderItem.indexOf(" : ",orderItem.length());
+                    //sPerUnitCost = orderItem.substring(beginIndex,endIndex);
+                    sPerUnitCost = orderItem.substring(beginIndex,orderItem.length());
+                    perUnitCost = Float.parseFloat(sPerUnitCost);
+                    
+//            Order(int OrderId, String OrderDate, firstName, lastName, customerAddress, phoneNumber, float TotalCost, shipped, List<OrderItem> OrderItems)
+                    Order order = new Order();
 //
-//            String[] items = itemsSelectedTextArea.getText().split("\\n");
-//
-//            for (int i = 0; i < items.length; i++ )
-//            {
-//                orderItem = items[i];
-//                messagesTextArea.append("\nitem #:" + i + ": " + items[i]);
-//
-//                // Check just to make sure that a blank line was not stuck in
-//                // there... just in case.
-//
-//                if (orderItem.length() > 0 )
-//                {
-//                    // Parse out the product id
-//                    beginIndex = 0;
-//                    endIndex = orderItem.indexOf(" : ",beginIndex);
-//                    productID = orderItem.substring(beginIndex,endIndex);
-//
-//                    // Parse out the description text
-//                    beginIndex = endIndex + 3; //skip over " : "
-//                    endIndex = orderItem.indexOf(" : ",beginIndex);
-//                    description = orderItem.substring(beginIndex,endIndex);
-//
-//                    // Parse out the item cost
-//                    beginIndex = endIndex + 4; //skip over " : $"
-//                    //endIndex = orderItem.indexOf(" : ",orderItem.length());
-//                    //sPerUnitCost = orderItem.substring(beginIndex,endIndex);
-//                    sPerUnitCost = orderItem.substring(beginIndex,orderItem.length());
-//                    perUnitCost = Float.parseFloat(sPerUnitCost);
-//
-//                    SQLstatement = ( "INSERT INTO " + orderTableName +
-//                        " (product_id, description, item_price) " +
-//                        "VALUES ( '" + productID + "', " + "'" +
-//                        description + "', " + perUnitCost + " );");
-//                    try
-//                    {
-//                        executeUpdateVal = s.executeUpdate(SQLstatement);
-//                        msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
-//                        messagesTextArea.setText(msgString);
-//
-//                        // Clean up the display
-//                        clearTextArea();
-//
-//                    } catch (Exception e) {
-//
-//                        errString =  "\nProblem with inserting into table " + orderTableName +
-//                            ":: " + e;
-//                        messagesTextArea.append(errString);
-//
-//                    } // try
-//
-//                } // line length check
-//
-//            } //for each line of text in order table
-//
-//        }
+                            try
+                            {
+//                Need to create order object to pass in to SubmitOrder
+//                this.orderService.SubmitOrder(...);
+                                msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
+                                messagesTextArea.setText(msgString);
+                                clearTextArea();
+                                
+                            } catch (Exception e) {
+                                
+                                errString =  "\nProblem submitting order:: " + e;
+                                messagesTextArea.append(errString);
+                                executeError = true;
+                                
+                            } // try
+                            
+                            
+                } // line length check
+                
+            } //for each line of text in order table
+            
+        }
         
     }//GEN-LAST:event_submitOrderButtonActionPerformed
     
@@ -657,15 +634,9 @@ public class OrderMainFrame extends MainFrame {
         // displayed in jTextArea1. From here the user can select an inventory
         // item by triple clicking the item.
         
-        // Database parameters
-        
-        
         // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
-        ResultSet res = null;               // SQL query result set pointer
-        Statement s = null;                 // SQL statement pointer
         
-        List<Product> productList = new ArrayList<Product>();
+        List<Product> products = new ArrayList<Product>();
         
         // If we are connected, then we get the list of trees from the
         // inventory database
@@ -677,17 +648,15 @@ public class OrderMainFrame extends MainFrame {
                 //Display the data in the textarea
                 
                 inventoryTextArea.setText("");
-                 productList = this.inventoryService.GetProducts(productType);
+                products = this.inventoryService.GetProducts(productType);
                 
+                inventoryTextArea.setText("");
                 
-//                while (res.next())
-//                {
-//                    msgString = res.getString(1) + " : " + res.getString(2) +
-//                            " : $"+ res.getString(4) + " : " + res.getString(3)
-//                            + " units in stock";
-//                    inventoryTextArea.append(msgString+"\n");
-//
-//                } // while
+                for (Product thisProduct : products) {
+                    inventoryTextArea.append("\n"+thisProduct.toString());
+                    
+                }
+                
                 
             } catch (Exception e) {
                 

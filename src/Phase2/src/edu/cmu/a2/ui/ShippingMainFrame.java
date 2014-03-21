@@ -26,7 +26,7 @@ import java.util.List;
 public class ShippingMainFrame extends MainFrame {
     Integer updateOrderID;
     OrderService orderService = null;
-    
+    int orderId = 0;
     
     /** Creates new form NewJFrame */
     public ShippingMainFrame() {
@@ -337,10 +337,10 @@ public class ShippingMainFrame extends MainFrame {
         String orderSelection = null;       // Order selected from TextArea1
         String orderIdSelection = null;              // Product ID pnemonic
         ResultSet res = null;               // SQL query result set pointer
-        Boolean orderBlank = false;         // False: order string is not blank
-        int orderId;
+        Boolean orderBlank;         // False: order string is not blank
         
-//        Order order = null;
+        
+        Order order = null;
 
 // this is the selected line of text
         orderSelection =  orderTextArea.getSelectedText();
@@ -358,6 +358,7 @@ public class ShippingMainFrame extends MainFrame {
             endIndex = orderSelection.indexOf(" :", beginIndex);
             orderIdSelection = orderSelection.substring(beginIndex,endIndex);
             orderId = Integer.parseInt(orderIdSelection);
+            orderBlank = false;
         } else {
             
             msgString = ">> Order string is blank...";
@@ -371,33 +372,13 @@ public class ShippingMainFrame extends MainFrame {
         // button is disabled until an order is selected... just in case the
         // check is here.
         
-//        try {
-//            orderService = connectToOrderService(databaseServerIpText.getText());
-//        } catch (Exception e) {
-//            connectError = true;
-//        }
-        
-//        if ( !connectError && !orderBlank)
-//        {
-//            try
-//            {
-//                Order myOrder = orderService.GetOrder(orderId);
-//                
-//            } catch (Exception e) {
-//                
-//                errString =  "\nProblem retrieving order:: " + e;
-//                messagesTextArea.append(errString);
-//                connectError = true;
-//                
-//            } // end try-catch
-//            
-//        } // blank order check
+       
         
         if ( !connectError && !orderBlank )
         {
             try
             {
-                Order order = this.orderService.GetOrder(orderId); 
+                order = this.orderService.GetOrder(orderId); 
             } catch (Exception e) {
                 
                 errString =  "\nProblem retrieving order:: " + e;
@@ -416,11 +397,11 @@ public class ShippingMainFrame extends MainFrame {
                 // contains the list of order items.
                 
                 
-                firstNameText.setText(selectedOrder.FirstName); // first name
-                lastNameText.setText(selectedOrder.LastName); // last name
-                phoneText.setText(selectedOrder.Phone); // phone
-                orderDateText.setText(selectedOrder.OrderDate); // order date
-                mailingAddressTextArea.setText(selectedOrder.Address);  // address
+                firstNameText.setText(order.FirstName); // first name
+                lastNameText.setText(order.LastName); // last name
+                phoneText.setText(order.Phone); // phone
+                orderDateText.setText(order.OrderDate); // order date
+                mailingAddressTextArea.setText(order.Address);  // address
                 
                 
                 // list the items on the form that comprise the order
@@ -456,7 +437,7 @@ public class ShippingMainFrame extends MainFrame {
     private void markAsShippedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markAsShippedButtonActionPerformed
         // This method is responsible changing the status of the order
         // to shipped.
-        
+
         String errString = null;            // String for displaying errors
         OrderService orderService;
         
@@ -471,22 +452,12 @@ public class ShippingMainFrame extends MainFrame {
             {
                 
                 // first we create the query
-                orderService.ShipOrder(orderId);
-                
+                this.orderService.ShipOrder(orderId);
+                messagesTextArea.setText("\nOrder #" + updateOrderID + " status has been changed to shipped.");
                 // if the query worked, then we display the data in TextArea 4 - BTW, its highly
                 // unlikely that the row won't exist and if it does the database tables are
                 // really screwed up... this should not fail if you get here, but the check (in the
                 // form of the else clause) is in place anyway
-                
-                if (rows > 0)
-                {
-                    messagesTextArea.setText("\nOrder #" + updateOrderID + " status has been changed to shipped.");
-                    
-                } else {
-                    
-                    messagesTextArea.setText("\nOrder #" + updateOrderID + " record not found.");
-                    
-                } // execute check
                 
                 // Clean up the form
                 markAsShippedButton.setEnabled(false);
