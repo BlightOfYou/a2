@@ -210,8 +210,8 @@ public class OrderService {
                     if (res2.first()) {
                         do {
                             int ItemId = res2.getInt(1);
-                            int ProductId = res2.getInt(2);
-                            int Description = res2.getInt(3);
+                            String ProductId = res2.getString(2);
+                            String Description = res2.getString(3);
                             float ItemPrice = res2.getFloat(4);
 
                             orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
@@ -319,8 +319,8 @@ public class OrderService {
                     if (res2.first()) {
                         do {
                             int ItemId = res2.getInt(1);
-                            int ProductId = res2.getInt(2);
-                            int Description = res2.getInt(3);
+                            String ProductId = res2.getString(2);
+                            String Description = res2.getString(3);
                             float ItemPrice = res2.getFloat(4);
 
                             orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
@@ -393,8 +393,8 @@ public class OrderService {
                     if (res2.first()) {
                         do {
                             int ItemId = res2.getInt(1);
-                            int ProductId = res2.getInt(2);
-                            int Description = res2.getInt(3);
+                            String ProductId = res2.getString(2);
+                            String Description = res2.getString(3);
                             float ItemPrice = res2.getFloat(4);
 
                             orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
@@ -467,8 +467,8 @@ public class OrderService {
                     if (res2.first()) {
                         do {
                             int ItemId = res2.getInt(1);
-                            int ProductId = res2.getInt(2);
-                            int Description = res2.getInt(3);
+                            String ProductId = res2.getString(2);
+                            String Description = res2.getString(3);
                             float ItemPrice = res2.getFloat(4);
 
                             orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));

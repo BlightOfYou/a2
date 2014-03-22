@@ -11,11 +11,11 @@ package edu.cmu.a2.dto;
 public class OrderItem {
 
     public int ItemId;
-    public int ProductId;
+    public String ProductId;
     public String Description;
     public float ItemPrice;
 
-    public OrderItem(int ItemId, int ProductId, String Description, float ItemPrice) {
+    public OrderItem(int ItemId, String ProductId, String Description, float ItemPrice) {
         this.ItemId = ItemId;
         this.ProductId = ProductId;
         this.Description = Description;
@@ -30,11 +30,11 @@ public class OrderItem {
         this.ItemId = ItemId;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return ProductId;
     }
 
-    public void setProductId(int ProductId) {
+    public void setProductId(String ProductId) {
         this.ProductId = ProductId;
     }
 
@@ -58,8 +58,8 @@ public class OrderItem {
     public int hashCode() {
         int hash = 7;
         hash = 37 * hash + this.ItemId;
-        hash = 37 * hash + this.ProductId;
-        hash = 37 * hash + this.Description;
+        hash = 37 * hash + this.ProductId.hashCode();
+        hash = 37 * hash + this.Description.hashCode();
         hash = 37 * hash + Float.floatToIntBits(this.ItemPrice);
         return hash;
     }
