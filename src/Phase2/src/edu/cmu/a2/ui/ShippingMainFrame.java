@@ -509,7 +509,7 @@ public class ShippingMainFrame extends MainFrame {
         // Connect to the order database
         try
         {
-            List<Order> pendingOrderList = orderService.GetPendingOrders();
+            List<Order> pendingOrders = orderService.GetPendingOrders();
             
         } catch (Exception e) {
             
@@ -527,7 +527,7 @@ public class ShippingMainFrame extends MainFrame {
             try
             {
                 // TO DO: LIST OUT ORDERS IN ORDERTEXTAREA
-                displayOrders(pendingOrderList);
+                displayOrders(pendingOrders);
                 
                 selectOrderButton.setEnabled(true);
                 msgString =  "\nPENDING ORDERS RETRIEVED...";

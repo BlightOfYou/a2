@@ -452,7 +452,9 @@ public class OrderMainFrame extends MainFrame {
                 fCost = Float.parseFloat(sTotalCost) + Float.parseFloat(sCost);
                 costText.setText( "$" + fCost.toString());
                 
-                Order.getOrderItems().add(new OrderItem(...)).
+                OrderItem orderItem = new OrderItem(0, Integer.parseInt(productID), productDescription, fCost);
+                
+                Order.getOrderItems().add(orderItem);
                 
                 
                 
@@ -585,7 +587,7 @@ public class OrderMainFrame extends MainFrame {
                     perUnitCost = Float.parseFloat(sPerUnitCost);
                     
 //            Order(int OrderId, String OrderDate, firstName, lastName, customerAddress, phoneNumber, float TotalCost, shipped, List<OrderItem> OrderItems)
-                    Order order = new Order();
+//                    Order order = new Order(0, stringTimeStamp, firstName, lastName, customerAddress, phoneNumber, fCost, 0, );
 //
                             try
                             {
