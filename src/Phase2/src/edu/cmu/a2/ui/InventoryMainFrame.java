@@ -478,13 +478,6 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         
         List<Product> products = new ArrayList<>();
         
-//        InventoryService inventoryService = null;
-//
-//        try {
-//            inventoryService = connectToInventoryService(databaseServerIpText.getText());
-//        } catch (Exception e) {
-//            connectError = true;
-//        }
         
         
         // Check to make sure a radio button is selected
