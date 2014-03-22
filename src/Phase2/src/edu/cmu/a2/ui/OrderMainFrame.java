@@ -387,7 +387,7 @@ public class OrderMainFrame extends MainFrame {
         String sCost,sTotalCost;            // String order and total cost values
         String quantity = null;
         Boolean IndexNotFound;              // Flag indicating a string index was not found.
-        
+        String thisProductType = null;
         // Initialization
         
         String inventorySelection = null;
@@ -412,10 +412,19 @@ public class OrderMainFrame extends MainFrame {
                 productID = inventorySelection.substring(beginIndex,endIndex);
             }
             
+            // get the product type
+            beginIndex = endIndex + 2;
+            endIndex = inventorySelection.indexOf(spacer,beginIndex);
+            if (endIndex < 0 ) {
+                IndexNotFound = true;
+            } else {
+                thisProductType = inventorySelection.substring(beginIndex,endIndex);
+            }
+            
+            // get the product description
             if ( !IndexNotFound )
             {
-                // get the product description
-                beginIndex = endIndex + 3; //skip over " : "
+                beginIndex = endIndex + 2; //skip over " : "
                 endIndex = inventorySelection.indexOf(spacer,beginIndex);
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
@@ -427,7 +436,7 @@ public class OrderMainFrame extends MainFrame {
             // get the string cost value
             if ( !IndexNotFound )
             {
-                beginIndex = endIndex + 4; //skip over " : $"
+                beginIndex = endIndex + 2; //skip over " : $"
                 endIndex = inventorySelection.indexOf(spacer,beginIndex);
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
@@ -573,12 +582,12 @@ public class OrderMainFrame extends MainFrame {
                 {
                     // Parse out the product id
                     beginIndex = 0;
-                    endIndex = orderItem.indexOf(" : ",beginIndex);
+                    endIndex = orderItem.indexOf(spacer,beginIndex);
                     productID = orderItem.substring(beginIndex,endIndex);
                     
                     // Parse out the description text
                     beginIndex = endIndex + 3; //skip over " : "
-                    endIndex = orderItem.indexOf(" : ",beginIndex);
+                    endIndex = orderItem.indexOf(spacer,beginIndex);
                     description = orderItem.substring(beginIndex,endIndex);
                     
                     // Parse out the item cost
