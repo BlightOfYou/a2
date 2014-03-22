@@ -103,7 +103,14 @@ public class LoginService {
         SecureRandom random = new SecureRandom();
 
         Session session = new Session();
-        session.setId(random.nextLong());
+        
+        // Generate a random positive session id
+        long sessionId = random.nextLong();
+        if(sessionId < 0) { 
+            sessionId = sessionId * -1;
+        };
+        
+        session.setId(sessionId);
         session.setUserId(UserId);
         session.setUsername(Username);
         session.setLoginTime(System.currentTimeMillis());
