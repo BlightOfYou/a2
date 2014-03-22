@@ -8,6 +8,7 @@ package edu.cmu.a2.middle;
 import edu.cmu.a2.dto.Product;
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -224,7 +225,7 @@ public class InventoryService {
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         int res = -1;               // SQL query result set pointer
-        Statement s = null;                 // SQL statement pointer
+        PreparedStatement s = null;                 // SQL statement pointer
         String type = product.getType();
         String id = product.getId();
 
@@ -239,21 +240,21 @@ public class InventoryService {
         // If we are connected, then we get the product from the
         // inventory database
         try {
-            s = DBConn.createStatement();
-            res = s.executeUpdate(
-                    "INSERT INTO " + type
-                    + " (" + getIdentifier(sourceURL) +
-                            ","+getDescription(sourceURL)+
-                            ","+getQuantity(sourceURL)+
-                            ","+getPrice(sourceURL)+") "
-                    + "VALUES ("
-                    + "'" + product.getId() + "',"
-                    + "'" + product.getDescription() + "',"
-                    + product.getQuantity() + ","
-                    + product.getPrice()
-                    + ");"
-            );
-
+            String sql = "INSERT INTO " + type
+                            + " (" + getIdentifier(sourceURL) +
+                                    ","+getDescription(sourceURL)+
+                                    ","+getQuantity(sourceURL)+
+                                    ","+getPrice(sourceURL)+") "
+                            + "VALUES (?, ?, ?, ?);";
+               
+            s = DBConn.prepareStatement(sql);
+            s.setString(1, product.getId());
+            s.setString(2, product.getDescription());
+            s.setInt(3, product.getQuantity());
+            s.setFloat(4, product.getPrice());
+            
+            res = s.executeUpdate();
+            
         } catch (SQLException e) {
             errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
             throw new SQLException(errString);

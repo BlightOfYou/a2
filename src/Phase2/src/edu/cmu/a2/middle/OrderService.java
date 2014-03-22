@@ -9,6 +9,7 @@ import edu.cmu.a2.dto.Order;
 import edu.cmu.a2.dto.OrderItem;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +36,7 @@ public class OrderService {
         String orderTableName = null;   // This is the name of the table that lists the items
         String SQLstatement = null;     // String for building SQL queries
         int executeUpdateVal;           // Return value from execute indicating effected rows
-        Statement s = null;             // SQL statement pointer
+        PreparedStatement s = null;             // SQL statement pointer
         String msgString = null;        // String for displaying non-error messages
 
         // Check to make sure there is a first name, last name, address and phone
@@ -79,14 +80,16 @@ public class OrderService {
 
             // Get the order data
             try {
-                s = DBConn.createStatement();
+                
 
                 SQLstatement = ("CREATE TABLE " + orderTableName
                         + "(item_id int unsigned not null auto_increment primary key, "
                         + "product_id varchar(20), description varchar(80), "
                         + "item_price float(7,2) );");
+                
+                s = DBConn.prepareStatement(SQLstatement);
 
-                executeUpdateVal = s.executeUpdate(SQLstatement);
+                executeUpdateVal = s.executeUpdate();
 
             } catch (SQLException e) {
 
@@ -99,14 +102,21 @@ public class OrderService {
 
             if (!executeError) {
                 try {
-                    SQLstatement = ("INSERT INTO orders (order_date, " + "first_name, "
+                    SQLstatement = "INSERT INTO orders (order_date, " + "first_name, "
                             + "last_name, address, phone, total_cost, shipped, "
-                            + "ordertable) VALUES ( '" + dateTimeStamp + "', "
-                            + "'" + order.FirstName + "', " + "'" + order.LastName + "', "
-                            + "'" + order.Address + "', " + "'" + order.Phone + "', "
-                            + order.TotalCost + ", " + false + ", '" + orderTableName + "' );");
-
-                    executeUpdateVal = s.executeUpdate(SQLstatement);
+                            + "ordertable) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);";
+                    
+                    s = DBConn.prepareStatement(SQLstatement);
+                    s.setString(1, dateTimeStamp);
+                    s.setString(2, order.FirstName);
+                    s.setString(3, order.LastName);
+                    s.setString(4, order.Address);
+                    s.setString(5, order.Phone);
+                    s.setFloat(6, order.TotalCost);
+                    s.setBoolean(7, false);
+                    s.setString(8, orderTableName);
+                    
+                    executeUpdateVal = s.executeUpdate();
 
                 } catch (Exception e1) {
 
@@ -116,7 +126,8 @@ public class OrderService {
 
                     try {
                         SQLstatement = ("DROP TABLE " + orderTableName + ";");
-                        executeUpdateVal = s.executeUpdate(SQLstatement);
+                        s = DBConn.prepareStatement(SQLstatement);
+                        executeUpdateVal = s.executeUpdate();
 
                     } catch (SQLException e2) {
 
@@ -150,14 +161,20 @@ public class OrderService {
             // there... just in case.
             {
                 if (item != null) {
-
-                    SQLstatement = ("INSERT INTO " + orderTableName
-                            + " (product_id, description, item_price) "
-                            + "VALUES ( '" + item.getProductId() + "', " + "'"
-                            + item.getDescription() + "', " + String.valueOf(item.getItemPrice()) + " );"); /*I don't know why this is showing up as an error*/
+               
 
                     try {
-                        executeUpdateVal = s.executeUpdate(SQLstatement);
+                        SQLstatement = "INSERT INTO " + orderTableName
+                            + " (product_id, description, item_price) "
+                            + "VALUES ( ?, ?, ?);";
+                        
+                        s = DBConn.prepareStatement(SQLstatement);
+                        s.setString(1, item.getProductId());
+                        s.setString(2, item.getDescription());
+                        s.setFloat(3, item.getItemPrice());
+                        
+                        executeUpdateVal = s.executeUpdate();
+                        
                         msgString = "\nORDER SUBMITTED FOR: " + order.FirstName + " " + order.LastName;
                         /*jTextArea3.append(errString); throws new Exception(msgString)?*/
 

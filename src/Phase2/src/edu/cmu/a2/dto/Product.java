@@ -106,12 +106,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return ">>" +  Id + "::" + 
-                Type + "::" + 
-                Description + "::" + 
-                Price + "::" + 
-                Quantity;
-                //"Product{" + "Id=" + Id + ", Type=" + Type + ", Description=" + Description + ", Price=" + Price + ", Quantity=" + Quantity + '}';
+        return String.format("%s : %s : %s : $%.2f : %d units in stock", Id, Type, Description, Price, Quantity);
     }
     
     

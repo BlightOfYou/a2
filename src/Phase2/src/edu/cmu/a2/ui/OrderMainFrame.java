@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class OrderMainFrame extends MainFrame {
     
-    String spacer = "::";
+    String spacer = " : ";
     InventoryService inventoryService = null;
     OrderService orderService = null;
     List<OrderItem> orderItems = new ArrayList<>();
@@ -413,7 +413,7 @@ public class OrderMainFrame extends MainFrame {
             }
             
             // get the product type
-            beginIndex = endIndex + 2;
+            beginIndex = endIndex + spacer.length();
             endIndex = inventorySelection.indexOf(spacer,beginIndex);
             if (endIndex < 0 ) {
                 IndexNotFound = true;
@@ -424,7 +424,7 @@ public class OrderMainFrame extends MainFrame {
             // get the product description
             if ( !IndexNotFound )
             {
-                beginIndex = endIndex + 2; //skip over " : "
+                beginIndex = endIndex + spacer.length(); //skip over " : "
                 endIndex = inventorySelection.indexOf(spacer,beginIndex);
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
@@ -436,7 +436,7 @@ public class OrderMainFrame extends MainFrame {
             // get the string cost value
             if ( !IndexNotFound )
             {
-                beginIndex = endIndex + 2; //skip over " : $"
+                beginIndex = endIndex + spacer.length() + 1; //skip over " : $"
                 endIndex = inventorySelection.indexOf(spacer,beginIndex);
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
@@ -586,12 +586,12 @@ public class OrderMainFrame extends MainFrame {
                     productID = orderItem.substring(beginIndex,endIndex);
                     
                     // Parse out the description text
-                    beginIndex = endIndex + 3; //skip over " : "
+                    beginIndex = endIndex + spacer.length(); //skip over " : "
                     endIndex = orderItem.indexOf(spacer,beginIndex);
                     description = orderItem.substring(beginIndex,endIndex);
                     
                     // Parse out the item cost
-                    beginIndex = endIndex + 4; //skip over " : $"
+                    beginIndex = endIndex + spacer.length() + 1; //skip over " : $"
                     //endIndex = orderItem.indexOf(" : ",orderItem.length());
                     //sPerUnitCost = orderItem.substring(beginIndex,endIndex);
                     sPerUnitCost = orderItem.substring(beginIndex,orderItem.length());
