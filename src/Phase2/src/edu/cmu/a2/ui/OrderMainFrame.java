@@ -32,23 +32,25 @@ public class OrderMainFrame extends MainFrame {
     
     InventoryService inventoryService = null;
     OrderService orderService = null;
-    
+    List<OrderItem> orderItems = new ArrayList<>();
     
 //    OrderService orderService = new OrderService(databaseStr);
     /** Creates new form NewJFrame */
-    public OrderMainFrame() {
+    public OrderMainFrame(Session session) {
+        super(session);
+        
         initComponents();
         jLabel1.setText("Order Management Application " + versionID);
-        
+        databaseServerIpText.setText(session.getServerHost());
         
         try {
-            inventoryService = connectToInventoryService(databaseServerIpText.getText());
+            inventoryService = connectToInventoryService();
         } catch (Exception e) {
             connectError = true;
         }
         
         try {
-            orderService = connectToOrderService(databaseServerIpText.getText());
+            orderService = connectToOrderService();
         } catch (Exception e) {
             connectError = true;
         }
@@ -393,6 +395,7 @@ public class OrderMainFrame extends MainFrame {
         sTotalCost = null;
         
         
+        
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
         
@@ -452,11 +455,8 @@ public class OrderMainFrame extends MainFrame {
                 fCost = Float.parseFloat(sTotalCost) + Float.parseFloat(sCost);
                 costText.setText( "$" + fCost.toString());
                 
-                OrderItem orderItem = new OrderItem(0, Integer.parseInt(productID), productDescription, fCost);
-                
-                Order.getOrderItems().add(orderItem);
-                
-                
+//                OrderItem orderItem = new OrderItem(0, Integer.parseInt(productID), productDescription, fCost);
+                orderItems.add(new OrderItem(0, Integer.parseInt(productID), productDescription, fCost));
                 
             } else {
                 messagesTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
@@ -479,11 +479,11 @@ public class OrderMainFrame extends MainFrame {
         
         int beginIndex;                 // String parsing index
         
-        String customerAddress;         // Buyers mailing address
+        String customerAddress = null;         // Buyers mailing address
         int endIndex;                   // String paring index
         String firstName = null;        // Customer's first name
         Connection DBConn = null;       // MySQL connection handle
-        float fCost;                    // Total order cost
+        float fCost = 0;                    // Total order cost
         String description;             // Tree, seed, or shrub description
         Boolean executeError = false;   // Error flag
         String errString = null;        // String for displaying errors
@@ -500,6 +500,7 @@ public class OrderMainFrame extends MainFrame {
         Statement s = null;             // SQL statement pointer
         String SQLstatement = null;     // String for building SQL queries
         Boolean shipped = false;
+        String dateTimeStamp = null;
         // Check to make sure there is a first name, last name, address and phone
         if ((firstNameText.getText().length()>0) && (lastNameText.getText().length()>0)
                 && (phoneTextArea.getText().length()>0)
@@ -531,7 +532,7 @@ public class OrderMainFrame extends MainFrame {
             int TheYear = rightNow.get(rightNow.YEAR);
             orderTableName = "order" + String.valueOf(rightNow.getTimeInMillis());
             
-            String dateTimeStamp = TheMonth + "/" + TheDay + "/" + TheYear + " "
+            dateTimeStamp = TheMonth + "/" + TheDay + "/" + TheYear + " "
                     + TheHour + ":" + TheMinute  + ":" + TheSecond;
             
             // Get the order data
@@ -586,26 +587,26 @@ public class OrderMainFrame extends MainFrame {
                     sPerUnitCost = orderItem.substring(beginIndex,orderItem.length());
                     perUnitCost = Float.parseFloat(sPerUnitCost);
                     
-//            Order(int OrderId, String OrderDate, firstName, lastName, customerAddress, phoneNumber, float TotalCost, shipped, List<OrderItem> OrderItems)
-//                    Order order = new Order(0, stringTimeStamp, firstName, lastName, customerAddress, phoneNumber, fCost, 0, );
+                    
+                    Order order = new Order(0, dateTimeStamp, firstName, lastName, customerAddress, phoneNumber, fCost, shipped, orderItems );
 //
-                            try
-                            {
+                    try
+                    {
 //                Need to create order object to pass in to SubmitOrder
-//                this.orderService.SubmitOrder(...);
-                                msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
-                                messagesTextArea.setText(msgString);
-                                clearTextArea();
-                                
-                            } catch (Exception e) {
-                                
-                                errString =  "\nProblem submitting order:: " + e;
-                                messagesTextArea.append(errString);
-                                executeError = true;
-                                
-                            } // try
-                            
-                            
+                        this.orderService.SubmitOrder(order);
+                        msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
+                        messagesTextArea.setText(msgString);
+                        clearTextArea();
+                        
+                    } catch (Exception e) {
+                        
+                        errString =  "\nProblem submitting order:: " + e;
+                        messagesTextArea.append(errString);
+                        executeError = true;
+                        
+                    } // try
+                    
+                    
                 } // line length check
                 
             } //for each line of text in order table
@@ -710,7 +711,17 @@ public class OrderMainFrame extends MainFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OrderMainFrame().setVisible(true);
+                
+                LoginFrame login = new LoginFrame();
+                login.setModal(true);
+                login.setVisible(true);
+                
+                Session session = login.getSession();
+                
+                if(session != null) {
+                    new OrderMainFrame(session).setVisible(true);
+                }
+                
             }
         });
     }
