@@ -730,6 +730,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         
         leafTechRadioButtonSelected();
         genomicsRadioButton.setSelected(true);
+        productType = "genomics";
     }//GEN-LAST:event_genomicsRadioButtonActionPerformed
     
     private void processingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingRadioButtonActionPerformed

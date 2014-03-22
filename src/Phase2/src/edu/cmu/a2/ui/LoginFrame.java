@@ -78,6 +78,7 @@ public class LoginFrame extends javax.swing.JDialog {
 
         passwordLabel1.setText("Server:");
 
+        serverName.setText("localhost");
         serverName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 serverNameActionPerformed(evt);
