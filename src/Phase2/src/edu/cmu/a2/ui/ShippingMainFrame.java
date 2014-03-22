@@ -5,6 +5,7 @@ import edu.cmu.a2.dto.*;
 import edu.cmu.a2.common.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 /******************************************************************************
  * File:NewJFrame.java
@@ -29,12 +30,16 @@ public class ShippingMainFrame extends MainFrame {
     int orderId = 0;
     
     /** Creates new form NewJFrame */
-    public ShippingMainFrame() {
+    public ShippingMainFrame(Session session) {
+        super(session);
+        
         initComponents();
         shippingApplicationLabel.setText("Shipping Application " + versionID);
+        databaseServerIpText.setText(session.getServerHost());
+        
         
         try {
-            orderService = connectToOrderService(databaseServerIpText.getText());
+            orderService = connectToOrderService();
         } catch (Exception e) {
             connectError = true;
         }
@@ -407,6 +412,10 @@ public class ShippingMainFrame extends MainFrame {
                 // list the items on the form that comprise the order
                 orderItemsTextArea.setText("");
                 
+//                for (Product thisProduct : products) {
+//                    inventoryTextArea.append("\n"+thisProduct.toString());
+//                }
+                
                 while (res.next())
                 {
                     msgString = res.getString(1) + ":  PRODUCT ID: " + res.getString(2) +
@@ -501,7 +510,7 @@ public class ShippingMainFrame extends MainFrame {
         
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
-        
+        List<Order> pendingOrders = new ArrayList<>();
         
         // Clean up the form before we start
         clearTextArea();
@@ -509,7 +518,7 @@ public class ShippingMainFrame extends MainFrame {
         // Connect to the order database
         try
         {
-            List<Order> pendingOrders = orderService.GetPendingOrders();
+            pendingOrders = orderService.GetPendingOrders();
             
         } catch (Exception e) {
             
@@ -552,14 +561,14 @@ public class ShippingMainFrame extends MainFrame {
         Boolean connectError = false;       // Error flag
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
-        
+        List<Order> shippedOrders = new ArrayList<>();
         // Clean up the form before we start
         clearTextArea();
         
         // Connect to the order database
         try
         {
-            List<Order> shippedOrderList = orderService.GetShippedOrders();
+            shippedOrders = orderService.GetShippedOrders();
             
         } catch (Exception e) {
             
@@ -578,7 +587,7 @@ public class ShippingMainFrame extends MainFrame {
             {
                 // Create a query to get all the rows from the orders database
                 // and execute the query.
-                displayOrders(shippedOrderList);
+                displayOrders(shippedOrders);
                 
                 markAsShippedButton.setEnabled(false);
                 selectOrderButton.setEnabled(false);
@@ -599,21 +608,26 @@ public class ShippingMainFrame extends MainFrame {
     
     
     
-    private void displayOrders(List<Order>) {
-        //                //-------- BEGIN OLD CODE ---------------------------------------//
+    private void displayOrders(List<Order> orders) {
+                        //-------- BEGIN OLD CODE ---------------------------------------//
 //                // Create a query to get all the orders and execute the query
 //                s = DBConn.createStatement();
 //                res = s.executeQuery( "Select * from orders" );
-//
-//                //Display the data in the textarea
-//                orderTextArea.setText("");
-//
-//                // For each row returned, we check the shipped status. If it is
-//                // equal to 0 it means it has not been shipped as of yet, so we
-//                // display it in TextArea 1. Note that we use an integer because
-//                // MySQL stores booleans and a TinyInt(1), which we interpret
-//                // here on the application side as an integer. It works, it just
-//                // isn't very elegant.
+
+                //Display the data in the textarea
+                orderTextArea.setText("");
+
+                // For each row returned, we check the shipped status. If it is
+                // equal to 0 it means it has not been shipped as of yet, so we
+                // display it in TextArea 1. Note that we use an integer because
+                // MySQL stores booleans and a TinyInt(1), which we interpret
+                // here on the application side as an integer. It works, it just
+                // isn't very elegant.
+                                for (Order thisOrder : orders) {
+                    orderTextArea.append("\n"+orders.toString());
+                }
+                
+                
 //                while (res.next())
 //                {
 //                    shippedStatus = Integer.parseInt(res.getString(8));
@@ -625,11 +639,11 @@ public class ShippingMainFrame extends MainFrame {
 //                        orderTextArea.append(msgString+"\n");
 //
 //                    } // shipped status check
-//
+
 //                } // while
-//
-//                // notify the user all went well and enable the select order
-//                // button
+
+                // notify the user all went well and enable the select order
+                // button
     }
     
     
@@ -649,7 +663,18 @@ public class ShippingMainFrame extends MainFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ShippingMainFrame().setVisible(true);
+                
+                LoginFrame login = new LoginFrame();
+                login.setModal(true);
+                login.setVisible(true);
+                
+                Session session = login.getSession();
+                
+                if(session != null) {
+                    new ShippingMainFrame(session).setVisible(true);    
+                }
+                
+                
             }
         });
     }
