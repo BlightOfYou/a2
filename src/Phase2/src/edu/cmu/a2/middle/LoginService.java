@@ -35,9 +35,11 @@ public class LoginService {
     }
 
     private String databaseUrl;
-
+    private String host;
+    
     public LoginService(String host, int port) {
         databaseUrl =  String.format("jdbc:mysql://%s:%d/loginservice", host, port);
+        this.host = host;
     }
 
     public Session Login(String Username, String Password)
@@ -49,22 +51,14 @@ public class LoginService {
         }
 
         Session session = CreateSession(Username, UserId);
+        session.setServerHost(host);
+        
         WriteLoginAuditLog(session);
         return session;
     }
 
     public void Logout(Session session) throws AuditLogException {
         WriteLogoutAuditLog(session);
-    }
-
-    public void ChangePassword(String Username, String OldPassword, String NewPassword)
-            throws InvalidLoginException {
-        int userId = -1;
-        if ((userId = IsValidLogin(Username, OldPassword)) < 0) {
-            throw new InvalidLoginException();
-        }
-
-        //TODO: Change Password
     }
 
     private int IsValidLogin(String Username, String Password) {

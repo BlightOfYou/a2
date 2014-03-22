@@ -22,19 +22,20 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
     private Boolean isLeafTechProduct = false;
     InventoryService inventoryService = null;
     
-//    InventoryService inventoryService;
-//InventoryService inventoryService = new InventoryService(databaseServerIpText.getText(), port);
     /** Creates new form AddInventoryMainFrame */
-    public InventoryMainFrame() {
+    public InventoryMainFrame(Session session) {
+        super(session);
+                
         initComponents();
         frameTitleLabel.setText("Inventory Management Application " + versionID);
+        databaseServerIpText.setText(session.getServerHost());
+
         
         try {
-            inventoryService = connectToInventoryService(databaseServerIpText.getText());
+            inventoryService = connectToInventoryService();
         } catch (Exception e) {
             connectError = true;
         }
-        
     }
     
     /** This method is called from within the constructor to
@@ -106,6 +107,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
 
         quantityLabel.setText("Quantity");
 
+        databaseServerIpText.setEditable(false);
         databaseServerIpText.setText("localhost");
 
         productIdText.addActionListener(new java.awt.event.ActionListener() {
@@ -531,7 +533,6 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         java.sql.Statement s = null;        // SQL statement pointer
         String inventorySelection = null;   // Inventory text string selected by user
         IndexNotFound = false;              // Flag indicating that a string index was not found
-
         
         // this is the selected line of text
         inventorySelection =  inventoryTextArea.getSelectedText();
@@ -620,7 +621,6 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         ResultSet res = null;               // SQL query result set pointer
         String inventorySelection = null;   // Inventory text string selected by user
         IndexNotFound = false;              // Flag indicating that a string index was not found
-
         
         
         // this is the selected line of text
@@ -722,6 +722,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         
         leafTechRadioButtonSelected();
         genomicsRadioButton.setSelected(true);
+        productType = "genomics";
     }//GEN-LAST:event_genomicsRadioButtonActionPerformed
     
     private void processingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingRadioButtonActionPerformed
@@ -744,7 +745,19 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InventoryMainFrame().setVisible(true);
+                
+                LoginFrame login = new LoginFrame();
+                login.setModal(true);
+                login.setVisible(true);
+                
+                Session session = login.getSession();
+                
+                if(session != null) {
+                    new InventoryMainFrame(session).setVisible(true);    
+                }
+                
+                
+                
             }
         });
     }

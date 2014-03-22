@@ -11,7 +11,8 @@ package edu.cmu.a2.dto;
 public class Session {
 
     private long Id;
-    private int UserId;
+    private String serverHost;
+    private int UserId;  
     private String Username;
     private long LoginTime;
 
@@ -65,7 +66,11 @@ public class Session {
         this.LoginTime = LoginTime;
     }
 
-    
-    
-    
+    public String getServerHost() {
+        return serverHost;
+    }
+
+    public void setServerHost(String serverHost) {
+        this.serverHost = serverHost;
+    }    
 }
