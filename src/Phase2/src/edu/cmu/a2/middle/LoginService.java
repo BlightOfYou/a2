@@ -29,9 +29,23 @@ public class LoginService {
     private static final int DEFAULT_BYTECOUNT = 32;
 
     public static class InvalidLoginException extends Exception {
+        public InvalidLoginException(String message){
+            super(message);
+        }
+        
+        public InvalidLoginException(String message, Exception inner){
+            super(message, inner);
+        }
     }
 
     public static class AuditLogException extends Exception {
+        public AuditLogException(String message){
+            super(message);
+        }
+        
+        public AuditLogException(String message, Exception inner){
+            super(message, inner);
+        }
     }
 
     private String databaseUrl;
@@ -47,7 +61,7 @@ public class LoginService {
 
         int UserId = -1;
         if ((UserId = IsValidLogin(Username, Password)) < 0) {
-            throw new InvalidLoginException();
+            throw new InvalidLoginException("Invalid username or password");
         }
 
         Session session = CreateSession(Username, UserId);
@@ -132,11 +146,11 @@ public class LoginService {
             int res = s.executeUpdate(SQLStatement);
 
             if (res < 1) {
-                throw new AuditLogException();
+                throw new AuditLogException("Unable to save audit log for login.");
             }
 
         } catch (SQLException ex) {
-            throw new AuditLogException();
+            throw new AuditLogException("Unable to save audit log for login. See inner exceptino for details", ex);
         } finally {
             try {
                 if (DBConn != null) {
@@ -165,11 +179,11 @@ public class LoginService {
             int res = s.executeUpdate(SQLStatement);
 
             if (res < 1) {
-                throw new AuditLogException();
+                throw new AuditLogException("Unable to save audit log for logout.");
             }
 
         } catch (SQLException ex) {
-            throw new AuditLogException();
+            throw new AuditLogException("Unable to save audit log for logout. See inner exceptino for details", ex);
         } finally {
             try {
                 if (DBConn != null) {

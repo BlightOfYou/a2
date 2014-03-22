@@ -150,12 +150,12 @@ public class LoginFrame extends javax.swing.JDialog {
             
         } catch (LoginService.InvalidLoginException ex) {
             session = null;
-            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(this, "Invalid Login!");
             
         } catch (LoginService.AuditLogException ex) {
             session = null;
-            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(this, "AuditLogException!");
         }
     }//GEN-LAST:event_loginButtonActionPerformed
