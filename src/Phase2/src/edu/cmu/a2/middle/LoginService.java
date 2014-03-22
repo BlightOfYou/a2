@@ -142,7 +142,7 @@ public class LoginService {
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
 
-            String sql = "INSERT INTO login_log (user_id, session_is, login) values (?, ?, ?)";
+            String sql = "INSERT INTO login_log (user_id, session_id, login) values (?, ?, ?)";
             PreparedStatement s = DBConn.prepareStatement(sql);
             s.setInt(1,session.getUserId());
             s.setLong(2, session.getId());
@@ -154,7 +154,7 @@ public class LoginService {
             }
 
         } catch (SQLException ex) {
-            throw new AuditLogException("Unable to save audit log for login. See inner exceptino for details", ex);
+            throw new AuditLogException("Unable to save audit log for login. See inner exception for details", ex);
         } finally {
             try {
                 if (DBConn != null) {
@@ -174,7 +174,7 @@ public class LoginService {
 
             long logoutTime = System.currentTimeMillis();
 
-            String sql = "INSERT INTO login_log (user_id, session_is, logout) values (?, ?, ?)";
+            String sql = "INSERT INTO login_log (user_id, session_id, logout) values (?, ?, ?)";
             PreparedStatement s = DBConn.prepareStatement(sql);
             s.setInt(1,session.getUserId());
             s.setLong(2, session.getId());

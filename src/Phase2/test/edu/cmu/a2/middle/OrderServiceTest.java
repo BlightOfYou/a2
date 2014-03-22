@@ -69,7 +69,7 @@ public class OrderServiceTest {
         float TotalCost = 1; //float(10,2)
         boolean Shipped = false; //tinyint(1)
         List<OrderItem> OrderItems = new ArrayList<OrderItem>(); //varchar(40)
-        OrderItems.add(new OrderItem(12, 0, 0, 0));
+        OrderItems.add(new OrderItem(12, "a", "b", 0));
         order = new Order(OrderId, OrderDate, FirstName, LastName,
                 Address, Phone, TotalCost, Shipped, OrderItems);
     }
@@ -139,7 +139,7 @@ public class OrderServiceTest {
      */
     @Test
     @Ignore
-    public void testShipOrder() {
+    public void testShipOrder() throws SQLException {
         System.out.println("ShipOrder");
         int OrderId = 0;
         OrderService instance = null;
@@ -172,7 +172,7 @@ public class OrderServiceTest {
      */
     @Test
     @Ignore
-    public void testGetShippedOrders() {
+    public void testGetShippedOrders() throws SQLException {
         System.out.println("GetShippedOrders");
         OrderService instance = null;
         List<Order> expResult = null;
@@ -187,7 +187,7 @@ public class OrderServiceTest {
      */
     @Test
     @Ignore
-    public void testGetPendingOrders() {
+    public void testGetPendingOrders() throws SQLException {
         System.out.println("GetPendingOrders");
         OrderService instance = null;
         List<Order> expResult = null;
