@@ -456,7 +456,7 @@ public class OrderMainFrame extends MainFrame {
                 costText.setText( "$" + fCost.toString());
                 
 //                OrderItem orderItem = new OrderItem(0, Integer.parseInt(productID), productDescription, fCost);
-                orderItems.add(new OrderItem(0, Integer.parseInt(productID), productDescription, fCost));
+                orderItems.add(new OrderItem(0, productID, productDescription, fCost));
                 
             } else {
                 messagesTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
