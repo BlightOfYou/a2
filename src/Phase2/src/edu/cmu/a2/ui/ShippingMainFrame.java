@@ -667,6 +667,7 @@ public class ShippingMainFrame extends MainFrame {
                 
                 LoginFrame login = new LoginFrame();
                 login.setModal(true);
+                login.setLocationRelativeTo(null);
                 login.setVisible(true);
                 
                 Session session = login.getSession();

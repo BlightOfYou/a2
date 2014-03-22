@@ -746,7 +746,9 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
                 
                 LoginFrame login = new LoginFrame();
                 login.setModal(true);
+                login.setLocationRelativeTo(null);
                 login.setVisible(true);
+                
                 
                 Session session = login.getSession();
                 
