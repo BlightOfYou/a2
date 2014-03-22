@@ -97,6 +97,7 @@ public class ShippingMainFrame extends MainFrame {
 
         databaseServerIpLabel.setText("Server IP Address:");
 
+        databaseServerIpText.setEditable(false);
         databaseServerIpText.setText("localhost");
 
         firstNameText.setEditable(false);

@@ -220,6 +220,7 @@ public class OrderMainFrame extends MainFrame {
 
         databaseServerIpLabel.setText("Server IP Address:");
 
+        databaseServerIpText.setEditable(false);
         databaseServerIpText.setText("localhost");
 
         jLabel12.setText("Address");

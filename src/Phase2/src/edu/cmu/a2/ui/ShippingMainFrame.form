@@ -185,6 +185,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="databaseServerIpText">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="localhost"/>
       </Properties>
     </Component>
