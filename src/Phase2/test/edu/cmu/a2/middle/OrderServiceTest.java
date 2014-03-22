@@ -26,6 +26,8 @@ import org.junit.Ignore;
  */
 public class OrderServiceTest {
 
+    private int size = 0;
+
     public OrderServiceTest() {
     }
 
@@ -39,12 +41,17 @@ public class OrderServiceTest {
 
     public int getLastOrder(OrderService instance) throws SQLException {
         int id = 1;
-        for (Order o : instance.GetAllOrders()) {
-            if (o.getOrderId() >= id) {
-                id = o.getOrderId();
+        try {
+            for (Order o : instance.GetAllOrders()) {
+                if (o.getOrderId() >= id) {
+                    id = o.getOrderId();
+                }
             }
+            return id;
+        } catch (Exception e) {
         }
         return id;
+
     }
 
     @Before
@@ -56,6 +63,7 @@ public class OrderServiceTest {
                 if (o.getOrderId() >= OrderId) {
                     OrderId = o.getOrderId() + 1;
                 }
+                this.size++;
             }
         } catch (Exception ex) {
             //Logger.getLogger(OrderServiceTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,6 +85,15 @@ public class OrderServiceTest {
 
     @After
     public void tearDown() {
+        OrderService instance = new OrderService("localhost", 3306);
+        try {
+            while (instance.GetAllOrders().size() > this.size) {
+                instance.DeleteOrder(getLastOrder(instance));
+
+            }
+        } catch (Exception ex) {
+            //Oh well, I tried
+        }
     }
 
     /**
@@ -123,14 +140,14 @@ public class OrderServiceTest {
         instance.SubmitOrder(order);
         int expected = instance.GetAllOrders().size() - 1;
         instance.DeleteOrder(getLastOrder(instance));
-        
+
         int actual = 0;
         try {
             instance.GetAllOrders().size();
-        } catch(Exception e) {
+        } catch (Exception e) {
             //no orders left
         }
-        
+
         assertEquals(expected, actual);
     }
 
@@ -138,14 +155,17 @@ public class OrderServiceTest {
      * Test of ShipOrder method, of class OrderService.
      */
     @Test
-    @Ignore
     public void testShipOrder() throws SQLException {
         System.out.println("ShipOrder");
-        int OrderId = 0;
-        OrderService instance = null;
-        instance.ShipOrder(OrderId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        OrderService instance = new OrderService("localhost", 3306);
+        order.setShipped(true);
+        instance.SubmitOrder(order);
+        order.setOrderId(this.getLastOrder(instance));
+        instance.ShipOrder(order.getOrderId());
+
+        Order actual = instance.GetOrder(order.getOrderId());
+        assertTrue(actual.isShipped());
+        instance.DeleteOrder(getLastOrder(instance));
     }
 
     /**
@@ -171,30 +191,41 @@ public class OrderServiceTest {
      * Test of GetShippedOrders method, of class OrderService.
      */
     @Test
-    @Ignore
     public void testGetShippedOrders() throws SQLException {
         System.out.println("GetShippedOrders");
-        OrderService instance = null;
-        List<Order> expResult = null;
+        OrderService instance = new OrderService("localhost", 3306);
+        order.setShipped(true);
+        instance.SubmitOrder(order);
+        order.setOrderId(this.getLastOrder(instance));
+        instance.ShipOrder(order.getOrderId());
+
         List<Order> result = instance.GetShippedOrders();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        Order actual = instance.GetOrder(order.getOrderId());
+        assertTrue(actual.isShipped());
+        instance.DeleteOrder(getLastOrder(instance));
+
     }
 
     /**
      * Test of GetPendingOrders method, of class OrderService.
      */
     @Test
-    @Ignore
     public void testGetPendingOrders() throws SQLException {
         System.out.println("GetPendingOrders");
-        OrderService instance = null;
-        List<Order> expResult = null;
+        OrderService instance = new OrderService("localhost", 3306);
+        order.setShipped(false);
+        instance.SubmitOrder(order);
         List<Order> result = instance.GetPendingOrders();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        Order actual = instance.GetOrder(this.getLastOrder(instance));
+        assertFalse(actual.isShipped());
+        instance.DeleteOrder(getLastOrder(instance));
+
     }
 
 }

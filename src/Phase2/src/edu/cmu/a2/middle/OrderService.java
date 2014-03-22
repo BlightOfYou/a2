@@ -80,13 +80,12 @@ public class OrderService {
 
             // Get the order data
             try {
-                
 
                 SQLstatement = ("CREATE TABLE " + orderTableName
                         + "(item_id int unsigned not null auto_increment primary key, "
                         + "product_id varchar(20), description varchar(80), "
                         + "item_price float(7,2) );");
-                
+
                 s = DBConn.prepareStatement(SQLstatement);
 
                 executeUpdateVal = s.executeUpdate();
@@ -105,7 +104,7 @@ public class OrderService {
                     SQLstatement = "INSERT INTO orders (order_date, " + "first_name, "
                             + "last_name, address, phone, total_cost, shipped, "
                             + "ordertable) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);";
-                    
+
                     s = DBConn.prepareStatement(SQLstatement);
                     s.setString(1, dateTimeStamp);
                     s.setString(2, order.FirstName);
@@ -115,7 +114,7 @@ public class OrderService {
                     s.setFloat(6, order.TotalCost);
                     s.setBoolean(7, false);
                     s.setString(8, orderTableName);
-                    
+
                     executeUpdateVal = s.executeUpdate();
 
                 } catch (Exception e1) {
@@ -161,20 +160,19 @@ public class OrderService {
             // there... just in case.
             {
                 if (item != null) {
-               
 
                     try {
                         SQLstatement = "INSERT INTO " + orderTableName
-                            + " (product_id, description, item_price) "
-                            + "VALUES ( ?, ?, ?);";
-                        
+                                + " (product_id, description, item_price) "
+                                + "VALUES ( ?, ?, ?);";
+
                         s = DBConn.prepareStatement(SQLstatement);
                         s.setString(1, item.getProductId());
                         s.setString(2, item.getDescription());
                         s.setFloat(3, item.getItemPrice());
-                        
+
                         executeUpdateVal = s.executeUpdate();
-                        
+
                         msgString = "\nORDER SUBMITTED FOR: " + order.FirstName + " " + order.LastName;
                         /*jTextArea3.append(errString); throws new Exception(msgString)?*/
 
@@ -219,21 +217,21 @@ public class OrderService {
                 if (!res.first()) {
                     return null;
                 }
-                    String ordertable = (res.getString("ordertable"));
-                    s = DBConn.createStatement();
-                    ResultSet res2 = s.executeQuery("SELECT * FROM " + ordertable + " ;");
-                    List<OrderItem> orders = new ArrayList<OrderItem>();
-                    // Make sure we got back at least one row
-                    if (res2.first()) {
-                        do {
-                            int ItemId = res2.getInt(1);
-                            String ProductId = res2.getString(2);
-                            String Description = res2.getString(3);
-                            float ItemPrice = res2.getFloat(4);
+                String ordertable = (res.getString("ordertable"));
+                s = DBConn.createStatement();
+                ResultSet res2 = s.executeQuery("SELECT * FROM " + ordertable + " ;");
+                List<OrderItem> orders = new ArrayList<OrderItem>();
+                // Make sure we got back at least one row
+                if (res2.first()) {
+                    do {
+                        int ItemId = res2.getInt(1);
+                        String ProductId = res2.getString(2);
+                        String Description = res2.getString(3);
+                        float ItemPrice = res2.getFloat(4);
 
-                            orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
-                        } while (res2.next());
-                    }
+                        orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
+                    } while (res2.next());
+                }
                 /*create return object*/
                 Order return_order = new Order(res.getInt("order_id"),
                         res.getString("order_date"),
@@ -287,8 +285,8 @@ public class OrderService {
 
         // Now try to delete order with order id 
         try {
-                del = s.executeUpdate("DELETE FROM orders WHERE order_id = "
-                        + Integer.toString(OrderId) + ";");
+            del = s.executeUpdate("DELETE FROM orders WHERE order_id = "
+                    + Integer.toString(OrderId) + ";");
         } catch (SQLException e) {
             errString = "\nProblem deleting order from order database:: " + e;
             throw new SQLException(errString);
@@ -309,34 +307,32 @@ public class OrderService {
         // Connect to the order database
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
-            
+
         } catch (Exception e) {
             errString = "\nProblem connecting to database(" + databaseUrl + "):: " + e;
             connectError = true;
             throw new SQLException(errString);
         } // end try-catch
-        
+
         // If we are connected, then we update the shipped status
-        if ( !connectError )
-        {
-            try
-            {
+        if (!connectError) {
+            try {
                 // first we create the query
                 s = DBConn.createStatement();
                 SQLStatement = "UPDATE orders SET shipped=" + true + " WHERE order_id=" + OrderId;
-                
+
                 // execute the statement
-                rows = s.executeUpdate( SQLStatement );
+                rows = s.executeUpdate(SQLStatement);
 
             } catch (Exception e) {
 
-                errString =  "\nProblem updating status:: " + e;
+                errString = "\nProblem updating status:: " + e;
                 throw new SQLException(errString);
 
             } // end try-catch
 
         } // if connect check
-        
+
     }
 
     public List<Order> GetAllOrders() throws SQLException {
@@ -406,43 +402,33 @@ public class OrderService {
         return null;
     }
 
-    public List<Order> GetShippedOrders() throws SQLException{
+    public List<Order> GetShippedOrders() throws SQLException {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
-        
-        
         // Connect to the order database
-        try
-        {
-            DBConn = DriverManager.getConnection(databaseUrl,"remote","remote_pass");
-            
+        try {
+            DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
         } catch (Exception e) {
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
+            errString = "\nProblem connecting to orderinfo database:: " + e;
             connectError = true;
             throw new SQLException(errString);
         }
-        
-        if ( !connectError )
-        {
-            try
-            {
+        if (!connectError) {
+            try {
                 // Create a query to get all the orders and execute the query
                 s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from orders WHERE shipped = 1" );
-                
+                res = s.executeQuery("Select * from orders WHERE shipped = 1");
                 // Make sure we got back at least one row
                 if (!res.first()) {
                     return null;
                 }
                 List<Order> return_shippedorders = new ArrayList<Order>();
-                
-                // For each row returned, we check the shipped status. If it is
+         // For each row returned, we check the shipped status. If it is
                 // equal to 1 it means it has been shipped.
-                do
-                {
+                do {
                     String ordertable = (res.getString("ordertable"));
                     s = DBConn.createStatement();
                     ResultSet res2 = s.executeQuery("SELECT * FROM " + ordertable + " ;");
@@ -454,69 +440,75 @@ public class OrderService {
                             String ProductId = res2.getString(2);
                             String Description = res2.getString(3);
                             float ItemPrice = res2.getFloat(4);
-
                             orders.add(new OrderItem(ItemId, ProductId, Description, ItemPrice));
                         } while (res2.next());
                     }
-
                     return_shippedorders.add(new Order(res.getInt("order_id"),
-                                                    res.getString("order_date"),
-                                                    res.getString("first_name"),
-                                                    res.getString("last_name"),
-                                                    res.getString("address"),
-                                                    res.getString("phone"),
-                                                    res.getFloat("total_cost"),
-                                                    res.getBoolean("shipped"),
-                                                    orders));
+                            res.getString("order_date"),
+                            res.getString("first_name"),
+                            res.getString("last_name"),
+                            res.getString("address"),
+                            res.getString("phone"),
+                            res.getFloat("total_cost"),
+                            res.getBoolean("shipped"),
+                            orders));
                 } while (res.next());
                 return return_shippedorders;
             } catch (Exception e) {
-                errString =  "\nProblem getting shipped orders:: " + e;
+                errString = "\nProblem getting shipped orders:: " + e;
                 throw new SQLException(errString);
             } // end try-catch
-        
         } // if connect check
-         
         return null;
+        /*
+         //Alternate Implementation
+         List<Order> orders = this.GetAllOrders();
+         if (orders == null) {
+         return new ArrayList<Order>();
+         }
+
+         for (Order order : orders.toArray(new Order[orders.size()])) {
+         if (!order.isShipped()) {
+         orders.remove(order);
+         }
+         }
+         return orders;
+         */
     }
 
     public List<Order> GetPendingOrders() throws SQLException {
+
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
-        
-        
+
         // Connect to the order database
-        try
-        {
-            DBConn = DriverManager.getConnection(databaseUrl,"remote","remote_pass");
-            
+        try {
+            DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
+
         } catch (Exception e) {
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
+            errString = "\nProblem connecting to orderinfo database:: " + e;
             connectError = true;
             throw new SQLException(errString);
         }
-        
-        if ( !connectError )
-        {
-            try
-            {
+
+        if (!connectError) {
+            try {
                 // Create a query to get all the orders and execute the query
                 s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from orders WHERE shipped = 0;" );
-                
+                res = s.executeQuery("Select * from orders WHERE shipped = 0;");
+
                 // Make sure we got back at least one row
                 if (!res.first()) {
                     return null;
                 }
                 List<Order> return_pendingorders = new ArrayList<Order>();
-                
-                // For each row returned, we check the shipped status. If it is
+
+         // For each row returned, we check the shipped status. If it is
                 // equal to 0 it means it has not been shipped as of yet.
-                do
-                {
+                do {
                     String ordertable = (res.getString("ordertable"));
                     s = DBConn.createStatement();
                     ResultSet res2 = s.executeQuery("SELECT * FROM " + ordertable + " ;");
@@ -534,23 +526,38 @@ public class OrderService {
                     }
 
                     return_pendingorders.add(new Order(res.getInt("order_id"),
-                                                    res.getString("order_date"),
-                                                    res.getString("first_name"),
-                                                    res.getString("last_name"),
-                                                    res.getString("address"),
-                                                    res.getString("phone"),
-                                                    res.getFloat("total_cost"),
-                                                    res.getBoolean("shipped"),
-                                                    orders));
+                            res.getString("order_date"),
+                            res.getString("first_name"),
+                            res.getString("last_name"),
+                            res.getString("address"),
+                            res.getString("phone"),
+                            res.getFloat("total_cost"),
+                            res.getBoolean("shipped"),
+                            orders));
                 } while (res.next());
                 return return_pendingorders;
             } catch (Exception e) {
-                errString =  "\nProblem getting pending orders:: " + e;
+                errString = "\nProblem getting pending orders:: " + e;
                 throw new SQLException(errString);
             } // end try-catch
-        
+
         } // if connect check
-         
+
         return null;
+
+        /*
+         //Alternate Implementation
+         List<Order> orders = this.GetAllOrders();
+         if (orders == null) {
+            return new ArrayList<Order>();
+         }
+
+         for (Order order : orders.toArray(new Order[orders.size()])) {
+             if (order.isShipped()) {
+                orders.remove(order);
+             }
+         }
+         return orders;
+         */
     }
 }
