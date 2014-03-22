@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class OrderMainFrame extends MainFrame {
     
-    
+    String spacer = "::";
     InventoryService inventoryService = null;
     OrderService orderService = null;
     List<OrderItem> orderItems = new ArrayList<>();
@@ -405,7 +405,7 @@ public class OrderMainFrame extends MainFrame {
         {
             // get the product ID
             beginIndex = 0;
-            endIndex = inventorySelection.indexOf(" : ",beginIndex);
+            endIndex = inventorySelection.indexOf(spacer,beginIndex);
             if (endIndex < 0 ) {
                 IndexNotFound = true;
             } else {
@@ -416,7 +416,7 @@ public class OrderMainFrame extends MainFrame {
             {
                 // get the product description
                 beginIndex = endIndex + 3; //skip over " : "
-                endIndex = inventorySelection.indexOf(" : ",beginIndex);
+                endIndex = inventorySelection.indexOf(spacer,beginIndex);
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
                 } else {
@@ -428,7 +428,7 @@ public class OrderMainFrame extends MainFrame {
             if ( !IndexNotFound )
             {
                 beginIndex = endIndex + 4; //skip over " : $"
-                endIndex = inventorySelection.indexOf(" : ",beginIndex);
+                endIndex = inventorySelection.indexOf(spacer,beginIndex);
                 if (endIndex < 0 ) {
                     IndexNotFound = true;
                 } else {
@@ -442,7 +442,7 @@ public class OrderMainFrame extends MainFrame {
             {
 //                TO DO: fill in order item constructor
 //                OrderItem orderItem = new OrderItem(int ItemId, int ProductId, int Description, float ItemPrice)
-                itemsSelectedTextArea.append( productID + " : " + productDescription + " : $"
+                itemsSelectedTextArea.append( productID + spacer + productDescription + spacer + "$"
                         + sCost + "\n");
                 
                 // convert the string cost to a float, add it to what is in the
