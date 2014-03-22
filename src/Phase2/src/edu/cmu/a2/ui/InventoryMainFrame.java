@@ -375,7 +375,6 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
         Boolean fieldError = false;     // Error flag
         String msgString = null;        // String for displaying non-error messages
         ResultSet res = null;           // SQL query result set pointer
-        String tableSelected = null;    // String used to determine which data table to use
         Integer quantity;               // Quantity of trees, seeds, or shrubs
         Float perUnitCost;              // Cost per tree, seed, or shrub unit
         String productID = null;        // Product id of tree, seed, or shrub
@@ -446,7 +445,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
                 this.inventoryService.AddProduct(product);
                 // let the user know all went well
                 
-                inventoryTextArea.append("\nINVENTORY UPDATED... The following was added to the " + tableSelected + " inventory...\n");
+                inventoryTextArea.append("\nINVENTORY UPDATED... The following was added to the " + productType + " inventory...\n");
                 inventoryTextArea.append("\nProduct Code:: " + productID);
                 inventoryTextArea.append("\nDescription::  " + description);
                 inventoryTextArea.append("\nQuantity::     " + quantity);
