@@ -135,7 +135,6 @@ public class OrderServiceTest {
     @Test
     public void testDeleteOrder() throws SQLException {
         System.out.println("DeleteOrder");
-        int OrderId = order.getOrderId();
         OrderService instance = new OrderService("localhost", 3306);
         instance.SubmitOrder(order);
         int expected = instance.GetAllOrders().size() - 1;
@@ -143,7 +142,7 @@ public class OrderServiceTest {
 
         int actual = 0;
         try {
-            instance.GetAllOrders().size();
+            actual = instance.GetAllOrders().size();
         } catch (Exception e) {
             //no orders left
         }
