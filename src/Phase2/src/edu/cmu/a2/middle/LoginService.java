@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -80,9 +81,13 @@ public class LoginService {
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
 
-            Statement s = DBConn.createStatement();
-            String SQLStatement = "SELECT * FROM users WHERE LOWER(username) = LOWER('" + Username + "')";
-            ResultSet res = s.executeQuery(SQLStatement);
+            
+            String SQLStatement = "SELECT * FROM users WHERE LOWER(username) = LOWER(?)";
+                       
+            PreparedStatement s = DBConn.prepareStatement(SQLStatement);
+            s.setString(1, Username);
+            
+            ResultSet res = s.executeQuery();
 
             // Make sure we got back at least one row
             if (!res.first()) {
@@ -137,14 +142,13 @@ public class LoginService {
         try {
             DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
 
-            Statement s = DBConn.createStatement();
-            String SQLStatement = "INSERT INTO login_log ( user_id, session_id, "
-                    + "login) VALUES (" + Integer.toString(session.getUserId()) + ", "
-                    + Long.toString(session.getId()) + ", "
-                    + Long.toString(session.getLoginTime()) + ")";
-
-            int res = s.executeUpdate(SQLStatement);
-
+            String sql = "INSERT INTO login_log (user_id, session_is, login) values (?, ?, ?)";
+            PreparedStatement s = DBConn.prepareStatement(sql);
+            s.setInt(1,session.getUserId());
+            s.setLong(2, session.getId());
+            s.setLong(3, session.getLoginTime());            
+            int res = s.executeUpdate();
+            
             if (res < 1) {
                 throw new AuditLogException("Unable to save audit log for login.");
             }
@@ -170,13 +174,12 @@ public class LoginService {
 
             long logoutTime = System.currentTimeMillis();
 
-            Statement s = DBConn.createStatement();
-            String SQLStatement = "INSERT INTO login_log ( user_id, session_id, "
-                    + "logout) VALUES (" + Integer.toString(session.getUserId()) + ", "
-                    + Long.toString(session.getId()) + ", "
-                    + Long.toString(logoutTime) + ")";
-
-            int res = s.executeUpdate(SQLStatement);
+            String sql = "INSERT INTO login_log (user_id, session_is, logout) values (?, ?, ?)";
+            PreparedStatement s = DBConn.prepareStatement(sql);
+            s.setInt(1,session.getUserId());
+            s.setLong(2, session.getId());
+            s.setLong(3, logoutTime);            
+            int res = s.executeUpdate();
 
             if (res < 1) {
                 throw new AuditLogException("Unable to save audit log for logout.");
