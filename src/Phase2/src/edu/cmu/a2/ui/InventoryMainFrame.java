@@ -508,7 +508,6 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
 
                 for (Product thisProduct : products) {
                     inventoryTextArea.append("\n"+thisProduct.toString());
-                    
                 }
  
             } catch(SQLException e) {

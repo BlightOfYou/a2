@@ -278,7 +278,48 @@ public class OrderService {
         } // end try-catch
     }
 
-    public void ShipOrder(int OrderId) {
+    public void ShipOrder(int OrderId) throws SQLException {
+        // This method is responsible changing the status of the order
+        // to shipped.
+
+        Boolean connectError = false;       // Error flag
+        Connection DBConn = null;           // MySQL connection handle
+        String errString = null;            // String for displaying errors
+        int rows;                           // Rows updated
+        Statement s = null;                 // SQL statement pointer
+        String SQLStatement = null;         // SQL statement string
+
+        // Connect to the order database
+        try {
+            DBConn = DriverManager.getConnection(databaseUrl, "remote", "remote_pass");
+            
+        } catch (Exception e) {
+            errString = "\nProblem connecting to database(" + databaseUrl + "):: " + e;
+            connectError = true;
+            throw new SQLException(errString);
+        } // end try-catch
+        
+        // If we are connected, then we update the shipped status
+        if ( !connectError )
+        {
+            try
+            {
+                // first we create the query
+                s = DBConn.createStatement();
+                SQLStatement = "UPDATE orders SET shipped=" + true + " WHERE order_id=" + OrderId;
+                
+                // execute the statement
+                rows = s.executeUpdate( SQLStatement );
+
+            } catch (Exception e) {
+
+                errString =  "\nProblem updating status:: " + e;
+                throw new SQLException(errString);
+
+            } // end try-catch
+
+        } // if connect check
+        
     }
 
     public List<Order> GetAllOrders() throws SQLException {
