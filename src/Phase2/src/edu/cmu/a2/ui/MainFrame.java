@@ -1,9 +1,8 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
-
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package edu.cmu.a2.ui;
 
 import edu.cmu.a2.dto.Session;
@@ -16,14 +15,15 @@ import javax.swing.JLabel;
  * @author binky
  */
 public abstract class MainFrame extends javax.swing.JFrame {
-    
+
     String productType = null;
     Integer port = 3306;
     Boolean connectError = false;
     String errString = null;
     String versionID = "v0.1";
-    
-    Session session;    
+
+    Session session;
+
     /**
      * Creates new form Frame
      */
@@ -31,27 +31,26 @@ public abstract class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.session = session;
     }
-    
-    public Session getSession() {
+
+    protected Session getSession() {
         return session;
     }
-    
-    public InventoryService connectToInventoryService() throws Exception {
+
+    protected InventoryService connectToInventoryService() throws Exception {
         Exception exception = null;
         InventoryService inventoryService;
-        
-        try
-        {
+
+        try {
             inventoryService = new InventoryService(session.getServerHost(), port);
             return inventoryService;
-            
+
         } catch (Exception e) {
-            
-            errString =  "\nProblem connecting to database:: " + e;
+
+            errString = "\nProblem connecting to database:: " + e;
             JFrame connectErrorFrame = new JFrame("Title");
             connectErrorFrame.setVisible(true);
             connectErrorFrame.add(new JLabel(errString));
-            
+
             connectError = true;
             exception = e;
         } // end try-catch
@@ -59,25 +58,24 @@ public abstract class MainFrame extends javax.swing.JFrame {
             throw exception;
         }
         throw new Exception("Unable to connect to database");
-        
+
     }
-    
-        public OrderService connectToOrderService() throws Exception {
+
+    protected OrderService connectToOrderService() throws Exception {
         Exception exception = null;
         OrderService orderService;
-        
-        try
-        {
+
+        try {
             orderService = new OrderService(session.getServerHost(), port);
             return orderService;
-            
+
         } catch (Exception e) {
-            
-            errString =  "\nProblem connecting to database:: " + e;
+
+            errString = "\nProblem connecting to database:: " + e;
             JFrame connectErrorFrame = new JFrame("Title");
             connectErrorFrame.setVisible(true);
             connectErrorFrame.add(new JLabel(errString));
-            
+
             connectError = true;
             exception = e;
         } // end try-catch
@@ -85,12 +83,34 @@ public abstract class MainFrame extends javax.swing.JFrame {
             throw exception;
         }
         throw new Exception("Unable to connect to database");
-        
+
     }
-        
-        
     
-    
+    protected LoginService connectToLoginService() throws Exception {
+        Exception exception = null;
+        LoginService loginService;
+
+        try {
+            loginService = new LoginService(session.getServerHost(), port);
+            return loginService;
+
+        } catch (Exception e) {
+
+            errString = "\nProblem connecting to database:: " + e;
+            JFrame connectErrorFrame = new JFrame("Title");
+            connectErrorFrame.setVisible(true);
+            connectErrorFrame.add(new JLabel(errString));
+
+            connectError = true;
+            exception = e;
+        } // end try-catch
+        if (exception != null) {
+            throw exception;
+        }
+        throw new Exception("Unable to connect to database");
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,7 +135,7 @@ public abstract class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     /**
      * @param args the command line arguments
      */
@@ -123,8 +143,8 @@ public abstract class MainFrame extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-        */
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -142,7 +162,7 @@ public abstract class MainFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -150,7 +170,7 @@ public abstract class MainFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

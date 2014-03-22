@@ -665,7 +665,7 @@ public class ShippingMainFrame extends MainFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                LoginFrame login = new LoginFrame();
+                LoginDialog login = new LoginDialog();
                 login.setModal(true);
                 login.setLocationRelativeTo(null);
                 login.setVisible(true);

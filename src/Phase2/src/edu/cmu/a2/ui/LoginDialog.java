@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author binky
  */
-public class LoginFrame extends javax.swing.JDialog {
+public class LoginDialog extends javax.swing.JDialog {
    
     private Session session = null;
     
@@ -28,7 +28,7 @@ public class LoginFrame extends javax.swing.JDialog {
     /**
      * Creates new form LoginFrame
      */
-    public LoginFrame() {
+    public LoginDialog() {
 //        LoginService loginService = new LoginService(databaseUrl);
         initComponents();
     }
@@ -150,12 +150,12 @@ public class LoginFrame extends javax.swing.JDialog {
             
         } catch (LoginService.InvalidLoginException ex) {
             session = null;
-            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(this, "Invalid Login!");
             
         } catch (LoginService.AuditLogException ex) {
             session = null;
-            Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(this, "AuditLogException!");
         }
     }//GEN-LAST:event_loginButtonActionPerformed
@@ -185,20 +185,20 @@ public class LoginFrame extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginFrame().setVisible(true);
+                new LoginDialog().setVisible(true);
             }
         });
     }
