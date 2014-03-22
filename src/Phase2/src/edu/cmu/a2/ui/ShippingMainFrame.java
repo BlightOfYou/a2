@@ -322,7 +322,7 @@ public class ShippingMainFrame extends MainFrame {
     private void showPendingOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPendingOrdersButtonActionPerformed
         // jButton2 is responsible for refreshing the list of pending
         // orders.
-//        List<Order> orderList = new List;
+        getPendingOrders();
         
         
     }//GEN-LAST:event_showPendingOrdersButtonActionPerformed
@@ -336,18 +336,17 @@ public class ShippingMainFrame extends MainFrame {
         // up the order. This table is opened and all the items are listed
         // in jTextArea3.
         
-        String errString = null;            // String for displaying errors
         int beginIndex;                     // Parsing index
         int endIndex;                       // Parsing index
-        String msgString = null;            // String for displaying non-error messages
-        String orderSelection = null;       // Order selected from TextArea1
+        String msgString;            // String for displaying non-error messages
+        String orderSelection;       // Order selected from TextArea1
         String orderIdSelection = null;              // Product ID pnemonic
         ResultSet res = null;               // SQL query result set pointer
         Boolean orderBlank;         // False: order string is not blank
         
         
         Order order = null;
-
+        
 // this is the selected line of text
         orderSelection =  orderTextArea.getSelectedText();
         
@@ -378,13 +377,13 @@ public class ShippingMainFrame extends MainFrame {
         // button is disabled until an order is selected... just in case the
         // check is here.
         
-       
+        
         
         if ( !connectError && !orderBlank )
         {
             try
             {
-                order = this.orderService.GetOrder(orderId); 
+                order = this.orderService.GetOrder(orderId);
             } catch (Exception e) {
                 
                 errString =  "\nProblem retrieving order:: " + e;
@@ -447,9 +446,6 @@ public class ShippingMainFrame extends MainFrame {
     private void markAsShippedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markAsShippedButtonActionPerformed
         // This method is responsible changing the status of the order
         // to shipped.
-
-        String errString = null;            // String for displaying errors
-        OrderService orderService;
         
         // Connect to the order database -- THIS CODE IS REMOVED
         
@@ -474,7 +470,7 @@ public class ShippingMainFrame extends MainFrame {
                 selectOrderButton.setEnabled(false);
                 clearTextArea();
                 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 
                 errString =  "\nProblem updating status:: " + e;
                 messagesTextArea.append(errString);
@@ -490,6 +486,7 @@ public class ShippingMainFrame extends MainFrame {
         // This button will display the list of orders that have already
         // have been shipped.
         
+        
         getShippedOrders();
         
     }//GEN-LAST:event_showShippedOrdersButtonActionPerformed
@@ -502,6 +499,44 @@ public class ShippingMainFrame extends MainFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_orderDateTextActionPerformed
     
+    private List<Order> getOrders(String orderType) throws Exception {
+        
+        Exception exception = null;
+        String msgString;            // String for displaying non-error messages
+        List<Order> orders = new ArrayList<>();
+        
+        // Clean up the form before we start
+        clearTextArea();
+        
+        // Connect to the order database
+        try
+        {
+            
+            if (orderType.equals("pending"))
+            {
+                orders = orderService.GetPendingOrders();
+                return orders;
+            }
+            else if (orderType.equals("shipped")) {
+                orders = orderService.GetShippedOrders();
+                return orders;
+            }
+            
+        } catch (Exception e) {
+            
+            errString =  "\nProblem retrieving " + orderType + " orders:: " + e;
+            messagesTextArea.append(errString);
+            connectError = true;
+            exception = e;
+        } // end try-catch
+        
+        if (exception != null) {
+            throw exception;
+        }
+        throw new Exception("Unable to retrieve orders");
+        
+    }
+    
     private void getPendingOrders() {
         
         // This method is responsible for querying the orders database and
@@ -509,7 +544,6 @@ public class ShippingMainFrame extends MainFrame {
         // been shipped as of yet. The list of pending orders is written to
         // jTextArea1.
         
-        String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         List<Order> pendingOrders = new ArrayList<>();
         
@@ -522,11 +556,9 @@ public class ShippingMainFrame extends MainFrame {
             pendingOrders = orderService.GetPendingOrders();
             
         } catch (Exception e) {
-            
             errString =  "\nProblem retrieving pending orders:: " + e;
             messagesTextArea.append(errString);
             connectError = true;
-            
         } // end try-catch
         
         // If we are connected, then we get the list of trees from the
@@ -559,9 +591,7 @@ public class ShippingMainFrame extends MainFrame {
         // getting the list of orders that have been shipped. The list of shipped
         // orders is written to jTextArea1.
         
-        Boolean connectError = false;       // Error flag
-        String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
+        String msgString;            // String for displaying non-error messages
         List<Order> shippedOrders = new ArrayList<>();
         // Clean up the form before we start
         clearTextArea();
@@ -571,7 +601,7 @@ public class ShippingMainFrame extends MainFrame {
         {
             shippedOrders = orderService.GetShippedOrders();
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             errString =  "\nProblem retrieving shipped orders:: " + e;
             messagesTextArea.append(errString);
@@ -605,46 +635,21 @@ public class ShippingMainFrame extends MainFrame {
             
         } // connect check
         
-    } // getPendingOrders
+    } // getShippedOrders
     
     
     
     private void displayOrders(List<Order> orders) {
-                        //-------- BEGIN OLD CODE ---------------------------------------//
-//                // Create a query to get all the orders and execute the query
-//                s = DBConn.createStatement();
-//                res = s.executeQuery( "Select * from orders" );
-
-                //Display the data in the textarea
-                orderTextArea.setText("");
-
-                // For each row returned, we check the shipped status. If it is
-                // equal to 0 it means it has not been shipped as of yet, so we
-                // display it in TextArea 1. Note that we use an integer because
-                // MySQL stores booleans and a TinyInt(1), which we interpret
-                // here on the application side as an integer. It works, it just
-                // isn't very elegant.
-                                for (Order thisOrder : orders) {
-                    orderTextArea.append("\n"+orders.toString());
-                }
-                
-                
-//                while (res.next())
-//                {
-//                    shippedStatus = Integer.parseInt(res.getString(8));
-//
-//                    if ( shippedStatus == 0 )
-//                    {
-//                        msgString = "ORDER # " + res.getString(1) + " : " + res.getString(2) +
-//                              " : "+ res.getString(3) + " : " + res.getString(4);
-//                        orderTextArea.append(msgString+"\n");
-//
-//                    } // shipped status check
-
-//                } // while
-
-                // notify the user all went well and enable the select order
-                // button
+        
+        
+        // Display the data in the textarea
+        orderTextArea.setText("");
+        
+        // List the orders in the orderTextArea
+        for (Order thisOrder : orders) {
+            orderTextArea.append("\n"+orders.toString());
+        }
+        
     }
     
     
@@ -673,7 +678,7 @@ public class ShippingMainFrame extends MainFrame {
                 Session session = login.getSession();
                 
                 if(session != null) {
-                    new ShippingMainFrame(session).setVisible(true);    
+                    new ShippingMainFrame(session).setVisible(true);
                 }
                 
                 

@@ -696,7 +696,7 @@ public class OrderMainFrame extends MainFrame {
     }//GEN-LAST:event_genomicsButtonActionPerformed
     
     private void processesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processesButtonActionPerformed
-        productType = "processes";
+        productType = "processing";
         displayTypeList();
     }//GEN-LAST:event_processesButtonActionPerformed
     

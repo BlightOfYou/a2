@@ -37,7 +37,7 @@ public abstract class MainFrame extends javax.swing.JFrame {
     }
 
     protected InventoryService connectToInventoryService() throws Exception {
-        Exception exception = null;
+        Exception exception;
         InventoryService inventoryService;
 
         try {
