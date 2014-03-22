@@ -12,10 +12,10 @@ public class OrderItem {
 
     public int ItemId;
     public int ProductId;
-    public int Description;
+    public String Description;
     public float ItemPrice;
 
-    public OrderItem(int ItemId, int ProductId, int Description, float ItemPrice) {
+    public OrderItem(int ItemId, int ProductId, String Description, float ItemPrice) {
         this.ItemId = ItemId;
         this.ProductId = ProductId;
         this.Description = Description;
@@ -38,11 +38,11 @@ public class OrderItem {
         this.ProductId = ProductId;
     }
 
-    public int getDescription() {
+    public String getDescription() {
         return Description;
     }
 
-    public void setDescription(int Description) {
+    public void setDescription(String Description) {
         this.Description = Description;
     }
 
