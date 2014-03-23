@@ -499,43 +499,6 @@ public class ShippingMainFrame extends MainFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_orderDateTextActionPerformed
     
-    private List<Order> getOrders(String orderType) throws Exception {
-        
-        Exception exception = null;
-        String msgString;            // String for displaying non-error messages
-        List<Order> orders = new ArrayList<>();
-        
-        // Clean up the form before we start
-        clearTextArea();
-        
-        // Connect to the order database
-        try
-        {
-            
-            if (orderType.equals("pending"))
-            {
-                orders = orderService.GetPendingOrders();
-                return orders;
-            }
-            else if (orderType.equals("shipped")) {
-                orders = orderService.GetShippedOrders();
-                return orders;
-            }
-            
-        } catch (Exception e) {
-            
-            errString =  "\nProblem retrieving " + orderType + " orders:: " + e;
-            messagesTextArea.append(errString);
-            connectError = true;
-            exception = e;
-        } // end try-catch
-        
-        if (exception != null) {
-            throw exception;
-        }
-        throw new Exception("Unable to retrieve orders");
-        
-    }
     
     private void getPendingOrders() {
         
@@ -646,8 +609,9 @@ public class ShippingMainFrame extends MainFrame {
         orderTextArea.setText("");
         
         // List the orders in the orderTextArea
+//        orderTextArea.append("\n"+orders.toString());
         for (Order thisOrder : orders) {
-            orderTextArea.append("\n"+orders.toString());
+            orderTextArea.append("\n"+thisOrder.toString());
         }
         
     }
