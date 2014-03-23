@@ -18,6 +18,6 @@ Team Members: Micah Lee, Keith Lindsey Jr, Daniel Souza, Christine Parry
 1. In Netbeans, click on: File -> Open Project, and then navigate to the source. Select the Phase2 project.
 2. To add the J Connector jar file to the libraries, left click on the libraries and you can choose to add a Project, Library, or JAR/Folder… select JAR/Folder. A window will pop-up allowing you to select the mysql-connector-java-5-1-28-bin.jar file.
 3. Right click on one of the three Applications and click "Run File":
-* InventoryMainFrame.java
-* OrderMainFrame.java
-* ShippingMainFrame.java
+   * InventoryMainFrame.java
+   * OrderMainFrame.java
+   * ShippingMainFrame.java
