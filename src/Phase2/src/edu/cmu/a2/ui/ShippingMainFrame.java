@@ -358,9 +358,9 @@ public class ShippingMainFrame extends MainFrame {
             
             // get the product ID
             beginIndex = 0;
-            beginIndex = orderSelection.indexOf(" # ", beginIndex);
-            beginIndex = beginIndex + 3; //skip past _#_
-            endIndex = orderSelection.indexOf(" :", beginIndex);
+            beginIndex = orderSelection.indexOf(">>", beginIndex);
+            beginIndex = beginIndex + 2; //skip past _#_
+            endIndex = orderSelection.indexOf("::", beginIndex);
             orderIdSelection = orderSelection.substring(beginIndex,endIndex);
             orderId = Integer.parseInt(orderIdSelection);
             orderBlank = false;
@@ -416,13 +416,7 @@ public class ShippingMainFrame extends MainFrame {
 //                    inventoryTextArea.append("\n"+thisProduct.toString());
 //                }
                 
-                while (res.next())
-                {
-                    msgString = res.getString(1) + ":  PRODUCT ID: " + res.getString(2) +
-                            "  DESCRIPTION: "+ res.getString(3) + "  PRICE $" + res.getString(4);
-                    orderItemsTextArea.append(msgString + "\n");
-                    
-                } // while
+                displayOrderItems(order.OrderItems);
                 
                 // This global variable is used to update the record as shipped
                 updateOrderID = Integer.parseInt(orderIdSelection);
@@ -604,18 +598,27 @@ public class ShippingMainFrame extends MainFrame {
     
     private void displayOrders(List<Order> orders) {
         
-        
         // Display the data in the textarea
         orderTextArea.setText("");
         
         // List the orders in the orderTextArea
-//        orderTextArea.append("\n"+orders.toString());
         for (Order thisOrder : orders) {
             orderTextArea.append("\n"+thisOrder.toString());
         }
         
     }
     
+    private void displayOrderItems(List<OrderItem> orderItems) {
+        
+        // Display the data in the textarea
+        orderItemsTextArea.setText("");
+        
+        // List the orders in the orderTextArea
+        for (OrderItem thisOrderItem : orderItems) {
+            orderItemsTextArea.append("\n"+thisOrderItem.toString());
+        }
+        
+    }
     
     private void clearTextArea() {
         orderTextArea.setText("");
