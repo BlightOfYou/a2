@@ -496,8 +496,6 @@ public class OrderMainFrame extends MainFrame {
         float fCost = 0;                    // Total order cost
         String description;             // Tree, seed, or shrub description
         Boolean executeError = false;   // Error flag
-        String errString = null;        // String for displaying errors
-        int executeUpdateVal;           // Return value from execute indicating effected rows
         String lastName = null;         // Customer's last name
         String msgString = null;        // String for displaying non-error messages
         String orderTableName = null;   // This is the name of the table that lists the items
@@ -511,26 +509,25 @@ public class OrderMainFrame extends MainFrame {
         String SQLstatement = null;     // String for building SQL queries
         Boolean shipped = false;
         String dateTimeStamp = null;
+        Boolean customerInformationError;
         // Check to make sure there is a first name, last name, address and phone
         if ((firstNameText.getText().length()>0) && (lastNameText.getText().length()>0)
                 && (phoneTextArea.getText().length()>0)
                 && (addressTextArea.getText().length()>0))
         {
-            
-// This used to be the code to connect to the database
+            customerInformationError = false;
+
             
         } else {
-            
             errString =  "\nMissing customer information!!!\n";
             messagesTextArea.append(errString);
-            connectError = true;
-            
+            customerInformationError = true;
         }// customer data check
         
         //If there is not a connection error, then we form the SQL statement
         //to submit the order to the orders table and then execute it.
         
-        if (!connectError )
+        if (!connectError && !customerInformationError)
         {
             Calendar rightNow = Calendar.getInstance();
             
@@ -555,8 +552,8 @@ public class OrderMainFrame extends MainFrame {
             beginIndex = sTotalCost.indexOf("$",beginIndex)+1;
             sTotalCost = sTotalCost.substring(beginIndex, sTotalCost.length());
             fCost = Float.parseFloat(sTotalCost);
-            
         }
+
         
 //        // Now, if there is no connect or SQL execution errors at this point,
 //        // then we have an order added to the orderinfo::orders table, and a
@@ -604,18 +601,18 @@ public class OrderMainFrame extends MainFrame {
                     {
 //                Need to create order object to pass in to SubmitOrder
                         this.orderService.SubmitOrder(order);
+                        clearTextArea();
                         msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
                         messagesTextArea.setText(msgString);
-                        clearTextArea();
                         
-                    } catch (Exception e) {
+                        
+                    } catch (SQLException e) {
                         
                         errString =  "\nProblem submitting order:: " + e;
                         messagesTextArea.append(errString);
                         executeError = true;
                         
                     } // try
-                    
                     
                 } // line length check
                 
@@ -671,7 +668,7 @@ public class OrderMainFrame extends MainFrame {
                 }
                 
                 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 
                 errString =  "\nProblem getting inventory:: " + e;
                 inventoryTextArea.append(errString);
