@@ -12,7 +12,18 @@ Team Members: Micah Lee, Keith Lindsey Jr, Daniel Souza, Christine Parry
 * Clone of the source
   
 ##Database Setup:
-...
+1. Connect to MySQL Database using command:
+	mysql --user=root
+
+2. Create database for Login Service using command:
+	mysql> create database loginservice;
+
+3. Exist from mysql using command:
+	mysql> exit
+
+4. Load Login Service data schema by running this command from the root installation directory:
+	mysql -u root -p[root pwd] -D loginservice < ./src/Phase2/sql/loginservice.sql
+
 
 ##Compile/Run Instructions
 1. In Netbeans, click on: File -> Open Project, and then navigate to the source. Select the Phase2 project.
@@ -21,3 +32,6 @@ Team Members: Micah Lee, Keith Lindsey Jr, Daniel Souza, Christine Parry
    * InventoryMainFrame.java
    * OrderMainFrame.java
    * ShippingMainFrame.java
+
+##User Credentials
+Your assigned username is 'andrew' with password 'architecture101'
