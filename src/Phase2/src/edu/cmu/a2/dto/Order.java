@@ -52,6 +52,14 @@ public class Order {
         this.OrderDate = OrderDate;
     }
 
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public void setFirstName(String FirstName) {
+        this.FirstName = FirstName;
+    }
+
     public String getLastName() {
         return LastName;
     }
