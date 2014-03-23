@@ -93,7 +93,6 @@ public class OrderService {
             } catch (SQLException e) {
 
                 errString = "\nProblem creating order table " + orderTableName + ":: " + e;
-                /*jTextArea3.append(errString); throws new Exception(errString)?*/
                 executeError = true;
                 throw new SQLException(errString);
 
@@ -120,7 +119,6 @@ public class OrderService {
                 } catch (Exception e1) {
 
                     errString = "\nProblem with inserting into table orders:: " + e1;
-                    /*jTextArea3.append(errString); throws new Exception(errString)?*/
                     executeError = true;
 
                     try {
@@ -132,7 +130,6 @@ public class OrderService {
 
                         errString = "\nProblem deleting unused order table:: "
                                 + orderTableName + ":: " + e2;
-                        /*jTextArea3.append(errString); throws new Exception(errString)?*/
                         throw new SQLException(errString);
 
                     } // try
@@ -145,17 +142,13 @@ public class OrderService {
 
         // Now, if there is no connect or SQL execution errors at this point, 
         // then we have an order added to the orderinfo::orders table, and a 
-        // new ordersXXXX table created. Here we insert the list of items in
-        // jTextArea2 into the ordersXXXX table.
+        // new ordersXXXX table created. 
         if (!connectError && !executeError) {
             // Now we create a table that contains the itemized list
             // of stuff that is associated with the order
-            //OrderItem orderItem = new OrderItem(); /*Don't know if I need to make this for lines 166-168*/
             List<OrderItem> items = order.getOrderItems();
-//            for (int i = 0; i < items.size(); i++ )
-//            {
-//                OrderItem orderItem = items.get(i);
-            for (OrderItem item : items) //                jTextArea3.append("\nitem #:" + i + ": " + items[i]);
+            
+            for (OrderItem item : items) 
             // Check just to make sure that a blank line was not stuck in
             // there... just in case.
             {
@@ -174,13 +167,11 @@ public class OrderService {
                         executeUpdateVal = s.executeUpdate();
 
                         msgString = "\nORDER SUBMITTED FOR: " + order.FirstName + " " + order.LastName;
-                        /*jTextArea3.append(errString); throws new Exception(msgString)?*/
 
                     } catch (Exception e) {
 
                         errString = "\nProblem with inserting into table " + orderTableName
                                 + ":: " + e;
-                        /*jTextArea3.append(errString); throws new Exception(errString)?*/
                         throw new SQLException(errString);
 
                     } // try
@@ -389,7 +380,7 @@ public class OrderService {
                             res.getString("phone"),
                             res.getFloat("total_cost"),
                             res.getBoolean("shipped"),
-                            orders)); /*Don't know what the error is*/
+                            orders));
 
                 } while (res.next());
                 return return_allorders;
@@ -426,7 +417,7 @@ public class OrderService {
                     return null;
                 }
                 List<Order> return_shippedorders = new ArrayList<Order>();
-         // For each row returned, we check the shipped status. If it is
+                // For each row returned, we check the shipped status. If it is
                 // equal to 1 it means it has been shipped.
                 do {
                     String ordertable = (res.getString("ordertable"));
@@ -506,7 +497,7 @@ public class OrderService {
                 }
                 List<Order> return_pendingorders = new ArrayList<Order>();
 
-         // For each row returned, we check the shipped status. If it is
+                // For each row returned, we check the shipped status. If it is
                 // equal to 0 it means it has not been shipped as of yet.
                 do {
                     String ordertable = (res.getString("ordertable"));
