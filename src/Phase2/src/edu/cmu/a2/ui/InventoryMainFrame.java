@@ -506,7 +506,7 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
                 inventoryTextArea.setText("");
 
                 for (Product thisProduct : products) {
-                    inventoryTextArea.append("\n"+thisProduct.toString());
+                    inventoryTextArea.append("\n>>"+thisProduct.toString());
                 }
  
             } catch(SQLException e) {
@@ -596,13 +596,13 @@ public class InventoryMainFrame extends MainFrame { //extends javax.swing.JFrame
             } else {
                 
                 inventoryTextArea.setText("");
-                inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
+                inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO DELETE ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
                 
             }
         } else {
             
             inventoryTextArea.setText("");
-            inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
+            inventoryTextArea.append("\nNo items selected...\nSELECT ENTIRE INVENTORY LINE TO DELETE ITEM TO ORDER\n(TRIPLE CLICK ITEM LINE)");
             
         } // Blank string check
         
