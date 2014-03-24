@@ -168,11 +168,11 @@ public class Order {
 
     @Override
     public String toString() {
-        return ">>" + OrderId + "::" +
+                return ">>" + OrderId + "::" +
                 OrderDate + "::" + 
                 FirstName + "::" + 
                 LastName + "::" + 
-                Address + "::" + 
+                Address.replace("\r", "").replace("\n", " ") + "::" + 
                 Phone + "::" + 
                 TotalCost + "::" + 
                 Shipped + "::" + 
