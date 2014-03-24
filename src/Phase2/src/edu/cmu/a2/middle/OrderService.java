@@ -352,7 +352,7 @@ public class OrderService {
 
                 // Make sure we got back at least one row
                 if (!res.first()) {
-                    return null;
+                    return new ArrayList<Order>();
                 }
                 List<Order> return_allorders = new ArrayList<Order>();
                 do {
@@ -390,7 +390,7 @@ public class OrderService {
 
             } // end try-catch
         }
-        return null;
+        return new ArrayList<Order>();
     }
 
     public List<Order> GetShippedOrders() throws SQLException {
@@ -414,7 +414,7 @@ public class OrderService {
                 res = s.executeQuery("Select * from orders WHERE shipped = 1");
                 // Make sure we got back at least one row
                 if (!res.first()) {
-                    return null;
+                    return new ArrayList<Order>();
                 }
                 List<Order> return_shippedorders = new ArrayList<Order>();
                 // For each row returned, we check the shipped status. If it is
@@ -450,7 +450,7 @@ public class OrderService {
                 throw new SQLException(errString);
             } // end try-catch
         } // if connect check
-        return null;
+        return new ArrayList<Order>();
         /*
          //Alternate Implementation
          List<Order> orders = this.GetAllOrders();
@@ -493,7 +493,7 @@ public class OrderService {
 
                 // Make sure we got back at least one row
                 if (!res.first()) {
-                    return null;
+                    return new ArrayList<Order>();
                 }
                 List<Order> return_pendingorders = new ArrayList<Order>();
 
@@ -534,7 +534,7 @@ public class OrderService {
 
         } // if connect check
 
-        return null;
+        return new ArrayList<Order>();
 
         /*
          //Alternate Implementation
