@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.cmu.a2.middle;
 
 import edu.cmu.a2.dto.Product;
@@ -18,12 +13,19 @@ import java.util.List;
 
 /**
  *
+ * @author Dantarp
  */
 public class InventoryService {
 
-    private String databaseUrlEep;
-    private String databaseUrlLeaf;
+    private String databaseUrlEep; //The EEP database URL
+    private String databaseUrlLeaf; //The Leaf Tech database URL
 
+    /**
+     * InventoryService is the middleware that provides an API to interact
+     * with the EEP and Leaf Tech databases.
+     * @param host the MySQL host address (ex "localhost" or "192.168.1.1")
+     * @param port the MySQL port (ex. 3306 (the MySQL default))
+     */
     public InventoryService(String host, int port) {
         databaseUrlEep = String.format("jdbc:mysql://%s:%d/inventory", host, port);
         databaseUrlLeaf = String.format("jdbc:mysql://%s:%d/leaftech", host, port);
@@ -66,7 +68,6 @@ public class InventoryService {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String type = Type;
@@ -80,8 +81,7 @@ public class InventoryService {
             throw new SQLException(errString);
         } // end try-catch
 
-        // If we are connected, then we get the product from the
-        // inventory database
+        // If we are connected, then we get the product from the inventory database
         try {
             s = DBConn.createStatement();
             res = s.executeQuery("SELECT * FROM " + type + " WHERE " + getIdentifier(sourceURL) + " = '" + id + "';"); /*Was hoping this selected a product with id*/
@@ -90,19 +90,9 @@ public class InventoryService {
             if (!res.first()) {
                 return null;
             }
+            //return the first (and hopefully only) product
             return new Product(Id, Type, res.getString(getDescription(sourceURL)),
                     res.getFloat(getPrice(sourceURL)), res.getInt(getQuantity(sourceURL)));
-
-            /*Now I am thinking of just getting the product*/
-            /*
-             res.getString(1) /*Copied the below from Orders NewJFrame, don't know what this means...*/
-            /*
-             while (res.next()) {
-
-             msgString = res.getString(1) + " : " + res.getString(2)
-             + " : $" + res.getString(4) + " : " + res.getString(3)
-             + " units in stock";
-             */
         } catch (SQLException e) {
             errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
             throw new SQLException(errString);
@@ -111,6 +101,13 @@ public class InventoryService {
 
     }
 
+    /**
+     * Get a product from the database by ID and Type
+     * @param Type The table name
+     * @param Id The primary key (product ID)
+     * @return The Product matching that ID
+     * @throws SQLException
+     */
     public Product GetProduct(String Type, String Id) throws SQLException {
         SQLException exception = null;
         Product result;
@@ -152,6 +149,13 @@ public class InventoryService {
 
     }
 
+    /**
+     * Removes a product from a database table
+     * @param Type The table name
+     * @param Id The primary key (product ID)
+     * @throws SQLException
+     * @throws IllegalArgumentException
+     */
     public void DeleteProduct(String Type, String Id) throws SQLException, IllegalArgumentException {
         DeleteProduct(new Product(Id, Type, null, 0, 0));
     }
@@ -173,7 +177,6 @@ public class InventoryService {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
         int res = -1;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String type = product.getType();
@@ -206,6 +209,13 @@ public class InventoryService {
 
     }
 
+    /**
+     * Adds a product to the appropriate database to the table in
+     * the product's type field
+     * @param product The product to be added to a database table
+     * @throws SQLException
+     * @throws IllegalArgumentException
+     */
     public void AddProduct(Product product) throws SQLException, IllegalArgumentException {
         if (product == null) {
             throw new IllegalArgumentException("Product is null");
@@ -223,7 +233,6 @@ public class InventoryService {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
         int res = -1;               // SQL query result set pointer
         PreparedStatement s = null;                 // SQL statement pointer
         String type = product.getType();
@@ -263,6 +272,12 @@ public class InventoryService {
 
     }
 
+    /**
+     * Decrease the quantity of a product in a table by ID
+     * @param Type The table name
+     * @param Id The primary key (product ID)
+     * @throws SQLException
+     */
     public void DecrementProduct(String Type, String Id) throws SQLException {
         SQLException exception = null;
         //lazy way of determining if it exists
@@ -289,7 +304,6 @@ public class InventoryService {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
         int res = -1;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String type = product.getType();
@@ -319,6 +333,11 @@ public class InventoryService {
 
     }
 
+    /**
+     * Get all the available table names (types) in the two databases
+     * @return A list of all the available types
+     * @throws SQLException
+     */
     public List<String> GetProductTypes() throws SQLException {
         List<String> ret = new ArrayList<String>();
         List<String> result;
@@ -339,7 +358,6 @@ public class InventoryService {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
 
@@ -369,16 +387,6 @@ public class InventoryService {
                 }
             } while (res.next());
             return return_products;
-            /*Now I am thinking of just getting the product*/
-            /*
-             res.getString(1) /*Copied the below from Orders NewJFrame, don't know what this means...*/
-            /*
-             while (res.next()) {
-
-             msgString = res.getString(1) + " : " + res.getString(2)
-             + " : $" + res.getString(4) + " : " + res.getString(3)
-             + " units in stock";
-             */
         } catch (SQLException e) {
             errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
             throw new SQLException(errString);
@@ -387,6 +395,12 @@ public class InventoryService {
 
     }
 
+    /**
+     * Get all the products of the given Type (table name) 
+     * @param Type The table name
+     * @return A list of all the products of the given type
+     * @throws SQLException
+     */
     public List<Product> GetProducts(String Type) throws SQLException {
         List<Product> ret = new ArrayList<Product>();
         SQLException exception = null;
@@ -420,7 +434,6 @@ public class InventoryService {
         Boolean connectError = false;       // Error flag
         Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String type = Type;
@@ -449,16 +462,6 @@ public class InventoryService {
                         res.getFloat(getPrice(sourceURL)), res.getInt(getQuantity(sourceURL))));
             } while (res.next());
             return return_products;
-            /*Now I am thinking of just getting the product*/
-            /*
-             res.getString(1) /*Copied the below from Orders NewJFrame, don't know what this means...*/
-            /*
-             while (res.next()) {
-
-             msgString = res.getString(1) + " : " + res.getString(2)
-             + " : $" + res.getString(4) + " : " + res.getString(3)
-             + " units in stock";
-             */
         } catch (SQLException e) {
             errString = "\nProblem getting product from inventory(" + sourceURL + "):: " + e;
             throw new SQLException(errString);
